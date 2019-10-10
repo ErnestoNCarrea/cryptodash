@@ -5,8 +5,9 @@ namespace App\Util;
 use GuzzleHttp\Client;
 use App\Model\Order;
 use App\Model\OrderBook;
+use App\Model\ExchangeClientInterface;
 
-class BinanceClient
+class BinanceClient implements ExchangeClientInterface
 {
     /** @var array */
     private $suppoertedSymbols = ['USD', 'BTC', 'ETH '];

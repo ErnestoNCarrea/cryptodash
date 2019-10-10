@@ -5,8 +5,9 @@ namespace App\Util;
 use GuzzleHttp\Client;
 use App\Model\Order;
 use App\Model\OrderBook;
+use App\Model\ExchangeClientInterface;
 
-class RipioClient
+class RipioClient implements ExchangeClientInterface
 {
     /** @var array */
     private $suppoertedSymbols = ['ARS', 'BTC', 'ETH '];

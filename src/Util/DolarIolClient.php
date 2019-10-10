@@ -4,8 +4,9 @@ namespace App\Util;
 
 use App\Model\Order;
 use App\Model\OrderBook;
+use App\Model\ExchangeClientInterface;
 
-class DolarIolClient
+class DolarIolClient implements ExchangeClientInterface
 {
     /** @var array */
     private $suppoertedSymbols = ['ARS', 'USD'];
