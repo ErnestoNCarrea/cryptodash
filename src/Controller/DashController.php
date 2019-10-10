@@ -32,6 +32,6 @@ class DashController extends AbstractController
         dump($ordersDolar);
         dump($ordersBinance);
 
-        return $this->render('dash/inicio.html.twig', ['orders_ripio' => $ordersRipio, 'orders_dolar' =>  $ordersDolar]);
+        return $this->render('dash/inicio.html.twig', ['orders_ripio' => $ordersRipio, 'orders_dolar' =>  $ordersDolar, 'orders_binance' => $ordersBinance]);
     }
 }
