@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Util\RipioClient;
+use App\Util\DolarIolClient;
 
 /**
  * @Route("/dash")
@@ -17,12 +18,16 @@ class DashController extends AbstractController
      */
     public function inicio()
     {
-        $client = new RipioClient('8f2104688f50a866fe648be370c9d80ef04d2203c59a1dc5ee8eea7118a94e6f');
+        $clientRipio = new RipioClient('8f2104688f50a866fe648be370c9d80ef04d2203c59a1dc5ee8eea7118a94e6f');
+        $clientDolar = new DolarIolClient();
 
-        $pairs = $client->getPairs();
+        //$pairs = $client->getPairs();
+        $ordersRipio = $clientRipio->getOrderBook('BTC/ARS');
+        $ordersDolar = $clientDolar->getOrderBook('USD/ARS');
 
-        dump($pairs);
+        dump($ordersRipio);
+        dump($ordersDolar);
 
-        return $this->render('dash/inicio.html.twig', ['pairs' => $pairs]);
+        return $this->render('dash/inicio.html.twig', ['orders_ripio' => $ordersRipio, 'orders_dolar' =>  $ordersDolar]);
     }
 }
