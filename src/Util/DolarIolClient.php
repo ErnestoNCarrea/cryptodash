@@ -20,13 +20,13 @@ class DolarIolClient
     {
         $dolar = 58.4;
 
-        $buyOrders =  [new Order(999999, 1 / $dolar, 0)];
-        $sellOrders = [new Order(999999, $dolar, 0)];
+        $buyOrders =  [new Order(999, $dolar, 0)];
+        $sellOrders = [new Order(999, $dolar, 0)];
 
         return new OrderBook($pair, $buyOrders, $sellOrders);
     }
 
-    public function getPairs()
+    public function getSupportedPairs(): array
     {
         return $this->suppoertedPairs;
     }

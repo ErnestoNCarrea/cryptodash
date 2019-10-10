@@ -67,7 +67,13 @@ class RipioClient
         return $res;
     }
 
-    public function getPairs()
+
+    public function getSupportedPairs(): array
+    {
+        return $this->suppoertedPairs;
+    }
+
+    public function api_getPairs(): array
     {
         $res = $this->client->request('GET', 'pair/', [
             'query' => [
