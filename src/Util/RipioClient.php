@@ -5,7 +5,7 @@ namespace App\Util;
 use GuzzleHttp\Client;
 use App\Model\Order;
 use App\Model\OrderBook;
-use App\Model\ExchangeClientInterface;
+use App\Util\ExchangeClientInterface;
 
 class RipioClient implements ExchangeClientInterface
 {

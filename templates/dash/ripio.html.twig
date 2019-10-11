@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6">
+            <h3>Ripio</h3>
+            <table class="table table-striped table-sm thead-dark">
+            <thead>
+                <tr>
+                <th scope="col">Asset</th>
+                <th scope="col" class="text-right">USD</th>
+                <th scope="col" class="text-right">ARS</th>
+                <th scope="col" class="text-right">Gap</th>
+                <th scope="col" class="text-right">ARS<br /><span class="small text-muted">(incl. taker fee)</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <td>Sell BTC</td>
+                <td class="text-right">{{ (analizador.RipioBuyBtc / analizador.Dolar)|number_format }}</td>
+                <td class="text-right">{{ analizador.RipioBuyBtc|number_format }}</td>
+                <td class="text-right
+                    {% if analizador.RipioBuyGapBtc > 0.13 %}table-danger
+                    {% elseif analizador.RipioBuyGapBtc > 0.10 %}table-warning
+                    {% endif %}">{{ (analizador.RipioBuyGapBtc * 100)|number_format(2) }}%</td>
+                <td class="text-right">{{ (analizador.RipioBuyBtc * 1.005)|number_format }}</td>
+                </tr>
+                <tr>
+                <td>Sell ETH</td>
+                <td class="text-right">{{ (analizador.RipioBuyEth / analizador.Dolar)|number_format }}</td>
+                <td class="text-right">{{ analizador.RipioBuyEth|number_format }}</td>
+                <td class="text-right
+                    {% if analizador.RipioBuyGapEth > 0.13 %}table-danger
+                    {% elseif analizador.RipioBuyGapEth > 0.10 %}table-warning
+                    {% endif %}">{{ (analizador.RipioBuyGapEth * 100)|number_format(2) }}%</td>
+                <td class="text-right">{{ (analizador.RipioBuyEth * 1.005)|number_format }}</td>
+                </tr>
+                <tr>
+                <td>Buy BTC</td>
+                <td class="text-right">{{ (analizador.RipioSellBtc / analizador.Dolar)|number_format }}</td>
+                <td class="text-right">{{ analizador.RipioSellBtc|number_format }}</td>
+                <td class="text-right
+                    {% if analizador.RipioSellGapBtc > 0.13 %}table-danger
+                    {% elseif analizador.RipioSellGapBtc > 0.10 %}table-warning
+                    {% endif %}">{{ (analizador.RipioSellGapBtc * 100)|number_format(2) }}%</td>
+                <td class="text-right">{{ (analizador.RipioSellBtc * 1.005)|number_format }}</td>
+                </tr>
+                <tr>
+                <td>Buy ETH</td>
+                <td class="text-right">{{ (analizador.RipioSellEth / analizador.Dolar)|number_format }}</td>
+                <td class="text-right">{{ analizador.RipioSellEth|number_format }}</td>
+                <td class="text-right
+                    {% if analizador.RipioSellGapEth > 0.13 %}table-danger
+                    {% elseif analizador.RipioSellGapEth > 0.10 %}table-warning
+                    {% endif %}">{{ (analizador.RipioSellGapEth * 100)|number_format(2) }}%</td>
+                <td class="text-right">{{ (analizador.RipioSellEth * 1.005)|number_format }}</td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+
+        <div class="col-6">
+            <h3>Reference</h3>
+            <table class="table table-striped table-sm thead-dark">
+            <thead>
+                <tr>
+                <th scope="col">Asset</th>
+                <th scope="col" class="text-right">USD</th>
+                <th scope="col" class="text-right">ARS</th>
+                <th scope="col" class="text-right">ARS<br /><span class="small text-muted">(fees incl.)</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <td>BTC</td>
+                <td class="text-right">{{ analizador.ReferenceBtcUsd|number_format }}</td>
+                <td class="text-right">{{ (analizador.ReferenceBtcUsd * analizador.Dolar)|number_format }}</td>
+                <td class="text-right">{{ (analizador.ReferenceBtcUsd * analizador.Dolar * 1.04075)|number_format }}</td>
+                </tr>
+                <tr>
+                <td>ETH</td>
+                <td class="text-right">{{ analizador.ReferenceEthUsd|number_format }}</td>
+                <td class="text-right">{{ (analizador.ReferenceEthUsd * analizador.Dolar)|number_format }}</td>
+                <td class="text-right">{{ (analizador.ReferenceEthUsd * analizador.Dolar * 1.03075)|number_format }}</td>
+                </tr>
+                <tr>
+                <td>USD</td>
+                <td class="text-right"> </td>
+                <td class="text-right">{{ analizador.Dolar }}</td>
+                <td class="text-right"></td>
+                </tr>
+            </tbody>
+            </table>
+            ETH/BTC: {{ analizador.ReferenceEthBtc|number_format(6) }}.
+        </div>
+    </div>
+
+    <p>Arbitraje BTC/ARS -> ARS/ETH -> ETH/BTC: 
+        <span class="{% if analizador.calcularGapArbitrageBtcEth > 0.015 %}text-danger
+        {% elseif analizador.calcularGapArbitrageBtcEth > 0.01 %}text-warning
+        {% endif %}">{{ (analizador.calcularGapArbitrageBtcEth * 100)|number_format(2) }}%</span>.
+
+        {% if analizador.calcularGapArbitrageBtcEth < 0.015 %}
+            Punto mínimo de arbitraje al 1.5%:
+            Venta BTC a {{ (analizador.RipioSellBtc * (1.015 + analizador.calcularGapArbitrageBtcEth))|number_format }}
+            o compra ETH a {{ (analizador.RipioBuyEth * (0.985 - analizador.calcularGapArbitrageBtcEth))|number_format }}.
+        {% endif %}
+    </p>
+
+    <p>Arbitraje ETH/ARS -> ARS/BTC -> BTC/ETH:
+        <span class="{% if analizador.calcularGapArbitrageEthBtc > 0.015 %}text-danger
+        {% elseif analizador.calcularGapArbitrageEthBtc > 0.01 %}text-warning
+        {% endif %}">{{ (analizador.calcularGapArbitrageEthBtc * 100)|number_format(2) }}%</span>.
+
+        {% if analizador.calcularGapArbitrageEthBtc < 0.015 %}
+            Punto mínimo de arbitraje al 1.5%:
+            Venta ETH a {{ (analizador.RipioSellEth * (1.015 + analizador.calcularGapArbitrageEthBtc))|number_format }}
+            o compra BTC a {{ (analizador.RipioBuyBtc * (0.985 - analizador.calcularGapArbitrageEthBtc))|number_format }}.
+        {% endif %}
+    </p>
+    
+</div>
+
+{% endblock %}

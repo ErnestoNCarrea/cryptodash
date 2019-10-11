@@ -5,7 +5,7 @@ namespace App\Util;
 use GuzzleHttp\Client;
 use App\Model\Order;
 use App\Model\OrderBook;
-use App\Model\ExchangeClientInterface;
+use App\Util\ExchangeClientInterface;
 
 class BinanceClient implements ExchangeClientInterface
 {
@@ -40,14 +40,14 @@ class BinanceClient implements ExchangeClientInterface
             case 'ETH/USD':
                 $price = 191;
                 break;
-            case 'BTC/USD':
+            case 'ETH/BTC':
                 $price = 191 / 8550;
                 break;
         }
         $dolar = 58.4;
 
-        $buyOrders =  [new Order(999, $price * .99, 0)];
-        $sellOrders = [new Order(999, $price * 1.01, 0)];
+        $buyOrders =  [new Order(999, $price * .9999, 0)];
+        $sellOrders = [new Order(999, $price * 1.0001, 0)];
 
         return new OrderBook($pair, $buyOrders, $sellOrders);
     }

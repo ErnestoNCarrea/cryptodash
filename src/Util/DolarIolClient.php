@@ -4,7 +4,7 @@ namespace App\Util;
 
 use App\Model\Order;
 use App\Model\OrderBook;
-use App\Model\ExchangeClientInterface;
+use App\Util\ExchangeClientInterface;
 
 class DolarIolClient implements ExchangeClientInterface
 {
@@ -19,7 +19,7 @@ class DolarIolClient implements ExchangeClientInterface
 
     public function getOrderBook(string $pair): ?OrderBook
     {
-        $dolar = 58.4;
+        $dolar = 59;
 
         $buyOrders =  [new Order(999, $dolar, 0)];
         $sellOrders = [new Order(999, $dolar, 0)];

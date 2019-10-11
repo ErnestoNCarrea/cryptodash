@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Util\RipioClient;
 use App\Util\DolarIolClient;
 use App\Util\BinanceClient;
+use App\Util\AnalizadorRipio;
 
 /**
  * @Route("/dash")
@@ -15,23 +16,25 @@ use App\Util\BinanceClient;
 class DashController extends AbstractController
 {
     /**
-     * @Route("/inicio")
+     * @Route("/ripio")
      */
-    public function inicio()
+    public function ripio()
     {
         $clientRipio = new RipioClient('8f2104688f50a866fe648be370c9d80ef04d2203c59a1dc5ee8eea7118a94e6f');
         $clientDolar = new DolarIolClient();
         $clientBinance = new BinanceClient();
 
-        //$pairs = $client->getPairs();
-        $ordersDolar = $clientDolar->getOrderBook('USD/ARS');
-        $ordersBinance = $clientBinance->getOrderBook('BTC/USD');
-        $ordersRipio = $clientRipio->getOrderBook('BTC/ARS');
+        $analizador = new AnalizadorRipio(
+            $clientRipio->getOrderBook('BTC/ARS'),
+            $clientRipio->getOrderBook('ETH/ARS'),
+            $clientDolar->getOrderBook('USD/ARS'),
+            $clientBinance->getOrderBook('BTC/USD'),
+            $clientBinance->getOrderBook('ETH/USD'),
+            $clientBinance->getOrderBook('ETH/BTC')
+        );
 
-        dump($ordersRipio);
-        dump($ordersDolar);
-        dump($ordersBinance);
+        dump($analizador);
 
-        return $this->render('dash/inicio.html.twig', ['orders_ripio' => $ordersRipio, 'orders_dolar' =>  $ordersDolar, 'orders_binance' => $ordersBinance]);
+        return $this->render('dash/ripio.html.twig', ['analizador' => $analizador]);
     }
 }
