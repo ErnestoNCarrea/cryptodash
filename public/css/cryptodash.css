@@ -1,0 +1,15 @@
+body {
+    font-family: Montserrat, sans-serif;
+}
+
+@media screen and (max-width: 767px) {
+    body { font-size: 11px; }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    body { font-size: 14px; }
+}
+
+#page-wrapper {
+    padding-top: 16px;
+}
