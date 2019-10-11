@@ -17,18 +17,6 @@
             </thead>
             <tbody>
                 <tr>
-                <td>Compra BTC</td>
-                <td class="text-right">{{ (analizador.RipioBuyBtc / analizador.Dolar)|number_format }}</td>
-                <td class="text-right">{{ analizador.RipioBuyBtc|number_format }}</td>
-                <td class="text-right">{{ (analizador.RipioBuyGapBtc * 100)|number_format(1) }}%
-                    {% if analizador.RipioBuyGapBtc < 0.06 %}<i class="fa fa-money-bill-wave text-success" title="Deberías tener esta punta"></i>
-                    {% elseif analizador.RipioBuyGapBtc > 0.13 %}<i class="fa fa-fire text-danger" title="¡Vendan!"></i>
-                    {% elseif analizador.RipioBuyGapBtc > 0.10 %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
-                    {% endif %}
-                </td>
-                <td class="text-right">{{ (analizador.RipioBuyBtc * 1.005)|number_format }}</td>
-                </tr>
-                <tr>
                 <td>Venta BTC</td>
                 <td class="text-right">{{ (analizador.RipioSellBtc / analizador.Dolar)|number_format }}</td>
                 <td class="text-right">{{ analizador.RipioSellBtc|number_format }}</td>
@@ -41,17 +29,18 @@
                 <td class="text-right">{{ (analizador.RipioSellBtc * 1.005)|number_format }}</td>
                 </tr>
                 <tr>
-                <td>Compra ETH</td>
-                <td class="text-right">{{ (analizador.RipioBuyEth / analizador.Dolar)|number_format }}</td>
-                <td class="text-right">{{ analizador.RipioBuyEth|number_format }}</td>
-                <td class="text-right">{{ (analizador.RipioBuyGapEth * 100)|number_format(1) }}%
-                    {% if analizador.RipioBuyGapEth < 0.06 %}<i class="fa fa-money-bill-wave text-success" title="Deberías tener esta punta"></i>
-                    {% elseif analizador.RipioBuyGapEth > 0.13 %}<i class="fa fa-fire text-danger" title="¡Vendan!"></i>
-                    {% elseif analizador.RipioBuyGapEth > 0.10 %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
+                <td>Compra BTC</td>
+                <td class="text-right">{{ (analizador.RipioBuyBtc / analizador.Dolar)|number_format }}</td>
+                <td class="text-right">{{ analizador.RipioBuyBtc|number_format }}</td>
+                <td class="text-right">{{ (analizador.RipioBuyGapBtc * 100)|number_format(1) }}%
+                    {% if analizador.RipioBuyGapBtc < 0.06 %}<i class="fa fa-money-bill-wave text-success" title="Deberías tener esta punta"></i>
+                    {% elseif analizador.RipioBuyGapBtc > 0.13 %}<i class="fa fa-fire text-danger" title="¡Vendan!"></i>
+                    {% elseif analizador.RipioBuyGapBtc > 0.10 %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
                     {% endif %}
                 </td>
-                <td class="text-right">{{ (analizador.RipioBuyEth * 1.005)|number_format }}</td>
+                <td class="text-right">{{ (analizador.RipioBuyBtc * 1.005)|number_format }}</td>
                 </tr>
+
                 <tr>
                 <td>Venta ETH</td>
                 <td class="text-right">{{ (analizador.RipioSellEth / analizador.Dolar)|number_format }}</td>
@@ -63,6 +52,18 @@
                     {% endif %}
                 </td>
                 <td class="text-right">{{ (analizador.RipioSellEth * 1.005)|number_format }}</td>
+                </tr>
+                <tr>
+                <td>Compra ETH</td>
+                <td class="text-right">{{ (analizador.RipioBuyEth / analizador.Dolar)|number_format }}</td>
+                <td class="text-right">{{ analizador.RipioBuyEth|number_format }}</td>
+                <td class="text-right">{{ (analizador.RipioBuyGapEth * 100)|number_format(1) }}%
+                    {% if analizador.RipioBuyGapEth < 0.06 %}<i class="fa fa-money-bill-wave text-success" title="Deberías tener esta punta"></i>
+                    {% elseif analizador.RipioBuyGapEth > 0.13 %}<i class="fa fa-fire text-danger" title="¡Vendan!"></i>
+                    {% elseif analizador.RipioBuyGapEth > 0.10 %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
+                    {% endif %}
+                </td>
+                <td class="text-right">{{ (analizador.RipioBuyEth * 1.005)|number_format }}</td>
                 </tr>
             </tbody>
             </table>
