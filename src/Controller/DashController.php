@@ -28,9 +28,9 @@ class DashController extends AbstractController
             $clientRipio->getOrderBook('BTC/ARS'),
             $clientRipio->getOrderBook('ETH/ARS'),
             $clientDolar->getOrderBook('USD/ARS'),
-            $clientBinance->getOrderBook('BTC/USD'),
-            $clientBinance->getOrderBook('ETH/USD'),
-            $clientBinance->getOrderBook('ETH/BTC')
+            $clientBinance->getCurrentPrice('BTC/USD'),
+            $clientBinance->getCurrentPrice('ETH/USD'),
+            $clientBinance->getCurrentPrice('ETH/BTC')
         );
 
         dump($analizador);

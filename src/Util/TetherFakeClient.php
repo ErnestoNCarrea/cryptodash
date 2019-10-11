@@ -4,30 +4,33 @@ namespace App\Util;
 
 use App\Model\Order;
 use App\Model\OrderBook;
-use App\Model\DolarIolExchange;
+use App\Model\TetherFakeExchange;
 use App\Util\AbstractClient;
 
-class DolarIolClient extends AbstractClient
+class TetherFakeClient extends AbstractClient
 {
     /** @var array */
-    private $suppoertedSymbols = ['ARS', 'USD'];
+    private $suppoertedSymbols = ['USD', 'USDT'];
 
     /** @var array */
-    private $suppoertedPairs = ['USD/ARS'];
+    private $suppoertedPairs = ['USD/USDT'];
 
     public function __construct(?string $authToken = null)
     {
-        $this->exchange = new DolarIolExchange();
+        $this->exchange = new TetherFakeExchange();
     }
 
     public function getOrderBook(string $pair): ?OrderBook
     {
-        $dolar = 59;
-
-        $buyOrders =  [new Order(999, $dolar, 0)];
-        $sellOrders = [new Order(999, $dolar, 0)];
+        $buyOrders =  [new Order(0, 1, 0)];
+        $sellOrders = [new Order(0, 1, 0)];
 
         return new OrderBook($pair, $buyOrders, $sellOrders);
+    }
+
+    public function getCurrentPrice(string $pair): float
+    {
+        return (float) 1;
     }
 
     public function getSupportedPairs(): array

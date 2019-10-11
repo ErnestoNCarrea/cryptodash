@@ -5,9 +5,10 @@ namespace App\Util;
 use GuzzleHttp\Client;
 use App\Model\Order;
 use App\Model\OrderBook;
-use App\Util\ExchangeClientInterface;
+use App\Model\RipioExchange;
+use App\Util\AbstractClient;
 
-class RipioClient implements ExchangeClientInterface
+class RipioClient extends AbstractClient
 {
     /** @var array */
     private $suppoertedSymbols = ['ARS', 'BTC', 'ETH '];
@@ -23,6 +24,8 @@ class RipioClient implements ExchangeClientInterface
 
     public function __construct(?string $authToken = null)
     {
+        $this->exchange = new RipioExchange();
+
         $this->authToken = $authToken;
 
         $this->client = new Client([
