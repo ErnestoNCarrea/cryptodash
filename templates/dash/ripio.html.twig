@@ -121,5 +121,12 @@
     </p>
     
 </div>
+{% endblock body %}
 
-{% endblock %}
+{% block javascripts %}
+<script>
+setTimeout(function(){
+   window.location.reload(1);
+}, 30000);
+</script>
+{% endblock javascripts %}
