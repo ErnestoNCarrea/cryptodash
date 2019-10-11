@@ -4,7 +4,6 @@ namespace App\Util;
 
 use App\Model\Order;
 use App\Model\OrderBook;
-use App\Model\AnalisisRipio;
 
 class AnalizadorRipio
 {
@@ -56,6 +55,16 @@ class AnalizadorRipio
         $ethPorBtcEnRef = ($btcPorEthEnRipio / $this->referenceEthBtc) - 1;
 
         return $ethPorBtcEnRef;
+    }
+
+    public function getGapBtc(): float
+    {
+        return 1 - ($this->getRipioBuyBtc() / $this->getRipioSellBtc());
+    }
+
+    public function getGapEth(): float
+    {
+        return 1 - ($this->getRipioBuyEth() / $this->getRipioSellEth());
     }
 
     public function getDolar(): float
