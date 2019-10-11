@@ -36,11 +36,10 @@ class RipioClient extends AbstractClient
 
     public function getOrderBook(string $pair): ?OrderBook
     {
-        $res = $this->client->request('GET', 'orderbook/' . urlencode(str_replace('/', '_', $pair)), [
+        $res = $this->client->request('GET', 'orderbook/' . urlencode($this->formatPair($pair)), [
             'headers' => [
                 'Accept' => '*/*',
                 'Content-type' => 'application/json',
-                'Authorization' => 'Bearer ' . $this->authToken,
             ]
         ]);
 
@@ -91,5 +90,13 @@ class RipioClient extends AbstractClient
         ]);
 
         return json_decode((string) $res->getBody());
+    }
+
+    /**
+     * Format SYM/SYM pair to SYM_SYM.
+     */
+    private function formatPair(string $pair): string
+    {
+        return str_replace('/', '_', $pair);
     }
 }
