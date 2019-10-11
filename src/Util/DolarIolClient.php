@@ -2,9 +2,9 @@
 
 namespace App\Util;
 
+use App\Model\DolarIolExchange;
 use App\Model\Order;
 use App\Model\OrderBook;
-use App\Model\DolarIolExchange;
 use App\Util\AbstractClient;
 
 class DolarIolClient extends AbstractClient
@@ -22,9 +22,9 @@ class DolarIolClient extends AbstractClient
 
     public function getOrderBook(string $pair): ?OrderBook
     {
-        $dolar = 59;
+        $dolar = 59 * 1.05;
 
-        $buyOrders =  [new Order(999, $dolar, 0)];
+        $buyOrders = [new Order(999, $dolar, 0)];
         $sellOrders = [new Order(999, $dolar, 0)];
 
         return new OrderBook($pair, $buyOrders, $sellOrders);
