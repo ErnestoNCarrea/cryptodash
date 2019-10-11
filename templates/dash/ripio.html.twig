@@ -83,19 +83,19 @@
             </thead>
             <tbody>
                 <tr>
-                <td>BTC</td>
+                <td>BTC <i class="fab fa-bitcoin text-muted"></i></td>
                 <td class="text-right">{{ analizador.ReferenceBtcUsd|number_format }}</td>
                 <td class="text-right">{{ (analizador.ReferenceBtcUsd * analizador.Dolar)|number_format }}</td>
                 <td class="text-right">{{ (analizador.ReferenceBtcUsd * analizador.Dolar * 1.04075)|number_format }}</td>
                 </tr>
                 <tr>
-                <td>ETH</td>
+                <td>ETH <i class="fab fa-ethereum text-muted"></i></td>
                 <td class="text-right">{{ analizador.ReferenceEthUsd|number_format }}</td>
                 <td class="text-right">{{ (analizador.ReferenceEthUsd * analizador.Dolar)|number_format }}</td>
                 <td class="text-right">{{ (analizador.ReferenceEthUsd * analizador.Dolar * 1.03075)|number_format }}</td>
                 </tr>
                 <tr>
-                <td>USD</td>
+                <td>USD <i class="fa fa-money-bill text-muted"></i></td>
                 <td class="text-right"> </td>
                 <td class="text-right">{{ analizador.Dolar }}</td>
                 <td class="text-right"></td>
