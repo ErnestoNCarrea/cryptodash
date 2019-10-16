@@ -11,7 +11,7 @@ use App\Util\AbstractClient;
 class BinanceClient extends AbstractClient
 {
     /** @var array */
-    private $suppoertedSymbols = ['USD', 'BTC', 'ETH '];
+    private $supportedSymbols = ['USD', 'BTC', 'ETH '];
 
     /** @var array */
     private $suppoertedPairs = ['BTC/USD', 'ETH/USD', 'BTC/ETH'];
@@ -36,6 +36,9 @@ class BinanceClient extends AbstractClient
             'timeout'  => 10,
         ]);
     }
+
+    public function connect()
+    { }
 
     public function getOrderBook(string $pair): ?OrderBook
     {

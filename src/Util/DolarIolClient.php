@@ -10,7 +10,7 @@ use App\Util\AbstractClient;
 class DolarIolClient extends AbstractClient
 {
     /** @var array */
-    private $suppoertedSymbols = ['ARS', 'USD'];
+    private $supportedSymbols = ['ARS', 'USD'];
 
     /** @var array */
     private $suppoertedPairs = ['USD/ARS'];
@@ -19,6 +19,9 @@ class DolarIolClient extends AbstractClient
     {
         $this->exchange = new DolarIolExchange();
     }
+
+    public function connect()
+    { }
 
     public function getOrderBook(string $pair): ?OrderBook
     {

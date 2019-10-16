@@ -13,9 +13,13 @@ class CexExchange extends AbstractExchange implements HasOrderBookInterface
         $this->takerFee = 0.0016;
 
         $this->depositFees = [
-            'USD' => 0.03
+            'USD' => 0.031
         ];
-        $this->withdrawalFees = null;
+        $this->withdrawalFees = [
+            'BTC' => 0.00005,
+            'ETH' => 0.01,
+            'XRP' => 0.02,
+        ];
 
         $this->infiniteSupply = false;
     }

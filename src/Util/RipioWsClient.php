@@ -2,13 +2,13 @@
 
 namespace App\Util;
 
-use GuzzleHttp\Client;
+use Ratchet\Client;
 use App\Model\Order;
 use App\Model\OrderBook;
 use App\Model\RipioExchange;
-use App\Util\AbstractClient;
+use App\Util\AbstractWsClient;
 
-class RipioClient extends AbstractClient
+class RipioWsClient extends AbstractWsClient
 {
     /** @var array */
     private $supportedSymbols = ['ARS', 'BTC', 'ETH '];
@@ -29,13 +29,19 @@ class RipioClient extends AbstractClient
         $this->authToken = $authToken;
 
         $this->client = new Client([
-            'base_uri' => 'https://api.exchange.ripio.com/api/v1/',
+            'base_uri' => 'https://exchange.ripio.com/ws',
             'timeout'  => 10,
         ]);
     }
 
     public function connect()
-    { }
+    {
+        $loop = \React\EventLoop\Factory::create();
+        $reactConnector = new \React\Socket\Connector($loop, [
+            'timeout' => 10
+        ]);
+        $connector = new \Ratchet\Client\Connector($loop, $reactConnector);
+    }
 
     public function getOrderBook(string $pair): ?OrderBook
     {
@@ -72,6 +78,7 @@ class RipioClient extends AbstractClient
 
         return $res;
     }
+
 
     public function getSupportedPairs(): array
     {

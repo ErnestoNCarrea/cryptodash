@@ -10,7 +10,7 @@ use App\Util\AbstractClient;
 class TetherFakeClient extends AbstractClient
 {
     /** @var array */
-    private $suppoertedSymbols = ['USD', 'USDT'];
+    private $supportedSymbols = ['USD', 'USDT'];
 
     /** @var array */
     private $suppoertedPairs = ['USD/USDT'];
@@ -19,6 +19,9 @@ class TetherFakeClient extends AbstractClient
     {
         $this->exchange = new TetherFakeExchange();
     }
+
+    public function connect()
+    { }
 
     public function getOrderBook(string $pair): ?OrderBook
     {
