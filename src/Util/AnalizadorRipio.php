@@ -69,7 +69,7 @@ class AnalizadorRipio
 
     public function getDolar(): float
     {
-        return $this->orderBookDolar->getBestBuyPrice();
+        return $this->orderBookDolar->getBestSellPrice();
     }
 
     public function getReferenceBtcUsd(): float
