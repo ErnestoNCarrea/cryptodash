@@ -12,7 +12,6 @@
                 <th scope="col" class="text-right">USD</th>
                 <th scope="col" class="text-right">ARS</th>
                 <th scope="col" class="text-right">Gap</th>
-                <th scope="col" class="text-right">ARS<br /><span class="small text-muted">(incl. taker fee)</span></th>
                 </tr>
             </thead>
             <tbody>
@@ -26,7 +25,6 @@
                     {% elseif analizador.RipioSellGapBtc < 0.05 %}<i class="fa fa-eye text-warning" title="Buen precio para comprar"></i>
                     {% endif %}
                     </td>
-                <td class="text-right">{{ (analizador.RipioSellBtc * 1.005)|number_format }}</td>
                 </tr>
                 <tr>
                 <td>Compra BTC</td>
@@ -38,7 +36,6 @@
                     {% elseif analizador.RipioBuyGapBtc > 0.08 %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
                     {% endif %}
                 </td>
-                <td class="text-right">{{ (analizador.RipioBuyBtc * 0.995)|number_format }}</td>
                 </tr>
 
                 <tr>
@@ -51,7 +48,6 @@
                     {% elseif analizador.RipioSellGapEth < 0.05 %}<i class="fa fa-eye text-warning" title="Buen precio para comprar"></i>
                     {% endif %}
                 </td>
-                <td class="text-right">{{ (analizador.RipioSellEth * 1.005)|number_format }}</td>
                 </tr>
                 <tr>
                 <td>Compra ETH</td>
@@ -63,7 +59,6 @@
                     {% elseif analizador.RipioBuyGapEth > 0.08 %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
                     {% endif %}
                 </td>
-                <td class="text-right">{{ (analizador.RipioBuyEth * 0.995)|number_format }}</td>
                 </tr>
             </tbody>
             </table>
