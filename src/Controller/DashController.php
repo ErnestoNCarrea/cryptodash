@@ -16,7 +16,7 @@ use App\Util\AnalizadorRipio;
 class DashController extends AbstractController
 {
     /**
-     * @Route("/ripio")
+     * @Route("/ripio", name="ripio")
      */
     public function ripio()
     {

@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Usuarios: Listado
+{% endblock %}
+
+{% block body %}
+    <table class="table table-striped datatable">
+        <thead>
+            <tr>
+                <th> </th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr href="{{ path('user_edit', {'id': user.id}) }}">
+                    <td class="text-nowrap">
+                        {% if user.hasRole('ROLE_ADMIN') %}
+                            <span class="badge badge-danger" title="Administrador">A</span>
+                        {% endif %}
+                        {% if user.hasRole('ROLE_USER') %}
+                            <span class="badge badge-primary" title="Usuario">U</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ user.nombre }}</td>
+                    <td>{{ user.apellido }}</td>
+                    <td>{{ user.email }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">No se encontraron registros.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-default" href="{{ path('user_new') }}">Crear nuevo usuario</a>
+{% endblock %}

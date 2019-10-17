@@ -1,0 +1,44 @@
+{% extends 'base-anon.html.twig' %}
+
+{% block body %}
+    <style>
+        body {
+            padding-top: 32px;
+        }
+    </style>
+
+    <div class="text-center mb-4">
+        <img alt="CryptoDash" class="mb-4" height="72" src="/assets/img/logo.png" width="72"/>
+        <h1 class="h3 mb-3 font-weight-normal">CryptoDash: Nuevo usuario</h1>
+    </div>
+
+    {{ form_start(form, { 'attr': { 'class': 'form-signin' }}) }}
+    <div class="form-label-group">
+        {{ form_widget(form.nombre) }}
+        <label for="nombre">Nombre</label>
+    </div>
+
+    <div class="form-label-group">
+        {{ form_widget(form.apellido) }}
+        <label for="apellido">Apellido</label>
+    </div>
+
+    <div class="form-label-group">
+        {{ form_widget(form.email) }}
+        <label for="email">Correo electrónico</label>
+    </div>
+
+    <div class="form-label-group">
+        {{ form_widget(form.plainPassword.first) }}
+        <label for="plainPassword[first]">Contraseña</label>
+    </div>
+    <div class="form-label-group">
+        {{ form_widget(form.plainPassword.second) }}
+        <label for="plainPassword[second]">Confirmar contraseña</label>
+    </div>
+
+    {{ form_widget(form.submit, { 'attr': { 'class': 'btn btn-lg btn-primary btn-block' }}) }}
+
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+{% endblock %}

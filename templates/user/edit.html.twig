@@ -1,0 +1,15 @@
+{% extends 'user/editbase.html.twig' %}
+
+{% block title %}Usuarios: Editar{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <a class="btn btn-default" href="{{ path('user_index') }}">Volver</a>
+    <a class="btn btn-default" href="{{ path('user_password', { 'id': user.id }) }}">Contraseña</a>
+
+    <button class="btn btn-primary float-right">Guardar</button>
+    {{ form_end(form) }}
+
+    {{ include('user/_delete_form.html.twig') }}
+{% endblock %}

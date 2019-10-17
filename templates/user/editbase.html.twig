@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+<script>
+    $('#user_localidad').change(function () {
+        var localidadSelector = $(this);
+
+        // Request the mesas of the selected establecimiento.
+        $.ajax({
+            url: "{{ path('establecimiento_porlocalidad') }}",
+            type: "GET",
+            dataType: "JSON",
+            data: {
+                localidadid: localidadSelector.val()
+            },
+            success: function (mesas) {
+                var estabSelect = $("#user_establecimiento");
+
+                // Remove current options
+                estabSelect.html('');
+
+                // Empty value ...
+                estabSelect.append('<option value>Todos los establecimientos de ' + localidadSelector.find("option:selected").text() + '</option>');
+
+                $.each(mesas, function (key, estab) {
+                    estabSelect.append('<option value="' + estab.id + '">' + estab.nombre + '</option>');
+                });
+            },
+            error: function (err) {
+                alert("Ocurrió un error al cargar los datos.");
+            }
+        });
+    });
+
+    $('#user_establecimiento').change(function () {
+        var establecimientoSelector = $(this);
+
+        // Request the mesas of the selected establecimiento.
+        $.ajax({
+            url: "{{ path('mesa_porestablecimiento') }}",
+            type: "GET",
+            dataType: "JSON",
+            data: {
+                establecimientoid: establecimientoSelector.val()
+            },
+            success: function (mesas) {
+                var mesaSelect = $("#user_mesa");
+
+                // Remove current options
+                mesaSelect.html('');
+
+                // Empty value ...
+                mesaSelect.append('<option value>Todas las mesas de ' + establecimientoSelector.find("option:selected").text() + '</option>');
+
+                $.each(mesas, function (key, mesa) {
+                    mesaSelect.append('<option value="' + mesa.id + '">' + mesa.numero + '</option>');
+                });
+            },
+            error: function (err) {
+                alert("Ocurrió un error al cargar los datos.");
+            }
+        });
+    });
+</script>
+{% endblock %}
