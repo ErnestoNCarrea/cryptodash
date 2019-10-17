@@ -25,10 +25,10 @@ class DolarIolClient extends AbstractClient
 
     public function getOrderBook(string $pair): ?OrderBook
     {
-        $dolar = 59 * 1.05;
+        $dolar = 59;
 
         $buyOrders = [new Order(999, $dolar, 0)];
-        $sellOrders = [new Order(999, $dolar, 0)];
+        $sellOrders = [new Order(999, $dolar * 1.05, 0)];
 
         return new OrderBook($pair, $buyOrders, $sellOrders);
     }
