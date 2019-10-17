@@ -12,6 +12,9 @@ class BookOrder
     public const SIDE_BUY = 1;
     public const SIDE_SELL = 2;
 
+    /** @var bool */
+    private $active = false;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -32,7 +35,7 @@ class BookOrder
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="orders")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $user;
 
@@ -50,6 +53,11 @@ class BookOrder
      * @ORM\Column(type="smallint")
      */
     private $side;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $dateTime;
 
     public function getId(): ?int
     {
@@ -124,6 +132,38 @@ class BookOrder
     public function setSide(int $side): self
     {
         $this->side = $side;
+
+        return $this;
+    }
+
+    public function getDateTime(): ?\DateTimeInterface
+    {
+        return $this->dateTime;
+    }
+
+    public function setDateTime(\DateTimeInterface $dateTime): self
+    {
+        $this->dateTime = $dateTime;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of active
+     */
+    public function getActive(): bool
+    {
+        return $this->active;
+    }
+
+    /**
+     * Set the value of active
+     *
+     * @return  self
+     */
+    public function setActive(bool $active)
+    {
+        $this->active = $active;
 
         return $this;
     }
