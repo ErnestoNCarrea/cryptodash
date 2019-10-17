@@ -22,21 +22,25 @@ class OrderBook
         $this->sellOrders = $sellOrders;
     }
 
-    public function getBestBuyOrder(?float $fillAmount = null) : Order {
+    public function getBestBuyOrder(?float $fillAmount = null): Order
+    {
         // FIXME: fillAmount
         return $this->buyOrders[0];
     }
 
-    public function getBestSellOrder(?float $fillAmount = null) : Order {
+    public function getBestSellOrder(?float $fillAmount = null): Order
+    {
         // FIXME: fillAmount
         return $this->sellOrders[0];
     }
 
-    public function getBestBuyPrice(?float $fillAmount = null) : float {
+    public function getBestBuyPrice(?float $fillAmount = null): float
+    {
         return $this->getBestBuyOrder($fillAmount)->getPrice();
     }
 
-    public function getBestSellPrice(?float $fillAmount = null) : float {
+    public function getBestSellPrice(?float $fillAmount = null): float
+    {
         return $this->getBestSellOrder($fillAmount)->getPrice();
     }
 

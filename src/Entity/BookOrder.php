@@ -5,10 +5,13 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\BookOrderRepository")
  */
-class Order
+class BookOrder
 {
+    public const SIDE_BUY = 1;
+    public const SIDE_SELL = 2;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -28,7 +31,7 @@ class Order
     private $pair;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="amount")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="orders")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
@@ -36,12 +39,17 @@ class Order
     /**
      * @ORM\Column(type="float")
      */
-    private $amount;
+    private $price;
 
     /**
      * @ORM\Column(type="float")
      */
     private $quantity;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $side;
 
     public function getId(): ?int
     {
@@ -84,14 +92,14 @@ class Order
         return $this;
     }
 
-    public function getAmount(): ?float
+    public function getPrice(): ?float
     {
-        return $this->amount;
+        return $this->price;
     }
 
-    public function setAmount(float $amount): self
+    public function setPrice(float $price): self
     {
-        $this->amount = $amount;
+        $this->price = $price;
 
         return $this;
     }
@@ -104,6 +112,18 @@ class Order
     public function setQuantity(float $quantity): self
     {
         $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getSide(): ?int
+    {
+        return $this->side;
+    }
+
+    public function setSide(int $side): self
+    {
+        $this->side = $side;
 
         return $this;
     }

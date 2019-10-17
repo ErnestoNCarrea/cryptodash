@@ -5,7 +5,7 @@ namespace App\Model;
 class Order
 {
     /** @var float */
-    private $amount = 0;
+    private $quantity = 0;
 
     /** @var float */
     private $price = 0;
@@ -21,28 +21,28 @@ class Order
     }
 
     /**
-     * Get the value of amount
-     */ 
-    public function getAmount()
+     * Get the value of quantity
+     */
+    public function getQuantity()
     {
-        return $this->amount;
+        return $this->quantity;
     }
 
     /**
-     * Set the value of amount
+     * Set the value of quantity
      *
      * @return  self
-     */ 
-    public function setAmount($amount)
+     */
+    public function setQuantity($quantity)
     {
-        $this->amount = $amount;
+        $this->quantity = $quantity;
 
         return $this;
     }
 
     /**
      * Get the value of price
-     */ 
+     */
     public function getPrice()
     {
         return $this->price;
@@ -52,7 +52,7 @@ class Order
      * Set the value of price
      *
      * @return  self
-     */ 
+     */
     public function setPrice($price)
     {
         $this->price = $price;
@@ -62,7 +62,7 @@ class Order
 
     /**
      * Get the value of total
-     */ 
+     */
     public function getTotal()
     {
         return $this->total;
@@ -72,7 +72,7 @@ class Order
      * Set the value of total
      *
      * @return  self
-     */ 
+     */
     public function setTotal($total)
     {
         $this->total = $total;

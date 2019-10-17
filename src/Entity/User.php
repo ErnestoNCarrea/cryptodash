@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\BookOrder;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -58,13 +59,13 @@ class User implements UserInterface
     protected $passwordRequestToken;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\BookOrder", mappedBy="user")
      */
-    private $orders;
+    private $bookOrders;
 
     public function __construct()
     {
-        $this->orders = new ArrayCollection();
+        $this->bookOrders = new ArrayCollection();
     }
 
     public function hasRole(string $role): bool
@@ -241,30 +242,30 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Order[]
+     * @return Collection|BookOrder[]
      */
-    public function getOrders(): Collection
+    public function getBookOrders(): Collection
     {
-        return $this->orders;
+        return $this->bookOrders;
     }
 
-    public function addOrder(Order $order): self
+    public function addBookOrder(BookOrder $bookOrder): self
     {
-        if (!$this->orders->contains($order)) {
-            $this->orders[] = $order;
-            $order->setUser($this);
+        if (!$this->bookOrders->contains($bookOrder)) {
+            $this->bookOrders[] = $bookOrder;
+            $bookOrder->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeOrder(Order $order): self
+    public function removeBookOrder(BookOrder $bookOrder): self
     {
-        if ($this->orders->contains($order)) {
-            $this->orders->removeElement($order);
+        if ($this->bookOrders->contains($bookOrder)) {
+            $this->bookOrders->removeElement($bookOrder);
             // set the owning side to null (unless already changed)
-            if ($orders->getUser() === $this) {
-                $orders->setUser(null);
+            if ($bookOrder->getUser() === $this) {
+                $bookOrder->setUser(null);
             }
         }
 

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
+use App\Entity\BookOrder;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ExchangeRepository")
@@ -30,6 +32,11 @@ class Exchange
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $class;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BookOrder", mappedBy="exchange")
+     */
+    private $bookOrders;
 
     public function getId(): ?int
     {
@@ -68,6 +75,37 @@ class Exchange
     public function setClass(?string $class): self
     {
         $this->class = $class;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PersistentCollection|BookOrder[]
+     */
+    public function getBookOrders(): PersistentCollection
+    {
+        return $this->bookOrders;
+    }
+
+    public function addBookOrder(BookOrder $bookOrder): self
+    {
+        if (!$this->bookOrders->contains($bookOrder)) {
+            $this->bookOrders[] = $bookOrder;
+            $bookOrder->setExchange($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookOrder(BookOrder $bookOrder): self
+    {
+        if ($this->bookOrders->contains($bookOrder)) {
+            $this->bookOrders->removeElement($bookOrder);
+            // set the owning side to null (unless already changed)
+            if ($bookOrder->getExchange() === $this) {
+                $bookOrder->setExchange(null);
+            }
+        }
 
         return $this;
     }
