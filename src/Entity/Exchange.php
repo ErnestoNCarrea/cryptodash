@@ -34,7 +34,7 @@ class Exchange
     private $class;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\BookOrder", mappedBy="exchange")
+     * @ORM\OneToMany(targetEntity="App\Entity\BookOrder", mappedBy="exchange", cascade={"persist", "remove"})
      */
     private $bookOrders;
 
