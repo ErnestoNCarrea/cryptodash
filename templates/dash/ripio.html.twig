@@ -19,7 +19,7 @@
                 <tr>
                     <td>Venta BTC</td>
                     <td class="text-right">{{ (analizador.RipioSellBtc / analizador.Dolar)|number_format }}</td>
-                    <td class="text-right">{{ analizador.RipioBuyBtc|number_format }}</td>
+                    <td class="text-right">{{ analizador.RipioSellBtc|number_format }}</td>
                     <td class="text-right">{{ (analizador.RipioSellGapBtc * 100)|number_format(1) }}%
                         {% if analizador.RipioSellGapBtc > 0.08 %}<i class="fa fa-money-bill-wave text-success" title="Deberías tener esta punta"></i>
                         {% elseif analizador.RipioSellGapBtc < 0.03 %}<i class="fa fa-fire text-danger" title="¡Muy barato!"></i>
