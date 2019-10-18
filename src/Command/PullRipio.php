@@ -2,23 +2,21 @@
 
 namespace App\Command;
 
+use App\Entity\BookOrder;
+use App\Entity\Exchange;
+use App\Model\OrderBook;
+use App\Util\RipioClient;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\PersistentCollection;
-use App\Util\RipioClient;
-use App\Model\OrderBook;
-use App\Entity\BookOrder;
-use App\Entity\Exchange;
-use Twig_Node_Expression_Array;
 
-class RipioConnection extends Command
+class PullRipio extends Command
 {
     //** @var EntityManagerInterface */
     private $em;
 
-    protected static $defaultName = 'connection:ripio';
+    protected static $defaultName = 'pull:ripio';
 
     public function __construct(EntityManagerInterface $em)
     {
@@ -29,7 +27,7 @@ class RipioConnection extends Command
 
     protected function configure()
     {
-        $this->setDescription('Establece una conexión con Ripio.');
+        $this->setDescription('Actualiza datos desde Ripio.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -42,13 +40,36 @@ class RipioConnection extends Command
             $orderBook = $clientRipio->getOrderBook($pair);
 
             $deletedOrders = $this->updateOrderBook($exchange, $pair, $orderBook);
-            foreach ($deletedOrders as $deletedOrder) {
-                $this->em->remove($deletedOrder);
+            if ($deletedOrders) {
+                foreach ($deletedOrders as $deletedOrder) {
+                    $this->em->remove($deletedOrder);
+                }
+            }
+
+            $rate = $this->updateRate($exchange, $pair, $clientRipio->getCurrentPrice($pair));
+            if ($rate) {
+                $this->em->persist($rate);
             }
         }
 
         $this->em->persist($exchange);
         $this->em->flush();
+    }
+
+    private function updateRate(Exchange $exchange, string $pair, \App\Model\Rate $rate): \App\Entity\Rate
+    {
+        $rateEntity = $exchange->getCurrentRateForPair($pair);
+        if ($rateEntity === null) {
+            $rateEntity = new \App\Entity\Rate();
+            $exchange->addCurrentRate($rateEntity);
+        }
+
+        $rateEntity->setPair($pair);
+        $rateEntity->setBuyPrice($rate->getBuy());
+        $rateEntity->setSellPrice($rate->getSell());
+        $rateEntity->setDateTime(new \Datetime());
+
+        return $rateEntity;
     }
 
     private function updateOrderBook(Exchange $exchange, string $pair, OrderBook $updatedOrderBook): array

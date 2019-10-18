@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\BookOrder;
+use App\Entity\Rate;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
-use App\Entity\BookOrder;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ExchangeRepository")
@@ -29,6 +30,7 @@ class Exchange
     private $infiniteSupply;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $class;
@@ -37,6 +39,23 @@ class Exchange
      * @ORM\OneToMany(targetEntity="App\Entity\BookOrder", mappedBy="exchange", cascade={"persist", "remove"})
      */
     private $bookOrders;
+
+    /**
+     * @var Rate
+     * @ORM\OneToMany(targetEntity="App\Entity\Rate", mappedBy="exchange", cascade={"persist", "remove"})
+     */
+    private $currentRates;
+
+    public function getCurrentRateForPair(string $pair): ?Rate
+    {
+        foreach ($this->currentRates as $rate) {
+            if ($rate->getPair() == $pair) {
+                return $rate;
+            }
+        }
+
+        return null;
+    }
 
     public function getId(): ?int
     {
@@ -104,6 +123,37 @@ class Exchange
             // set the owning side to null (unless already changed)
             if ($bookOrder->getExchange() === $this) {
                 $bookOrder->setExchange(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PersistentCollection|Rate[]
+     */
+    public function getCurrentRates(): PersistentCollection
+    {
+        return $this->currentRates;
+    }
+
+    public function addCurrentRate(Rate $currentRate): self
+    {
+        if (!$this->currentRates->contains($currentRate)) {
+            $this->currentRates[] = $currentRate;
+            $currentRate->setExchange($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCurrentRate(Rate $currentRate): self
+    {
+        if ($this->currentRates->contains($currentRate)) {
+            $this->currentRates->removeElement($currentRate);
+            // set the owning side to null (unless already changed)
+            if ($currentRate->getExchange() === $this) {
+                $currentRate->setExchange(null);
             }
         }
 

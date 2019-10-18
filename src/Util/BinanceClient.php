@@ -2,11 +2,12 @@
 
 namespace App\Util;
 
-use GuzzleHttp\Client;
 use App\Model\BinanceExchange;
 use App\Model\Order;
 use App\Model\OrderBook;
+use App\Model\Rate;
 use App\Util\AbstractClient;
+use GuzzleHttp\Client;
 
 class BinanceClient extends AbstractClient
 {
@@ -33,38 +34,38 @@ class BinanceClient extends AbstractClient
 
         $this->client = new Client([
             'base_uri' => 'https://api.binance.com/',
-            'timeout'  => 10,
+            'timeout' => 10,
         ]);
     }
 
     public function connect()
-    { }
+    {}
 
     public function getOrderBook(string $pair): ?OrderBook
     {
         $res = $this->client->request('GET', 'api/v3/avgPrice', [
             'query' => [
-                'symbol' => $this->formatPair($this->convertUsdToUsdt($pair))
+                'symbol' => $this->formatPair($this->convertUsdToUsdt($pair)),
             ],
         ]);
 
-        $buyOrders =  [new Order(0, $price, 0)];
+        $buyOrders = [new Order(0, $price, 0)];
         $sellOrders = [new Order(0, $price, 0)];
 
         return new OrderBook($pair, $buyOrders, $sellOrders);
     }
 
-    public function getCurrentPrice(string $pair): float
+    public function getCurrentPrice(string $pair): Rate
     {
         $res = $this->client->request('GET', 'api/v3/avgPrice', [
             'query' => [
-                'symbol' => $this->formatPair($this->convertUsdToUsdt($pair))
+                'symbol' => $this->formatPair($this->convertUsdToUsdt($pair)),
             ],
         ]);
 
         $res = json_decode((string) $res->getBody());
 
-        return (float) $res->price;
+        return new Rate((float) $res->price, (float) $res->price);
     }
 
     public function getSupportedPairs(): array

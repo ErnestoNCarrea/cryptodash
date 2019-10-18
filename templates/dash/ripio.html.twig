@@ -102,7 +102,13 @@
                 </tr>
             </tbody>
             </table>
-            ETH/BTC: {{ analizador.ReferenceEthBtc|number_format(6) }}
+            ETH/BTC: ref {{ analizador.ReferenceEthBtc|number_format(6) }},
+            {% if (analizador.RipioBuyEth / analizador.RipioSellBtc) > analizador.ReferenceEthBtc %}
+                <span class="text-success">
+            {% else %}
+                <span class="text-muted">
+            {% endif %}
+                Ripio {{ (analizador.RipioBuyEth / analizador.RipioSellBtc)|number_format(6) }}</span>
         </div>
     </div>
 

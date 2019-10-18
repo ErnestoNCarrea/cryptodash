@@ -2,11 +2,12 @@
 
 namespace App\Util;
 
-use GuzzleHttp\Client;
 use App\Model\Order;
 use App\Model\OrderBook;
+use App\Model\Rate;
 use App\Model\RipioExchange;
 use App\Util\AbstractClient;
+use GuzzleHttp\Client;
 
 class RipioClient extends AbstractClient
 {
@@ -30,12 +31,21 @@ class RipioClient extends AbstractClient
 
         $this->client = new Client([
             'base_uri' => 'https://api.exchange.ripio.com/api/v1/',
-            'timeout'  => 10,
+            'timeout' => 10,
         ]);
     }
 
     public function connect()
-    { }
+    {}
+
+    public function getCurrentPrice(string $pair): Rate
+    {
+        $res = $this->client->request('GET', 'https://ripio.com/api/v1/rates/');
+
+        $res = json_decode((string) $res->getBody());
+
+        return new Rate((float) $res->rates->ARS_BUY, (float) $res->rates->ARS_SELL);
+    }
 
     public function getOrderBook(string $pair): ?OrderBook
     {
@@ -43,7 +53,7 @@ class RipioClient extends AbstractClient
             'headers' => [
                 'Accept' => '*/*',
                 'Content-type' => 'application/json',
-            ]
+            ],
         ]);
 
         if ($res->getStatusCode() === 200) {
@@ -82,13 +92,13 @@ class RipioClient extends AbstractClient
     {
         $res = $this->client->request('GET', 'pair/', [
             'query' => [
-                'country' => 'AR'
+                'country' => 'AR',
             ],
             'headers' => [
                 'Accept' => '*/*',
                 'Content-type' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->authToken,
-            ]
+            ],
         ]);
 
         return json_decode((string) $res->getBody());
