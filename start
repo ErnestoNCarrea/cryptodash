@@ -1,0 +1,8 @@
+#!/bin/sh
+bin/console server:start
+while :
+do
+    bin/console pull:ripio
+    bin/console pull:binance
+    sleep 10
+done

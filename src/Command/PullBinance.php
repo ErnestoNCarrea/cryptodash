@@ -32,6 +32,8 @@ class PullBinance extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $output->writeln('Actualizando desde Binance');
+
         $exchange = $this->em->getRepository('App\Entity\Exchange')->find(1000);
         $exchangeClient = new BinanceClient();
 

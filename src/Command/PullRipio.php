@@ -32,6 +32,8 @@ class PullRipio extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $output->writeln('Actualizando desde Ripio');
+
         $exchange = $this->em->getRepository('App\Entity\Exchange')->find(9000);
         $clientRipio = new RipioClient('8f2104688f50a866fe648be370c9d80ef04d2203c59a1dc5ee8eea7118a94e6f');
 
