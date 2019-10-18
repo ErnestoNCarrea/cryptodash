@@ -5,53 +5,53 @@ namespace App\Model;
 class Rate
 {
     /** @var float */
-    private $buy = 0;
+    private $buyPrice = 0;
 
     /** @var float */
-    private $sell = 0;
+    private $sellPrice = 0;
 
-    public function __construct(float $buy, float $sell)
+    public function __construct(float $buyPrice, float $sellPrice)
     {
-        $this->buy = $buy;
-        $this->sell = $sell;
+        $this->buyPrice = $buyPrice;
+        $this->sellPrice = $sellPrice;
     }
 
     public function spread(): float
     {
-        return $this->buy - $this->sell;
+        return $this->buyPrice - $this->sellPrice;
     }
 
     /**
      * @ignore
      */
-    public function getBuy(): float
+    public function getBuyPrice(): float
     {
-        return $this->buy;
+        return $this->buyPrice;
     }
 
     /**
      * @ignore
      */
-    public function setBuy(float $buy)
+    public function setBuyPrice(float $buyPrice)
     {
-        $this->buy = $buy;
+        $this->buyPrice = $buyPrice;
         return $this;
     }
 
     /**
      * @ignore
      */
-    public function getSell(): float
+    public function getSellPrice(): float
     {
-        return $this->sell;
+        return $this->sellPrice;
     }
 
     /**
      * @ignore
      */
-    public function setSell(float $sell)
+    public function setSellPrice(float $sellPrice)
     {
-        $this->sell = $sell;
+        $this->sellPrice = $sellPrice;
         return $this;
     }
 }

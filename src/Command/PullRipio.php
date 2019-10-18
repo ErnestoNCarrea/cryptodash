@@ -65,8 +65,8 @@ class PullRipio extends Command
         }
 
         $rateEntity->setPair($pair);
-        $rateEntity->setBuyPrice($rate->getBuy());
-        $rateEntity->setSellPrice($rate->getSell());
+        $rateEntity->setBuyPrice($rate->getBuyPrice());
+        $rateEntity->setSellPrice($rate->getSellPrice());
         $rateEntity->setDateTime(new \Datetime());
 
         return $rateEntity;

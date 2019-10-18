@@ -4,6 +4,7 @@ namespace App\Util;
 
 use App\Model\Order;
 use App\Model\OrderBook;
+use App\Model\Rate;
 
 class AnalizadorRipio
 {
@@ -16,16 +17,16 @@ class AnalizadorRipio
     /** @var OrderBook */
     private $orderBookDolar;
 
-    /** @var float */
+    /** @var Rate */
     private $referenceBtcUsd;
 
-    /** @var float */
+    /** @var Rate */
     private $referenceEthUsd;
 
-    /** @var float */
+    /** @var Rate */
     private $referenceEthBtc;
 
-    public function __construct(OrderBook $ripioBtc, OrderBook $ripioEth, OrderBook $dolar, float $referenceBtcUsd, float $referenceEthUsd, float $referenceEthBtc)
+    public function __construct(OrderBook $ripioBtc, OrderBook $ripioEth, OrderBook $dolar, Rate $referenceBtcUsd, Rate $referenceEthUsd, Rate $referenceEthBtc)
     {
         $this->orderBookRipioBtcArs = $ripioBtc;
         $this->orderBookRipioEthArs = $ripioEth;
@@ -41,7 +42,7 @@ class AnalizadorRipio
         $precioCompraEth = $this->getRipioSellEth();
 
         $ethPorBtcEnRipio = $precioVentaBtc / $precioCompraEth;
-        $btcPorEthEnRef = ($ethPorBtcEnRipio * $this->referenceEthBtc) - 1;
+        $btcPorEthEnRef = ($ethPorBtcEnRipio * $this->referenceEthBtc->getSellPrice()) - 1;
 
         return $btcPorEthEnRef;
     }
@@ -52,7 +53,7 @@ class AnalizadorRipio
         $precioCompraBtc = $this->getRipioSellBtc();
 
         $btcPorEthEnRipio = $precioVentaEth / $precioCompraBtc;
-        $ethPorBtcEnRef = ($btcPorEthEnRipio / $this->referenceEthBtc) - 1;
+        $ethPorBtcEnRef = ($btcPorEthEnRipio / $this->referenceEthBtc->getSellPrice()) - 1;
 
         return $ethPorBtcEnRef;
     }
@@ -72,17 +73,17 @@ class AnalizadorRipio
         return $this->orderBookDolar->getBestSellPrice();
     }
 
-    public function getReferenceBtcUsd(): float
+    public function getReferenceBtcUsd(): Rate
     {
         return $this->referenceBtcUsd;
     }
 
-    public function getReferenceEthUsd(): float
+    public function getReferenceEthUsd(): Rate
     {
         return $this->referenceEthUsd;
     }
 
-    public function getReferenceEthBtc(): float
+    public function getReferenceEthBtc(): Rate
     {
         return $this->referenceEthBtc;
     }
@@ -109,21 +110,21 @@ class AnalizadorRipio
 
     public function getRipioBuyGapBtc(): float
     {
-        return $this->orderBookRipioBtcArs->getBestBuyPrice() / ($this->getReferenceBtcUsd() * $this->getDolar()) - 1;
+        return $this->orderBookRipioBtcArs->getBestBuyPrice() / ($this->getReferenceBtcUsd()->getSellPrice() * $this->getDolar()) - 1;
     }
 
     public function getRipioBuyGapEth(): float
     {
-        return $this->orderBookRipioEthArs->getBestBuyPrice() / ($this->getReferenceEthUsd() * $this->getDolar()) - 1;
+        return $this->orderBookRipioEthArs->getBestBuyPrice() / ($this->getReferenceEthUsd()->getSellPrice() * $this->getDolar()) - 1;
     }
 
     public function getRipioSellGapBtc(): float
     {
-        return $this->orderBookRipioBtcArs->getBestSellPrice() / ($this->getReferenceBtcUsd() * $this->getDolar()) - 1;
+        return $this->orderBookRipioBtcArs->getBestSellPrice() / ($this->getReferenceBtcUsd()->getSellPrice() * $this->getDolar()) - 1;
     }
 
     public function getRipioSellGapEth(): float
     {
-        return $this->orderBookRipioEthArs->getBestSellPrice() / ($this->getReferenceEthUsd() * $this->getDolar()) - 1;
+        return $this->orderBookRipioEthArs->getBestSellPrice() / ($this->getReferenceEthUsd()->getSellPrice() * $this->getDolar()) - 1;
     }
 }
