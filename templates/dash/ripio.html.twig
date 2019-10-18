@@ -51,7 +51,7 @@
                         {% elseif analizador.RipioSellGapEth < 0.05 %}<i class="fa fa-eye text-warning" title="Buen precio para comprar"></i>
                         {% endif %}
                     </td>
-                    <td class="text-right text-muted">{{ (analizador.RipioBuyEth / analizador.ReferenceEthUsd)|number_format(2) }}</td>
+                    <td class="text-right text-muted">{{ (analizador.RipioSellEth / analizador.ReferenceEthUsd)|number_format(2) }}</td>
                 </tr>
                 <tr>
                     <td>Compra ETH</td>
@@ -63,7 +63,7 @@
                         {% elseif analizador.RipioBuyGapEth > 0.08 %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
                         {% endif %}
                     </td>
-                    <td class="text-right">{{ (analizador.RipioSellEth / analizador.ReferenceEthUsd)|number_format(2) }}</td>
+                    <td class="text-right">{{ (analizador.RipioBuyEth / analizador.ReferenceEthUsd)|number_format(2) }}</td>
                 </tr>
             </tbody>
             </table>
