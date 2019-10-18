@@ -54,10 +54,12 @@ class Exchange
     {
         $res = new OrderBook($pair);
         foreach ($this->getBookOrders() as $bookOrder) {
-            if ($bookOrder->getSide() == BookOrder::SIDE_SELL) {
-                $res->addSellOrder(new \App\Model\Order($bookOrder->getQuantity(), $bookOrder->getPrice()));
-            } else {
-                $res->addBuyOrder(new \App\Model\Order($bookOrder->getQuantity(), $bookOrder->getPrice()));
+            if ($bookOrder->getPair() == $pair) {
+                if ($bookOrder->getSide() == BookOrder::SIDE_SELL) {
+                    $res->addSellOrder(new \App\Model\Order($bookOrder->getQuantity(), $bookOrder->getPrice()));
+                } else {
+                    $res->addBuyOrder(new \App\Model\Order($bookOrder->getQuantity(), $bookOrder->getPrice()));
+                }
             }
         }
 
