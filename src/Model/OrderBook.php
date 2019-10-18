@@ -18,8 +18,20 @@ class OrderBook
     public function __construct(string $pair, ?array $buyOrders = null, ?array $sellOrders = null)
     {
         $this->pair = $pair;
-        $this->buyOrders = $buyOrders;
-        $this->sellOrders = $sellOrders;
+        $this->buyOrders = $buyOrders ? $buyOrders : [];
+        $this->sellOrders = $sellOrders ? $sellOrders : [];
+    }
+
+    public function addBuyOrder(Order $order): self
+    {
+        $this->buyOrders[] = $order;
+        return $this;
+    }
+
+    public function addSellOrder(Order $order): self
+    {
+        $this->sellOrders[] = $order;
+        return $this;
     }
 
     public function getBestBuyOrder(?float $fillAmount = null): Order

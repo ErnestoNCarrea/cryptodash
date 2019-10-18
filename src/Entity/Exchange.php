@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\BookOrder;
 use App\Entity\Rate;
+use App\Model\OrderBook;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 
@@ -45,6 +46,23 @@ class Exchange
      * @ORM\OneToMany(targetEntity="App\Entity\Rate", mappedBy="exchange", cascade={"persist", "remove"})
      */
     private $currentRates;
+
+    /**
+     * @return OrderBook
+     */
+    public function getOrderBookForPair(string $pair): OrderBook
+    {
+        $res = new OrderBook($pair);
+        foreach ($this->getBookOrders() as $bookOrder) {
+            if ($bookOrder->getSide() == BookOrder::SIDE_SELL) {
+                $res->addSellOrder(new \App\Model\Order($bookOrder->getQuantity(), $bookOrder->getPrice()));
+            } else {
+                $res->addBuyOrder(new \App\Model\Order($bookOrder->getQuantity(), $bookOrder->getPrice()));
+            }
+        }
+
+        return $res;
+    }
 
     public function getCurrentRateForPair(string $pair): ?Rate
     {

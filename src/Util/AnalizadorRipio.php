@@ -2,9 +2,10 @@
 
 namespace App\Util;
 
-use App\Model\Order;
+use App\Entity\Exchange;
+use App\Entity\Order;
+use App\Entity\Rate;
 use App\Model\OrderBook;
-use App\Model\Rate;
 
 class AnalizadorRipio
 {
@@ -14,8 +15,8 @@ class AnalizadorRipio
     /** @var OrderBook */
     private $orderBookRipioEthArs;
 
-    /** @var OrderBook */
-    private $orderBookDolar;
+    /** @var \App\Model\Rate */
+    private $referenceUsdArs;
 
     /** @var Rate */
     private $referenceBtcUsd;
@@ -26,14 +27,15 @@ class AnalizadorRipio
     /** @var Rate */
     private $referenceEthBtc;
 
-    public function __construct(OrderBook $ripioBtc, OrderBook $ripioEth, OrderBook $dolar, Rate $referenceBtcUsd, Rate $referenceEthUsd, Rate $referenceEthBtc)
+    public function __construct(Exchange $exchangeRipio, Exchange $exchangeReference, \App\Model\Rate $dolar)
     {
-        $this->orderBookRipioBtcArs = $ripioBtc;
-        $this->orderBookRipioEthArs = $ripioEth;
-        $this->orderBookDolar = $dolar;
-        $this->referenceBtcUsd = $referenceBtcUsd;
-        $this->referenceEthUsd = $referenceEthUsd;
-        $this->referenceEthBtc = $referenceEthBtc;
+        $this->orderBookRipioBtcArs = $exchangeRipio->getOrderBookForPair('BTC/ARS');
+        $this->orderBookRipioEthArs = $exchangeRipio->getOrderBookForPair('ETH/ARS');
+        $this->referenceUsdArs = $dolar;
+        $this->referenceBtcUsd = $exchangeReference->getCurrentRateForPair('BTC/USD');
+        $this->referenceEthUsd = $exchangeReference->getCurrentRateForPair('ETH/USD');
+        $this->referenceEthBtc = $exchangeReference->getCurrentRateForPair('ETH/BTC');
+
     }
 
     public function calcularGapArbitrageBtcEth(): float
@@ -70,7 +72,7 @@ class AnalizadorRipio
 
     public function getDolar(): float
     {
-        return $this->orderBookDolar->getBestSellPrice();
+        return $this->referenceUsdArs->getSellPrice();
     }
 
     public function getReferenceBtcUsd(): Rate

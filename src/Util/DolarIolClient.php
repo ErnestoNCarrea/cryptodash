@@ -5,6 +5,7 @@ namespace App\Util;
 use App\Model\DolarIolExchange;
 use App\Model\Order;
 use App\Model\OrderBook;
+use App\Model\Rate;
 use App\Util\AbstractClient;
 
 class DolarIolClient extends AbstractClient
@@ -21,7 +22,14 @@ class DolarIolClient extends AbstractClient
     }
 
     public function connect()
-    { }
+    {}
+
+    public function getCurrentPrice(string $pair): Rate
+    {
+        $dolar = 59.5;
+
+        return new Rate($dolar, $dolar * 1.05);
+    }
 
     public function getOrderBook(string $pair): ?OrderBook
     {
