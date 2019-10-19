@@ -23,7 +23,7 @@ class DashController extends AbstractController
     }
 
     /**
-     * @Route("/ripio", name="ripio")
+     * @Route("/ripio", name="dash_ripio")
      */
     public function ripio()
     {

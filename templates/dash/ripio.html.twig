@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <h3>Ripio</h3>
+            <h3>Ripio exchange</h3>
             <table class="table table-striped table-sm thead-dark">
             <thead>
                 <tr>
@@ -72,6 +72,49 @@
             Venta al 10%: BTC {{ (analizador.ReferenceBtcUsd.SellPrice * analizador.Dolar * 1.10)|number_format }}, 
                 ETH {{ (analizador.ReferenceEthUsd.SellPrice * analizador.Dolar * 1.10)|number_format }}.
             </span>
+
+
+            <h3>Billetera Ripio</h3>
+            <table class="table table-striped table-sm thead-dark">
+            <thead>
+                <tr>
+                <th scope="col">Asset</th>
+                <th scope="col" class="text-right">USD</th>
+                <th scope="col" class="text-right">ARS</th>
+                <th scope="col" class="text-right">Spread</th>
+                <th scope="col" class="text-right">Dólar<br />implícito</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Compra BTC</td>
+                    <td class="text-right">{{ (analizador.exchangeRipio.CurrentRateForPair('BTC/ARS').SellPrice / analizador.Dolar)|number_format }}</td>
+                    <td class="text-right">{{ analizador.exchangeRipio.CurrentRateForPair('BTC/ARS').SellPrice|number_format }}</td>
+                    {% set gap = analizador.exchangeRipio.CurrentRateForPair('BTC/ARS').SellPrice / (analizador.ReferenceBtcUsd.SellPrice * analizador.Dolar)  - 1 %}
+                    <td class="text-right">{{ (gap * 100)|number_format(1) }}%
+                        {% if gap < 0.03 %}<i class="fa fa-money-bill-wave text-success" title="Deberías tener esta punta"></i>
+                        {% elseif gap > 0.10 %}<i class="fa fa-fire text-danger" title="¡Vendan!"></i>
+                        {% elseif gap > 0.08 %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
+                        {% endif %}
+                    </td>
+                    <td class="text-right">{{ (analizador.exchangeRipio.CurrentRateForPair('BTC/ARS').SellPrice / analizador.ReferenceBtcUsd.SellPrice)|number_format(2) }}</td>
+                </tr>
+
+                <tr>
+                    <td>Compra ETH</td>
+                    <td class="text-right">{{ (analizador.exchangeRipio.CurrentRateForPair('ETH/ARS').SellPrice / analizador.Dolar)|number_format }}</td>
+                    <td class="text-right">{{ analizador.exchangeRipio.CurrentRateForPair('ETH/ARS').SellPrice|number_format }}</td>
+                    {% set gap = analizador.exchangeRipio.CurrentRateForPair('ETH/ARS').SellPrice / (analizador.ReferenceEthUsd.SellPrice * analizador.Dolar)  - 1 %}
+                    <td class="text-right">{{ (gap * 100)|number_format(1) }}%
+                        {% if gap < 0.03 %}<i class="fa fa-money-bill-wave text-success" title="Deberías tener esta punta"></i>
+                        {% elseif gap > 0.10 %}<i class="fa fa-fire text-danger" title="¡Vendan!"></i>
+                        {% elseif gap > 0.08 %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
+                        {% endif %}
+                    </td>
+                    <td class="text-right">{{ (analizador.exchangeRipio.CurrentRateForPair('ETH/ARS').SellPrice / analizador.ReferenceEthUsd.SellPrice)|number_format(2) }}</td>
+                </tr>
+            </tbody>
+            </table>
         </div>
 
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -145,8 +188,22 @@
 
 {% block javascripts %}
 <script>
-setTimeout(function(){
-   window.location.reload(1);
-}, 10000);
+    function ripioRecargar() {
+        url = '{{ path('dash_ripio') }}';
+        destino = '#page-wrapper';
+        $.get(url, function (data, status, xhr) {
+            try {
+                $(destino).html(data);
+            } catch (err) {
+                $(destinoFinal).append('<div class="alert alert-dismissable alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert">×</button>Error al cargar fragmento AJAX: ' + err + '</div>');
+            }
+        }).fail(function (jqXHR) {
+            // Muestro un error
+            $(destino).html(jqXHR.responseText);
+        });
+        setTimeout(ripioRecargar, 10000);
+    }
+
+    setTimeout(ripioRecargar, 10000);
 </script>
 {% endblock javascripts %}
