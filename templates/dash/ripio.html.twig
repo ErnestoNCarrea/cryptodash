@@ -67,11 +67,11 @@
                 </tr>
             </tbody>
             </table>
-            <span class="small">
+            <p class="small">
             Brecha entre puntas: BTC {{ (analizador.GapBtc * 100)|number_format(1) }}%, ETH {{ (analizador.GapEth * 100)|number_format(1) }}%.
             Venta al 10%: BTC {{ (analizador.ReferenceBtcUsd.SellPrice * analizador.Dolar * 1.10)|number_format }}, 
                 ETH {{ (analizador.ReferenceEthUsd.SellPrice * analizador.Dolar * 1.10)|number_format }}.
-            </span>
+            </p>
 
 
             <h3>Billetera Ripio</h3>
@@ -82,36 +82,33 @@
                 <th scope="col" class="text-right">USD</th>
                 <th scope="col" class="text-right">ARS</th>
                 <th scope="col" class="text-right">Spread</th>
-                <th scope="col" class="text-right">Dólar<br />implícito</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>Compra BTC</td>
-                    <td class="text-right">{{ (analizador.exchangeRipio.CurrentRateForPair('BTC/ARS').SellPrice / analizador.Dolar)|number_format }}</td>
-                    <td class="text-right">{{ analizador.exchangeRipio.CurrentRateForPair('BTC/ARS').SellPrice|number_format }}</td>
-                    {% set gap = analizador.exchangeRipio.CurrentRateForPair('BTC/ARS').SellPrice / (analizador.ReferenceBtcUsd.SellPrice * analizador.Dolar)  - 1 %}
+                    <td class="text-right">{{ (analizador.exchangeRipio.CurrentRateForPair('BTC/ARS').SellPrice / analizador.Dolar * 0.99)|number_format }}</td>
+                    <td class="text-right">{{ (analizador.exchangeRipio.CurrentRateForPair('BTC/ARS').SellPrice * 0.99)|number_format }}</td>
+                    {% set gap = analizador.exchangeRipio.CurrentRateForPair('BTC/ARS').SellPrice / (analizador.ReferenceBtcUsd.SellPrice * analizador.Dolar)  - 1.01 %}
                     <td class="text-right">{{ (gap * 100)|number_format(1) }}%
                         {% if gap < 0.03 %}<i class="fa fa-money-bill-wave text-success" title="Deberías tener esta punta"></i>
                         {% elseif gap > 0.10 %}<i class="fa fa-fire text-danger" title="¡Vendan!"></i>
                         {% elseif gap > 0.08 %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
                         {% endif %}
                     </td>
-                    <td class="text-right">{{ (analizador.exchangeRipio.CurrentRateForPair('BTC/ARS').SellPrice / analizador.ReferenceBtcUsd.SellPrice)|number_format(2) }}</td>
                 </tr>
 
                 <tr>
                     <td>Compra ETH</td>
-                    <td class="text-right">{{ (analizador.exchangeRipio.CurrentRateForPair('ETH/ARS').SellPrice / analizador.Dolar)|number_format }}</td>
-                    <td class="text-right">{{ analizador.exchangeRipio.CurrentRateForPair('ETH/ARS').SellPrice|number_format }}</td>
-                    {% set gap = analizador.exchangeRipio.CurrentRateForPair('ETH/ARS').SellPrice / (analizador.ReferenceEthUsd.SellPrice * analizador.Dolar)  - 1 %}
+                    <td class="text-right">{{ (analizador.exchangeRipio.CurrentRateForPair('ETH/ARS').SellPrice / analizador.Dolar * 0.99)|number_format }}</td>
+                    <td class="text-right">{{ (analizador.exchangeRipio.CurrentRateForPair('ETH/ARS').SellPrice * 0.99)|number_format }}</td>
+                    {% set gap = analizador.exchangeRipio.CurrentRateForPair('ETH/ARS').SellPrice / (analizador.ReferenceEthUsd.SellPrice * analizador.Dolar)  - 1.01 %}
                     <td class="text-right">{{ (gap * 100)|number_format(1) }}%
                         {% if gap < 0.03 %}<i class="fa fa-money-bill-wave text-success" title="Deberías tener esta punta"></i>
                         {% elseif gap > 0.10 %}<i class="fa fa-fire text-danger" title="¡Vendan!"></i>
                         {% elseif gap > 0.08 %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
                         {% endif %}
                     </td>
-                    <td class="text-right">{{ (analizador.exchangeRipio.CurrentRateForPair('ETH/ARS').SellPrice / analizador.ReferenceEthUsd.SellPrice)|number_format(2) }}</td>
                 </tr>
             </tbody>
             </table>
