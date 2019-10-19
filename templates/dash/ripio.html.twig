@@ -34,7 +34,7 @@
                     <td class="text-right">{{ analizador.RipioBuyBtc|number_format }}</td>
                     <td class="text-right">{{ (analizador.RipioBuyGapBtc * 100)|number_format(1) }}%
                         {% if analizador.RipioBuyGapBtc < 0.03 %}<i class="fa fa-money-bill-wave text-success" title="Deberías tener esta punta"></i>
-                        {% elseif analizador.RipioBuyGapBtc > 0.10 %}<i class="fa fa-fire text-danger" title="¡Vendan!"></i>
+                        {% elseif analizador.RipioBuyGapBtc > 0.10 %}<i class="fa fa-fire text-danger" title="¡Vendé!"></i>
                         {% elseif analizador.RipioBuyGapBtc > 0.08 %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
                         {% endif %}
                     </td>
@@ -59,7 +59,7 @@
                     <td class="text-right">{{ analizador.RipioBuyEth|number_format }}</td>
                     <td class="text-right">{{ (analizador.RipioBuyGapEth * 100)|number_format(1) }}%
                         {% if analizador.RipioBuyGapEth < 0.03 %}<i class="fa fa-money-bill-wave text-success" title="Deberías tener esta punta"></i>
-                        {% elseif analizador.RipioBuyGapEth > 0.10 %}<i class="fa fa-fire text-danger" title="¡Vendan!"></i>
+                        {% elseif analizador.RipioBuyGapEth > 0.10 %}<i class="fa fa-fire text-danger" title="¡Vendé!"></i>
                         {% elseif analizador.RipioBuyGapEth > 0.08 %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
                         {% endif %}
                     </td>
@@ -92,7 +92,7 @@
                     {% set gap = analizador.exchangeRipio.CurrentRateForPair('BTC/ARS').SellPrice / (analizador.ReferenceBtcUsd.SellPrice * analizador.Dolar)  - 1.01 %}
                     <td class="text-right">{{ (gap * 100)|number_format(1) }}%
                         {% if gap < 0.03 %}<i class="fa fa-money-bill-wave text-success" title="Deberías tener esta punta"></i>
-                        {% elseif gap > 0.10 %}<i class="fa fa-fire text-danger" title="¡Vendan!"></i>
+                        {% elseif gap > 0.10 %}<i class="fa fa-fire text-danger" title="¡Vendé!"></i>
                         {% elseif gap > 0.08 %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
                         {% endif %}
                     </td>
@@ -105,7 +105,7 @@
                     {% set gap = analizador.exchangeRipio.CurrentRateForPair('ETH/ARS').SellPrice / (analizador.ReferenceEthUsd.SellPrice * analizador.Dolar)  - 1.01 %}
                     <td class="text-right">{{ (gap * 100)|number_format(1) }}%
                         {% if gap < 0.03 %}<i class="fa fa-money-bill-wave text-success" title="Deberías tener esta punta"></i>
-                        {% elseif gap > 0.10 %}<i class="fa fa-fire text-danger" title="¡Vendan!"></i>
+                        {% elseif gap > 0.10 %}<i class="fa fa-fire text-danger" title="¡Vendé!"></i>
                         {% elseif gap > 0.08 %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
                         {% endif %}
                     </td>
