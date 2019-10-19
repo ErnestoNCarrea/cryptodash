@@ -40,11 +40,19 @@ class RipioClient extends AbstractClient
 
     public function getCurrentPrice(string $pair): Rate
     {
-        $res = $this->client->request('GET', 'https://ripio.com/api/v1/rates/');
+        [$pairBase, $pairQuote] = explode('/', $pair);
+
+        $res = $this->client->request('GET', 'https://ripio.com/api/v1/rates/', [
+            'query' => [
+                'base' => $pairBase,
+            ]]);
 
         $res = json_decode((string) $res->getBody());
 
-        return new Rate((float) $res->rates->ARS_BUY, (float) $res->rates->ARS_SELL);
+        $pairQuote_BUY = $pairQuote . '_BUY';
+        $pairQuote_SELL = $pairQuote . '_SELL';
+
+        return new Rate((float) $res->rates->$pairQuote_BUY, (float) $res->rates->$pairQuote_SELL);
     }
 
     public function getOrderBook(string $pair): ?OrderBook
