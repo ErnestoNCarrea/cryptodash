@@ -9,6 +9,12 @@ use App\Model\OrderBook;
 
 class AnalizadorRipio
 {
+    /** @var Exchange */
+    private $exchangeRipio;
+
+    /** @var Exchange */
+    private $exchangeReference;
+
     /** @var OrderBook */
     private $orderBookRipioBtcArs;
 
@@ -29,9 +35,14 @@ class AnalizadorRipio
 
     public function __construct(Exchange $exchangeRipio, Exchange $exchangeReference, \App\Model\Rate $dolar)
     {
+        $this->exchangeRipio = $exchangeRipio;
+        $this->exchangeReference = $exchangeReference;
+
         $this->orderBookRipioBtcArs = $exchangeRipio->getOrderBookForPair('BTC/ARS');
         $this->orderBookRipioEthArs = $exchangeRipio->getOrderBookForPair('ETH/ARS');
+
         $this->referenceUsdArs = $dolar;
+
         $this->referenceBtcUsd = $exchangeReference->getCurrentRateForPair('BTC/USD');
         $this->referenceEthUsd = $exchangeReference->getCurrentRateForPair('ETH/USD');
         $this->referenceEthBtc = $exchangeReference->getCurrentRateForPair('ETH/BTC');
@@ -128,5 +139,39 @@ class AnalizadorRipio
     public function getRipioSellGapEth(): float
     {
         return $this->orderBookRipioEthArs->getBestSellPrice() / ($this->getReferenceEthUsd()->getSellPrice() * $this->getDolar()) - 1;
+    }
+
+    /**
+     * @ignore
+     */
+    public function getExchangeRipio(): ?Exchange
+    {
+        return $this->exchangeRipio;
+    }
+
+    /**
+     * @ignore
+     */
+    public function setExchangeRipio($exchangeRipio)
+    {
+        $this->exchangeRipio = $exchangeRipio;
+        return $this;
+    }
+
+    /**
+     * @ignore
+     */
+    public function getExchangeReference(): ?Exchange
+    {
+        return $this->exchangeReference;
+    }
+
+    /**
+     * @ignore
+     */
+    public function setExchangeReference($exchangeReference)
+    {
+        $this->exchangeReference = $exchangeReference;
+        return $this;
     }
 }
