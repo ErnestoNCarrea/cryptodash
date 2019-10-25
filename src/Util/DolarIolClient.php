@@ -22,18 +22,18 @@ class DolarIolClient extends AbstractClient
     }
 
     public function connect()
-    {}
+    { }
 
     public function getCurrentPrice(string $pair): Rate
     {
-        $dolar = 59.5;
+        $dolar = 61;
 
         return new Rate($dolar, $dolar * 1.05);
     }
 
     public function getOrderBook(string $pair): ?OrderBook
     {
-        $dolar = 59.5;
+        $dolar = 61;
 
         $buyOrders = [new Order(999, $dolar, 0)];
         $sellOrders = [new Order(999, $dolar * 1.05, 0)];
