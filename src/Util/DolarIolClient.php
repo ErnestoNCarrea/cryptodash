@@ -26,14 +26,14 @@ class DolarIolClient extends AbstractClient
 
     public function getCurrentPrice(string $pair): Rate
     {
-        $dolar = 61;
+        $dolar = (float) getenv('DOLAR');
 
         return new Rate($dolar, $dolar * 1.05);
     }
 
     public function getOrderBook(string $pair): ?OrderBook
     {
-        $dolar = 61;
+        $dolar = (float) getenv('DOLAR');
 
         $buyOrders = [new Order(999, $dolar, 0)];
         $sellOrders = [new Order(999, $dolar * 1.05, 0)];
