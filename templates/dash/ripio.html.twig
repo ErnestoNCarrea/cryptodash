@@ -78,6 +78,39 @@
             </p>
 
 
+            <h3>Arbitraje ETH/BTC</h3>
+            <table class="table table-striped table-sm thead-dark">
+            <thead>
+                <tr>
+                <th scope="col">Asset</th>
+                <th scope="col" class="text-right">Relación</th>
+                <th scope="col" class="text-right">Brecha<br />con ref.</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Compra ETH / Venta BTC</td>
+                    <td class="text-right">{{ (analizador.RipioBuyEth / analizador.RipioSellBtc)|number_format(6) }} a 1</td>
+                    <td class="text-right">{{ (((analizador.RipioBuyEth / analizador.RipioSellBtc)/analizador.ReferenceEthBtc.SellPrice - 1) * 100)|number_format(1) }}%</td>
+                </tr>
+                <tr>
+                    <td>Venta ETH / Venta BTC</td>
+                    <td class="text-right">{{ (analizador.RipioSellEth / analizador.RipioSellBtc)|number_format(6) }} a 1</td>
+                    <td class="text-right">{{ (((analizador.RipioSellEth / analizador.RipioSellBtc)/analizador.ReferenceEthBtc.SellPrice - 1) * 100)|number_format(1) }}%</td>
+                </tr>
+                <tr>
+                    <td>Compra ETH / Compra BTC</td>
+                    <td class="text-right">{{ (analizador.RipioBuyEth / analizador.RipioBuyBtc)|number_format(6) }} a 1</td>
+                    <td class="text-right">{{ (((analizador.RipioBuyEth / analizador.RipioBuyBtc)/analizador.ReferenceEthBtc.SellPrice - 1) * 100)|number_format(1) }}%</td>
+                </tr>
+                <tr>
+                    <td>Venta ETH / Compra BTC</td>
+                    <td class="text-right">{{ (analizador.RipioSellEth / analizador.RipioBuyBtc)|number_format(6) }} a 1</td>
+                    <td class="text-right">{{ (((analizador.RipioSellEth / analizador.RipioBuyBtc)/analizador.ReferenceEthBtc.SellPrice - 1) * 100)|number_format(1) }}%</td>
+                </tr>
+            </tbody>
+            </table>
+
             <h3>Billetera Ripio</h3>
             <table class="table table-striped table-sm thead-dark">
             <thead>
