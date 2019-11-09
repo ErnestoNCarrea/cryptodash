@@ -17,7 +17,11 @@ class Order
     {
         $this->amount = $amount;
         $this->price = $price;
-        $this->total = $total;
+        if (!$total) {
+            $this->total = $amount * $price;
+        } else {
+            $this->total = $total;
+        }
     }
 
     /**
