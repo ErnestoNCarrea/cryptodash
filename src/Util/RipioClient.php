@@ -12,7 +12,7 @@ use GuzzleHttp\Client;
 class RipioClient extends AbstractClient
 {
     /** @var array */
-    private $supportedSymbols = ['ARS', 'BTC', 'ETH '];
+    private $supportedSymbols = ['ARS', 'BTC', 'ETH'];
 
     /** @var array */
     private $suppoertedPairs = ['BTC/ARS', 'ETH/ARS'];
@@ -113,7 +113,7 @@ class RipioClient extends AbstractClient
     }
 
     /**
-     * Format SYM/SYM pair to SYM_SYM.
+     * Convert SYM/SYM to the format used by the exchange (SYM_SYM).
      */
     private function formatPair(string $pair): string
     {
