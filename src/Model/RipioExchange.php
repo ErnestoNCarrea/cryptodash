@@ -10,10 +10,10 @@ class RipioExchange extends AbstractExchange
     {
         $this->name = 'Ripio';
         $this->makerFee = 0;
-        $this->takerFee = 0.05;
+        $this->takerFee = 0;
 
         $this->depositFees = null;
-        $this->withdrawalFees = null;
+        $this->withdrawalFees = 0.005;      // 0.5%
 
         $this->infiniteSupply = false;
     }
