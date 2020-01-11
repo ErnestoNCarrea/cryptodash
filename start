@@ -4,5 +4,6 @@ while :
 do
     bin/console pull:ripio
     bin/console pull:binance
+    bin/console pull:cryptomkt
     sleep 10
 done
