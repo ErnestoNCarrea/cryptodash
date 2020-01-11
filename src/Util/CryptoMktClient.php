@@ -61,7 +61,7 @@ class CryptoMktClient extends AbstractClient
         return new OrderBook($pair, $buyOrders, $sellOrders);
     }
 
-    private function decodeOrderCollection(array $json_orders): array
+    private function decodeOrderCollection($json_orders): array
     {
         $res = [];
 
@@ -84,7 +84,7 @@ class CryptoMktClient extends AbstractClient
 
         $res = json_decode((string) $res->getBody());
 
-        return new Rate((float) $res->data->bid, (float) $res->data->ask);
+        return new Rate((float) $res->data[0]->bid, (float) $res->data[0]->ask);
     }
 
     public function getSupportedPairs(): array
