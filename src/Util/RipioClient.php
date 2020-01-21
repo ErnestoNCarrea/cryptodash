@@ -12,10 +12,10 @@ use GuzzleHttp\Client;
 class RipioClient extends AbstractClient
 {
     /** @var array */
-    private $supportedSymbols = ['ARS', 'BTC', 'ETH'];
+    private $supportedSymbols = ['ARS', 'BTC', 'ETH', 'USDC'];
 
     /** @var array */
-    private $suppoertedPairs = ['BTC/ARS', 'ETH/ARS'];
+    private $suppoertedPairs = ['BTC/ARS', 'ETH/ARS', 'USDC/ARS', 'BTC/USDC', 'ETH/USDC'];
 
     /** @var Client */
     private $client;
@@ -49,9 +49,16 @@ class RipioClient extends AbstractClient
 
         $res = json_decode((string) $res->getBody());
 
+        if($pairQuote == 'USDC') {
+            // A Ripio le preguntás por USDC y en algunos lugares responde USD
+            $pairQuote = 'USD';
+        }
         $pairQuote_BUY = $pairQuote . '_BUY';
         $pairQuote_SELL = $pairQuote . '_SELL';
 
+        //echo "$pair \n\n";
+        //if($pair == 'BTC/USDC')
+        //print_r($res);
         return new Rate((float) $res->rates->$pairQuote_BUY, (float) $res->rates->$pairQuote_SELL);
     }
 
