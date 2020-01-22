@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Entity\BookOrder;
 use App\Entity\Rate;
 use App\Model\OrderBook;
-use App\Model\Rate as ModelRate;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 
@@ -48,7 +47,7 @@ class Exchange
      */
     private $currentRates;
 
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->name;
     }
@@ -81,7 +80,7 @@ class Exchange
 
         foreach ($this->currentRates as $rate) {
             $pair = $rate->getPair();
-            if ($symbol === '*' || strpos($pair, $symbol . '/') !== false || strpos($pair,  '/' . $symbol)) {
+            if ($symbol === '*' || strpos($pair, $symbol . '/') !== false || strpos($pair, '/' . $symbol)) {
                 $res[] = $rate;
             }
         }
@@ -105,17 +104,17 @@ class Exchange
 
         $res = [];
 
-        foreach($pairs as $pair) {
+        foreach ($pairs as $pair) {
             $ob = $this->getOrderBookForPair($pair);
             $rate = new Rate();
             $rate->setExchange($this);
             $rate->setPair($pair);
-            $rate->setSellPrice($ob->getBestSellPrice());
-            $rate->setBuyPrice($ob->getBestBuyPrice());
-            
+            $rate->setSellPrice($ob->getBestSellPrice() ?: 0);
+            $rate->setBuyPrice($ob->getBestBuyPrice() ?: 0);
+
             $res[] = $rate;
         }
-    
+
         return $res;
     }
 

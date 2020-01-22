@@ -54,23 +54,23 @@ class OrderBook
         }
     }
 
-    public function getBestBuyPrice(?float $fillAmount = null): float
+    public function getBestBuyPrice(?float $fillAmount = null): ?float
     {
         $order = $this->getBestBuyOrder($fillAmount);
         if ($order) {
             return $order->getPrice();
         } else {
-            return 0;
+            return null;
         }
     }
 
-    public function getBestSellPrice(?float $fillAmount = null): float
+    public function getBestSellPrice(?float $fillAmount = null): ?float
     {
         $order = $this->getBestSellOrder($fillAmount);
         if ($order) {
             return $order->getPrice();
         } else {
-            return 0;
+            return null;
         }
     }
 
