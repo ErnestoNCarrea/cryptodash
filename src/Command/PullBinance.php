@@ -37,7 +37,7 @@ class PullBinance extends Command
         $exchange = $this->em->getRepository('App\Entity\Exchange')->find(1000);
         $exchangeClient = new BinanceClient();
 
-        foreach (['BTC/USD', 'ETH/USD', 'ETH/BTC'] as $pair) {
+        foreach (['BTC/USD', 'ETH/USD', 'ETH/BTC', 'XLM/USD', 'EOS/USD'] as $pair) {
             /* $orderBook = $exchangeClient->getOrderBook($pair);
 
             $deletedOrders = $this->updateOrderBook($exchange, $pair, $orderBook);

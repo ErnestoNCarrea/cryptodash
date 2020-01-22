@@ -47,6 +47,11 @@ class Exchange
      */
     private $currentRates;
 
+    public function __toString() : string
+    {
+        return $this->name;
+    }
+
     /**
      * @return OrderBook
      */
@@ -60,6 +65,23 @@ class Exchange
                 } else {
                     $res->addBuyOrder(new \App\Model\Order($bookOrder->getQuantity(), $bookOrder->getPrice()));
                 }
+            }
+        }
+
+        return $res;
+    }
+
+    /**
+     * Obtener cotizaciones de un símbolo contra el resto de los símbolos.
+     */
+    public function getAllRatesForSymbol(string $symbol): array
+    {
+        $res = [];
+
+        foreach ($this->currentRates as $rate) {
+            $pair = $rate->getPair();
+            if ($symbol === '*' || strpos($pair, $symbol . '/') !== false || strpos($pair,  '/' . $symbol)) {
+                $res[] = $rate;
             }
         }
 

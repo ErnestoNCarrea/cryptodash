@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container-fluid">
+
+</div>
+{% endblock body %}
+
+{% block javascripts %}
+<script>
+    function cotiRecargar() {
+        url = '{{ path('dash_coti') }}';
+        destino = '#page-wrapper';
+        $.get(url, function (data, status, xhr) {
+            try {
+                $(destino).html(data);
+            } catch (err) {
+                $(destinoFinal).append('<div class="alert alert-dismissable alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert">×</button>Error al cargar fragmento AJAX: ' + err + '</div>');
+            }
+        }).fail(function (jqXHR) {
+            // Muestro un error
+            $(destino).html(jqXHR.responseText);
+        });
+        setTimeout(cotiRecargar, 10000);
+    }
+
+    setTimeout(cotiRecargar, 10000);
+</script>
+
+<div class="container-fluid"><div class="row">
+{% for exchange in analizador.Exchanges %}
+    {% set precioDolar = dolar.getCurrentPrice %}
+    <div class="col">
+    <h2>{{ exchange }}</h2>
+    {% set rates = exchange.getAllRatesForSymbol('*') %}
+    <table class="table">
+    {% for rate in rates %}
+        <tr>
+            <td>{{ rate.pair }}</td>
+            <td class="text-right">
+                {% if rate.buyPrice > 10 %}
+                    {{ rate.buyPrice|number_format(2) }}
+                {% else %}
+                    {{ rate.buyPrice|number_format(8) }}
+                {% endif %}
+
+                {% if 'ARS' in rate.pair %}
+                    {% set inversePair = rate.pair|replace({'ARS': 'USD'}) %}
+                    {% set referenceRate = reference.getCurrentRateForPair(inversePair) %}
+                    {% if referenceRate %}
+                        {% set buyPrice = referenceRate.getBuyPrice %}
+                        <br />
+                        <span class="small text-muted">DI {{ (rate.buyPrice / buyPrice)|number_format(2) }}</span>
+                    {% endif %}
+
+                {% elseif 'USD' in rate.pair %}
+                    
+                {% endif %}
+                
+            </td>
+            <td class="text-right">
+                {% if rate.sellPrice > 10 %}
+                    {{ rate.sellPrice|number_format(2) }}
+                {% else %}
+                    {{ rate.sellPrice|number_format(8) }}
+                {% endif %}
+
+                {% if 'ARS' in rate.pair %}
+                    {% set inversePair = rate.pair|replace({'ARS': 'USD'}) %}
+                    {% set referenceRate = reference.getCurrentRateForPair(inversePair) %}
+                    {% if referenceRate %}
+                        {% set sellPrice = referenceRate.getSellPrice %}
+                        <br />
+                        <span class="small text-muted">DI {{ (rate.sellPrice / sellPrice)|number_format(2) }}</span>
+                    {% endif %}
+
+                {% elseif 'USD' in rate.pair %}
+                    
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+    </div>
+{% endfor %}
+</div></div>
+{% endblock javascripts %}

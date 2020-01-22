@@ -24,14 +24,14 @@ class DolarIolClient extends AbstractClient
     public function connect()
     {}
 
-    public function getCurrentPrice(string $pair): Rate
+    public function getCurrentPrice(?string $pair = null): Rate
     {
         $dolar = (float) $_ENV['DOLAR'];
 
         return new Rate($dolar, $dolar);
     }
 
-    public function getOrderBook(string $pair): ?OrderBook
+    public function getOrderBook(?string $pair = null): ?OrderBook
     {
         $dolar = (float) $_ENV['DOLAR'];
 
