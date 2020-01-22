@@ -34,26 +34,44 @@ class OrderBook
         return $this;
     }
 
-    public function getBestBuyOrder(?float $fillAmount = null): Order
+    public function getBestBuyOrder(?float $fillAmount = null): ?Order
     {
-        // FIXME: fillAmount
-        return $this->buyOrders[0];
+        if ($this->buyOrders && count($this->buyOrders) > 0) {
+            // FIXME: fillAmount
+            return $this->buyOrders[0];
+        } else {
+            return null;
+        }
     }
 
-    public function getBestSellOrder(?float $fillAmount = null): Order
+    public function getBestSellOrder(?float $fillAmount = null): ?Order
     {
-        // FIXME: fillAmount
-        return $this->sellOrders[0];
+        if ($this->buyOrders && count($this->buyOrders) > 0) {
+            // FIXME: fillAmount
+            return $this->sellOrders[0];
+        } else {
+            return null;
+        }
     }
 
     public function getBestBuyPrice(?float $fillAmount = null): float
     {
-        return $this->getBestBuyOrder($fillAmount)->getPrice();
+        $order = $this->getBestBuyOrder($fillAmount);
+        if ($order) {
+            return $order->getPrice();
+        } else {
+            return 0;
+        }
     }
 
     public function getBestSellPrice(?float $fillAmount = null): float
     {
-        return $this->getBestSellOrder($fillAmount)->getPrice();
+        $order = $this->getBestSellOrder($fillAmount);
+        if ($order) {
+            return $order->getPrice();
+        } else {
+            return 0;
+        }
     }
 
     /**
