@@ -38,6 +38,26 @@
         <tr>
             <td>{{ rate.pair }}</td>
             <td class="text-right">
+                {% if rate.sellPrice > 10 %}
+                    {{ rate.sellPrice|number_format(2) }}
+                {% else %}
+                    {{ rate.sellPrice|number_format(8) }}
+                {% endif %}
+
+                {% if 'ARS' in rate.pair %}
+                    {% set inversePair = rate.pair|replace({'ARS': 'USD'}) %}
+                    {% set referenceRate = reference.getCurrentRateForPair(inversePair) %}
+                    {% if referenceRate %}
+                        {% set sellPrice = referenceRate.getSellPrice %}
+                        <br />
+                        <span class="small text-muted">DI {{ (rate.sellPrice / sellPrice)|number_format(2) }}</span>
+                    {% endif %}
+
+                {% elseif 'USD' in rate.pair %}
+                    
+                {% endif %}
+            </td>
+            <td class="text-right">
                 {% if rate.buyPrice > 10 %}
                     {{ rate.buyPrice|number_format(2) }}
                 {% else %}
@@ -57,26 +77,6 @@
                     
                 {% endif %}
                 
-            </td>
-            <td class="text-right">
-                {% if rate.sellPrice > 10 %}
-                    {{ rate.sellPrice|number_format(2) }}
-                {% else %}
-                    {{ rate.sellPrice|number_format(8) }}
-                {% endif %}
-
-                {% if 'ARS' in rate.pair %}
-                    {% set inversePair = rate.pair|replace({'ARS': 'USD'}) %}
-                    {% set referenceRate = reference.getCurrentRateForPair(inversePair) %}
-                    {% if referenceRate %}
-                        {% set sellPrice = referenceRate.getSellPrice %}
-                        <br />
-                        <span class="small text-muted">DI {{ (rate.sellPrice / sellPrice)|number_format(2) }}</span>
-                    {% endif %}
-
-                {% elseif 'USD' in rate.pair %}
-                    
-                {% endif %}
             </td>
         </tr>
     {% endfor %}
