@@ -14,7 +14,7 @@ class RipioWsClient extends AbstractWsClient
     private $supportedSymbols = ['ARS', 'BTC', 'ETH '];
 
     /** @var array */
-    private $suppoertedPairs = ['BTC/ARS', 'ETH/ARS'];
+    private $supportedPairs = ['BTC/ARS', 'ETH/ARS'];
 
     /** @var Client */
     private $client;
@@ -82,7 +82,7 @@ class RipioWsClient extends AbstractWsClient
 
     public function getSupportedPairs(): array
     {
-        return $this->suppoertedPairs;
+        return $this->supportedPairs;
     }
 
     public function api_getPairs(): array

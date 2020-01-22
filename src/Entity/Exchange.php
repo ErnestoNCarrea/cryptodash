@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\BookOrder;
 use App\Entity\Rate;
 use App\Model\OrderBook;
+use App\Model\Rate as ModelRate;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 
@@ -85,6 +86,36 @@ class Exchange
             }
         }
 
+        return $res;
+    }
+
+    /**
+     * Obtener cotizaciones de un símbolo contra el resto de los símbolos.
+     */
+    public function getBestOrdersForAllSymbols(): array
+    {
+        $pairs = [];
+
+        // Get all paris
+        foreach ($this->getBookOrders() as $bookOrder) {
+            if (in_array($bookOrder->getPair(), $pairs) == false) {
+                $pairs[] = $bookOrder->getPair();
+            }
+        }
+
+        $res = [];
+
+        foreach($pairs as $pair) {
+            $ob = $this->getOrderBookForPair($pair);
+            $rate = new Rate();
+            $rate->setExchange($this);
+            $rate->setPair($pair);
+            $rate->setSellPrice($ob->getBestSellPrice());
+            $rate->setBuyPrice($ob->getBestBuyPrice());
+            
+            $res[] = $rate;
+        }
+    
         return $res;
     }
 

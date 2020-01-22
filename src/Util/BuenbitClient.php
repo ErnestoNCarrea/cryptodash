@@ -15,7 +15,7 @@ class BuenbitClient extends AbstractClient
     private $supportedSymbols = ['ARS', 'BTC', 'ETH', 'DAI'];
 
     /** @var array */
-    private $suppoertedPairs = ['BTC/ARS', 'ETH/ARS', 'DAI/ARS', 'BTC/DAI', 'DAI/ARS'];
+    private $supportedPairs = ['BTC/ARS', 'ETH/ARS', 'DAI/ARS', 'BTC/DAI', 'DAI/ARS'];
 
     /** @var Client */
     private $client;
@@ -92,7 +92,7 @@ class BuenbitClient extends AbstractClient
 
     public function getSupportedPairs(): array
     {
-        return $this->suppoertedPairs;
+        return $this->supportedPairs;
     }
 
     public function api_getPairs(): array

@@ -15,7 +15,7 @@ class RipioClient extends AbstractClient
     private $supportedSymbols = ['ARS', 'BTC', 'ETH', 'USDC'];
 
     /** @var array */
-    private $suppoertedPairs = ['BTC/ARS', 'ETH/ARS', 'USDC/ARS', 'BTC/USDC', 'ETH/USDC'];
+    private $supportedPairs = ['BTC/ARS', 'ETH/ARS', 'USDC/ARS', 'BTC/USDC', 'ETH/USDC'];
 
     /** @var Client */
     private $client;
@@ -100,7 +100,7 @@ class RipioClient extends AbstractClient
 
     public function getSupportedPairs(): array
     {
-        return $this->suppoertedPairs;
+        return $this->supportedPairs;
     }
 
     public function api_getPairs(): array

@@ -13,7 +13,7 @@ class TetherFakeClient extends AbstractClient
     private $supportedSymbols = ['USD', 'USDT'];
 
     /** @var array */
-    private $suppoertedPairs = ['USD/USDT'];
+    private $supportedPairs = ['USD/USDT'];
 
     public function __construct(?string $authToken = null)
     {
@@ -38,6 +38,6 @@ class TetherFakeClient extends AbstractClient
 
     public function getSupportedPairs(): array
     {
-        return $this->suppoertedPairs;
+        return $this->supportedPairs;
     }
 }

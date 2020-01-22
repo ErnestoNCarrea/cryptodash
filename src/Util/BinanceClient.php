@@ -15,7 +15,7 @@ class BinanceClient extends AbstractClient
     private $supportedSymbols = ['USD', 'BTC', 'ETH', 'XRP', 'XLM', 'EOS'];
 
     /** @var array */
-    private $suppoertedPairs = ['BTC/USD', 'ETH/USD', 'BTC/ETH', 'XRP/USD', 'XLM/USD', 'EOS/USD'];
+    private $supportedPairs = ['BTC/USD', 'ETH/USD', 'BTC/ETH', 'XRP/USD', 'XLM/USD', 'EOS/USD'];
 
     /** @var Client */
     private $client;
@@ -70,7 +70,7 @@ class BinanceClient extends AbstractClient
 
     public function getSupportedPairs(): array
     {
-        return $this->suppoertedPairs;
+        return $this->supportedPairs;
     }
 
     /**

@@ -14,7 +14,7 @@ class DolarIolClient extends AbstractClient
     private $supportedSymbols = ['ARS', 'USD'];
 
     /** @var array */
-    private $suppoertedPairs = ['USD/ARS'];
+    private $supportedPairs = ['USD/ARS'];
 
     public function __construct(?string $authToken = null)
     {
@@ -43,6 +43,6 @@ class DolarIolClient extends AbstractClient
 
     public function getSupportedPairs(): array
     {
-        return $this->suppoertedPairs;
+        return $this->supportedPairs;
     }
 }

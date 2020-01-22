@@ -15,7 +15,7 @@ class CryptoMktClient extends AbstractClient
     private $supportedSymbols = ['ARS', 'BTC', 'ETH', 'EOS', 'XLM'];
 
     /** @var array */
-    private $suppoertedPairs = ['BTC/ARS', 'ETH/ARS', 'XML/ARS', 'EOS/ARS'];
+    private $supportedPairs = ['BTC/ARS', 'ETH/ARS', 'XML/ARS', 'EOS/ARS'];
 
     /** @var Client */
     private $client;
@@ -89,7 +89,7 @@ class CryptoMktClient extends AbstractClient
 
     public function getSupportedPairs(): array
     {
-        return $this->suppoertedPairs;
+        return $this->supportedPairs;
     }
 
     /**
