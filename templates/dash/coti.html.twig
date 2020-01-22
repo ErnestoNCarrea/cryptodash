@@ -1,32 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container-fluid">
-
-</div>
-{% endblock body %}
-
-{% block javascripts %}
-<script>
-    function cotiRecargar() {
-        url = '{{ path('dash_coti') }}';
-        destino = '#page-wrapper';
-        $.get(url, function (data, status, xhr) {
-            try {
-                $(destino).html(data);
-            } catch (err) {
-                $(destinoFinal).append('<div class="alert alert-dismissable alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert">×</button>Error al cargar fragmento AJAX: ' + err + '</div>');
-            }
-        }).fail(function (jqXHR) {
-            // Muestro un error
-            $(destino).html(jqXHR.responseText);
-        });
-        setTimeout(cotiRecargar, 10000);
-    }
-
-    setTimeout(cotiRecargar, 10000);
-</script>
-
 <div class="container-fluid"><div class="row">
 {% for exchange in analizador.Exchanges %}
     {% set precioDolar = dolar.getCurrentPrice %}
@@ -87,4 +61,26 @@
     {% endif %}
 {% endfor %}
 </div></div>
+{% endblock body %}
+
+{% block javascripts %}
+<script>
+    function cotiRecargar() {
+        url = '{{ path('dash_coti') }}';
+        destino = '#page-wrapper';
+        $.get(url, function (data, status, xhr) {
+            try {
+                $(destino).html(data);
+            } catch (err) {
+                $(destinoFinal).append('<div class="alert alert-dismissable alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert">×</button>Error al cargar fragmento AJAX: ' + err + '</div>');
+            }
+        }).fail(function (jqXHR) {
+            // Muestro un error
+            $(destino).html(jqXHR.responseText);
+        });
+        setTimeout(cotiRecargar, 10000);
+    }
+
+    setTimeout(cotiRecargar, 10000);
+</script>
 {% endblock javascripts %}
