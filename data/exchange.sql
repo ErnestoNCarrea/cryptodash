@@ -37,7 +37,7 @@ CREATE TABLE `exchange` (
 
 LOCK TABLES `exchange` WRITE;
 /*!40000 ALTER TABLE `exchange` DISABLE KEYS */;
-INSERT INTO `exchange` VALUES (1000,'Binance',0,'BinanceExchange'),(1001,'CEX',0,'CexExchange'),(9000,'Ripio',0,'RipioExchange'),(9001,'DolarIol',1,'DolarIolExchange'),(9002,'Buenbit',0,'BuenbitExchange'),(9003,'CryptoMkt',0,'CryptoMktExchange');
+INSERT INTO `exchange` VALUES (1000,'Binance',0,'BinanceExchange'),(1001,'CEX',0,'CexExchange'),(9000,'Ripio',0,'RipioExchange'),(9001,'DolarIol',1,'DolarIolExchange'),(9002,'Buenbit',0,'BuenbitExchange'),(9003,'CryptoMkt',0,'CryptoMktExchange'),(9004,'Bitso',0,'BitsoExchange');
 /*!40000 ALTER TABLE `exchange` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
