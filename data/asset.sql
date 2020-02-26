@@ -1,8 +1,8 @@
--- MySQL dump 10.17  Distrib 10.3.20-MariaDB, for Linux (x86_64)
+-- MariaDB dump 10.17  Distrib 10.4.11-MariaDB, for Linux (x86_64)
 --
--- Host: localhost    Database: cryptodash_dev
+-- Host: localhost    Database: cryptodash_prod
 -- ------------------------------------------------------
--- Server version	10.3.20-MariaDB
+-- Server version	10.4.11-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,29 +16,28 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `exchange`
+-- Table structure for table `asset`
 --
 
-DROP TABLE IF EXISTS `exchange`;
+DROP TABLE IF EXISTS `asset`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `exchange` (
+CREATE TABLE `asset` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `symbol` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `infinite_supply` tinyint(1) NOT NULL,
-  `class` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9004 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2002 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `exchange`
+-- Dumping data for table `asset`
 --
 
-LOCK TABLES `exchange` WRITE;
-/*!40000 ALTER TABLE `exchange` DISABLE KEYS */;
-INSERT INTO `exchange` VALUES (1000,'Binance',0,'BinanceExchange'),(1001,'CEX',0,'CexExchange'),(9000,'Ripio',0,'RipioExchange'),(9001,'DolarIol',1,'DolarIolExchange'),(9002,'Buenbit',0,'BuenbitExchange'),(9003,'CryptoMkt',0,'CryptoMktExchange');
-/*!40000 ALTER TABLE `exchange` ENABLE KEYS */;
+LOCK TABLES `asset` WRITE;
+/*!40000 ALTER TABLE `asset` DISABLE KEYS */;
+INSERT INTO `asset` VALUES (32,'ARS','Pesos'),(840,'USD','Dólar'),(1001,'BTC','Bitcoin'),(1002,'ETH','Ethereum'),(1003,'XRP','Ripple'),(1004,'LTC','Litecoin'),(2000,'USDT','Tether'),(2001,'DAI','DAI');
+/*!40000 ALTER TABLE `asset` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-11 17:19:22
+-- Dump completed on 2020-02-26 11:35:56
