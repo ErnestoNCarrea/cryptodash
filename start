@@ -5,5 +5,7 @@ do
     bin/console pull:ripio
     bin/console pull:binance
     bin/console pull:cryptomkt
+    bin/console pull:buenbit
+    bin/console pull:bitso
     sleep 10
 done
