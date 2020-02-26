@@ -1,8 +1,8 @@
--- MySQL dump 10.17  Distrib 10.3.20-MariaDB, for Linux (x86_64)
+-- MariaDB dump 10.17  Distrib 10.4.11-MariaDB, for Linux (x86_64)
 --
--- Host: localhost    Database: cryptodash_dev
+-- Host: localhost    Database: cryptodash_prod
 -- ------------------------------------------------------
--- Server version	10.3.20-MariaDB
+-- Server version	10.4.11-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -28,7 +28,7 @@ CREATE TABLE `exchange` (
   `infinite_supply` tinyint(1) NOT NULL,
   `class` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9004 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9005 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-11 17:19:19
+-- Dump completed on 2020-02-26 11:35:49
