@@ -94,8 +94,6 @@ class DashController extends AbstractController
         $exchange = $this->em->getRepository('App\Entity\Exchange')->find($exchangeId);
         $book = $exchange->getOrderBookForPair($pair);
 
-        dump($book);
-
         return $this->render('dash/book.html.twig', [
             'exchange' => $exchange,
             'book' => $book,
