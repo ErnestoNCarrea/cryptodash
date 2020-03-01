@@ -12,7 +12,7 @@
         <table class="table">
         {% for rate in rates %}
             <tr>
-                <td>{{ rate.pair }}</td>
+                <td><a href="{{ path('dash_book', { 'exchange': exchange.id, 'pair': rate.pair }) }}">{{ rate.pair }}</a></td>
                 <td class="text-right">
                     {% if rate.sellPrice > 10 %}
                         {{ rate.sellPrice|number_format(2) }}

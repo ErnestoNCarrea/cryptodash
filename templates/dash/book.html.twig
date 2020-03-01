@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container-fluid">
+<h2>{{ exchange }} - {{ pair }}</h2>
+<div class="row">
+
+<div class="col">
+    <h3>Compra</h3>
+    <table class="table">
+    <tr>
+        <th>Cantidad</tg>
+        <th class="text-center">Total</tg>
+        <th class="text-right">Precio</tg>
+    </tr>
+    {% for order in book.buyOrders|slice(0, 8) %}
+    <tr>
+        <td>{{ order.quantity|number_format(6) }}</td>
+        <td class="text-center">{{ (order.quantity * order.price)|number_format(2) }}</td>
+        <td class="text-right text-success">{{ order.price|number_format(2) }}</td>
+    </tr>
+    {% endfor %}
+</table></div>
+
+<div class="col">
+    <h3>Venta</h3>
+    <table class="table">
+    <tr>
+        <th>Cantidad</tg>
+        <th class="text-center">Total</tg>
+        <th class="text-right">Precio</tg>
+    </tr>
+    {% for order in book.sellOrders|slice(0, 8) %}
+    <tr>
+        <td>{{ order.quantity|number_format(6) }}</td>
+        <td class="text-center">{{ (order.quantity * order.price)|number_format(2) }}</td>
+        <td class="text-right text-danger">{{ order.price|number_format(2) }}</td>
+    </tr>
+    {% endfor %}
+</table></div>
+
+</div></div>
+{% endblock body %}
+
+{% block javascripts %}
+<script>
+    function bookRecargar() {
+        url = '{{ path('dash_book', { 'exchange': exchange.id, 'pair': app.request.get('pair') })|raw }}';
+        destino = '#page-wrapper';
+        $.get(url, function (data, status, xhr) {
+            try {
+                $(destino).html(data);
+            } catch (err) {
+                $(destinoFinal).append('<div class="alert alert-dismissable alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert">×</button>Error al cargar fragmento AJAX: ' + err + '</div>');
+            }
+        }).fail(function (jqXHR) {
+            // Muestro un error
+            $(destino).html(jqXHR.responseText);
+        });
+        setTimeout(bookRecargar, 10000);
+    }
+
+    setTimeout(bookRecargar, 10000);
+</script>
+{% endblock javascripts %}

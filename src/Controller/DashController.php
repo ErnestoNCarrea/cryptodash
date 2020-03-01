@@ -10,6 +10,7 @@ use App\Util\DolarIolClient;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/dash")
@@ -80,5 +81,25 @@ class DashController extends AbstractController
             'reference' => $reference,
             'dolar' => $clientDolar
             ]);
+    }
+
+    /**
+     * @Route("/book", name="dash_book")
+     */
+    public function book(Request $request)
+    {
+        $exchangeId = $request->query->get('exchange');
+        $pair = $request->query->get('pair');
+
+        $exchange = $this->em->getRepository('App\Entity\Exchange')->find($exchangeId);
+        $book = $exchange->getOrderBookForPair($pair);
+
+        dump($book);
+
+        return $this->render('dash/book.html.twig', [
+            'exchange' => $exchange,
+            'book' => $book,
+            'pair' => $pair,
+        ]);
     }
 }
