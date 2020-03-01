@@ -13,12 +13,12 @@ class Order
     /** @var float */
     private $total = 0;
 
-    public function __construct(float $amount, float $price, ?float $total = 0)
+    public function __construct(float $quantity, float $price, ?float $total = 0)
     {
-        $this->amount = $amount;
+        $this->quantity = $quantity;
         $this->price = $price;
         if (!$total) {
-            $this->total = $amount * $price;
+            $this->total = $quantity * $price;
         } else {
             $this->total = $total;
         }
