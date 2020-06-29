@@ -56,6 +56,8 @@ class PullRipio extends Command
 
         $this->em->persist($exchange);
         $this->em->flush();
+
+        return 0;
     }
 
     private function updateRate(Exchange $exchange, string $pair, \App\Model\Rate $rate): \App\Entity\Rate
