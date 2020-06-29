@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
-use App\Entity\BookOrder;
+use App\Entity\Orden;
 use App\Entity\Rate;
-use App\Model\OrderBook;
+use App\Model\Libro;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 
@@ -37,9 +37,9 @@ class Exchange
     private $class;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\BookOrder", mappedBy="exchange", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Orden", mappedBy="exchange", cascade={"persist", "remove"})
      */
-    private $bookOrders;
+    private $ordenLibros;
 
     /**
      * @var Rate
@@ -53,17 +53,17 @@ class Exchange
     }
 
     /**
-     * @return OrderBook
+     * @return Libro
      */
-    public function getOrderBookForPair(string $pair): OrderBook
+    public function getLibroForPair(string $pair): Libro
     {
-        $res = new OrderBook($pair);
-        foreach ($this->getBookOrders() as $bookOrder) {
-            if ($bookOrder->getPair() == $pair) {
-                if ($bookOrder->getSide() == BookOrder::SIDE_SELL) {
-                    $res->addSellOrder(new \App\Model\Order($bookOrder->getQuantity(), $bookOrder->getPrice()));
+        $res = new Libro($pair);
+        foreach ($this->getOrdens() as $ordenLibro) {
+            if ($ordenLibro->getPair() == $pair) {
+                if ($ordenLibro->getSide() == Orden::SIDE_SELL) {
+                    $res->addOrdenVenta(new \App\Model\Orden($ordenLibro->getQuantity(), $ordenLibro->getPrice()));
                 } else {
-                    $res->addBuyOrder(new \App\Model\Order($bookOrder->getQuantity(), $bookOrder->getPrice()));
+                    $res->addOrdenCompra(new \App\Model\Orden($ordenLibro->getQuantity(), $ordenLibro->getPrice()));
                 }
             }
         }
@@ -91,21 +91,21 @@ class Exchange
     /**
      * Obtener cotizaciones de un símbolo contra el resto de los símbolos.
      */
-    public function getBestOrdersForAllSymbols(): array
+    public function getBestOrdensForAllSymbols(): array
     {
         $pairs = [];
 
         // Get all paris
-        foreach ($this->getBookOrders() as $bookOrder) {
-            if (in_array($bookOrder->getPair(), $pairs) == false) {
-                $pairs[] = $bookOrder->getPair();
+        foreach ($this->getOrdens() as $ordenLibro) {
+            if (in_array($ordenLibro->getPair(), $pairs) == false) {
+                $pairs[] = $ordenLibro->getPair();
             }
         }
 
         $res = [];
 
         foreach ($pairs as $pair) {
-            $ob = $this->getOrderBookForPair($pair);
+            $ob = $this->getLibroForPair($pair);
             $rate = new Rate();
             $rate->setExchange($this);
             $rate->setPair($pair);
@@ -171,30 +171,30 @@ class Exchange
     }
 
     /**
-     * @return Collection|PersistentCollection|BookOrder[]
+     * @return Collection|PersistentCollection|Orden[]
      */
-    public function getBookOrders(): PersistentCollection
+    public function getOrdens(): PersistentCollection
     {
-        return $this->bookOrders;
+        return $this->ordenLibros;
     }
 
-    public function addBookOrder(BookOrder $bookOrder): self
+    public function addOrden(Orden $ordenLibro): self
     {
-        if (!$this->bookOrders->contains($bookOrder)) {
-            $this->bookOrders[] = $bookOrder;
-            $bookOrder->setExchange($this);
+        if (!$this->ordenLibros->contains($ordenLibro)) {
+            $this->ordenLibros[] = $ordenLibro;
+            $ordenLibro->setExchange($this);
         }
 
         return $this;
     }
 
-    public function removeBookOrder(BookOrder $bookOrder): self
+    public function removeOrden(Orden $ordenLibro): self
     {
-        if ($this->bookOrders->contains($bookOrder)) {
-            $this->bookOrders->removeElement($bookOrder);
+        if ($this->ordenLibros->contains($ordenLibro)) {
+            $this->ordenLibros->removeElement($ordenLibro);
             // set the owning side to null (unless already changed)
-            if ($bookOrder->getExchange() === $this) {
-                $bookOrder->setExchange(null);
+            if ($ordenLibro->getExchange() === $this) {
+                $ordenLibro->setExchange(null);
             }
         }
 

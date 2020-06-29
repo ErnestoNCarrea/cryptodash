@@ -3,7 +3,7 @@
 namespace App\Model;
 
 use App\Model\AbstractExchange;
-use App\Model\HasOrderBookInterface;
+use App\Model\HasLibroInterface;
 
 class BinanceExchange extends AbstractExchange
 {

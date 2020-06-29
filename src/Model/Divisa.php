@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-class Asset
+class Divisa
 {
     /** @var string */
     private $symbol;

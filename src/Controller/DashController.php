@@ -92,7 +92,7 @@ class DashController extends AbstractController
         $pair = $request->query->get('pair');
 
         $exchange = $this->em->getRepository('App\Entity\Exchange')->find($exchangeId);
-        $book = $exchange->getOrderBookForPair($pair);
+        $book = $exchange->getLibroForPair($pair);
 
         return $this->render('dash/book.html.twig', [
             'exchange' => $exchange,

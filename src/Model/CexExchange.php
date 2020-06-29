@@ -4,7 +4,7 @@ namespace App\Model;
 
 use App\Model\ExchangeInterface;
 
-class CexExchange extends AbstractExchange implements HasOrderBookInterface
+class CexExchange extends AbstractExchange implements HasLibroInterface
 {
     public function __construct()
     {

@@ -3,14 +3,14 @@
 namespace App\Util;
 
 use App\Model\ExchangeInterface;
-use App\Model\Order;
-use App\Model\OrderBook;
+use App\Model\Orden;
+use App\Model\Libro;
 
 interface ExchangeClientInterface
 {
     public function connect();
 
     public function getExchange(): ExchangeInterface;
-    public function getOrderBook(string $pair): ?OrderBook;
+    public function getLibro(string $pair): ?Libro;
     public function getSupportedPairs(): array;
 }

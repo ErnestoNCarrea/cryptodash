@@ -2,8 +2,8 @@
 
 namespace App\Util;
 
-use App\Model\Order;
-use App\Model\OrderBook;
+use App\Model\Orden;
+use App\Model\Libro;
 use App\Model\TetherFakeExchange;
 use App\Util\AbstractClient;
 
@@ -23,12 +23,12 @@ class TetherFakeClient extends AbstractClient
     public function connect()
     { }
 
-    public function getOrderBook(string $pair): ?OrderBook
+    public function getLibro(string $pair): ?Libro
     {
-        $buyOrders =  [new Order(0, 1, 0)];
-        $sellOrders = [new Order(0, 1, 0)];
+        $ordenesCompra =  [new Orden(0, 1, 0)];
+        $ordenesVenta = [new Orden(0, 1, 0)];
 
-        return new OrderBook($pair, $buyOrders, $sellOrders);
+        return new Libro($pair, $ordenesCompra, $ordenesVenta);
     }
 
     public function getCurrentPrice(string $pair): float

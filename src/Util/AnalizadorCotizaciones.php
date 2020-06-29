@@ -3,9 +3,9 @@
 namespace App\Util;
 
 use App\Entity\Exchange;
-use App\Entity\Order;
+use App\Entity\Orden;
 use App\Entity\Rate;
-use App\Model\OrderBook;
+use App\Model\Libro;
 use App\Model\Opportunity;
 
 class AnalizadorCotizaciones
@@ -29,7 +29,7 @@ class AnalizadorCotizaciones
         $rates = [];
         
         foreach($this->exchanges as $exchange) {
-            /* @var OrderBook */
+            /* @var Libro */
             $rates[$exchange->getId()] = $exchange->getAllRatesForSymbol($symbol);    
         }
 

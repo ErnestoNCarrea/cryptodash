@@ -3,8 +3,8 @@
 namespace App\Util;
 
 use App\Model\BinanceExchange;
-use App\Model\Order;
-use App\Model\OrderBook;
+use App\Model\Orden;
+use App\Model\Libro;
 use App\Model\Rate;
 use App\Util\AbstractClient;
 use GuzzleHttp\Client;
@@ -41,7 +41,7 @@ class CryptoMktClient extends AbstractClient
     public function connect()
     {}
 
-    public function getOrderBook(string $pair): ?OrderBook
+    public function getLibro(string $pair): ?Libro
     {
         $res = $this->client->request('GET', 'book', [
             'query' => [
@@ -49,7 +49,7 @@ class CryptoMktClient extends AbstractClient
                 'type' => 'buy'
             ],
         ]);
-        $buyOrders = $this->decodeOrderCollection(json_decode((string) $res->getBody()));
+        $ordenesCompra = $this->decodeOrdenCollection(json_decode((string) $res->getBody()));
 
         $res = $this->client->request('GET', 'book', [
             'query' => [
@@ -57,16 +57,16 @@ class CryptoMktClient extends AbstractClient
                 'type' => 'sell'
             ],
         ]);
-        $sellOrders = $this->decodeOrderCollection(json_decode((string) $res->getBody()));
-        return new OrderBook($pair, $buyOrders, $sellOrders);
+        $ordenesVenta = $this->decodeOrdenCollection(json_decode((string) $res->getBody()));
+        return new Libro($pair, $ordenesCompra, $ordenesVenta);
     }
 
-    private function decodeOrderCollection($json_orders): array
+    private function decodeOrdenCollection($json_orders): array
     {
         $res = [];
 
         foreach ($json_orders->data as $json_order) {
-            $order = new Order((float) $json_order->amount, (float) $json_order->price);
+            $order = new Orden((float) $json_order->amount, (float) $json_order->price);
             $res[] = $order;
         }
 

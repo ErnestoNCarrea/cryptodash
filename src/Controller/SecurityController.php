@@ -9,13 +9,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\UsuarioPasswordEncoderInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Form\UserLoginType;
-use App\Form\UserRegistrationType;
+use App\Form\UsuarioLoginType;
+use App\Form\UsuarioRegistrationType;
 use App\Form\NewPasswordType;
 use App\Form\PasswordRequestType;
-use App\Entity\User;
+use App\Entity\Usuario;
 
 class SecurityController extends AbstractController
 {
@@ -36,7 +36,7 @@ class SecurityController extends AbstractController
     {
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
-        $form = $this->createForm(UserLoginType::class);
+        $form = $this->createForm(UsuarioLoginType::class);
         return $this->render(
             'login.html.twig',
             [
@@ -60,9 +60,9 @@ class SecurityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $form->get('email')->getData();
             $token = bin2hex(random_bytes(32));
-            $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
-            if ($user instanceof User) {
-                $user->setPasswordRequestToken($token);
+            $usuario = $entityManager->getRepository(Usuario::class)->findOneBy(['email' => $email]);
+            if ($usuario instanceof Usuario) {
+                $usuario->setPasswordRequestToken($token);
                 $entityManager->flush();
 
                 // Enviar un mail al usuario con el token para resetear la contraseña
@@ -93,12 +93,12 @@ class SecurityController extends AbstractController
         Request $request,
         string $token,
         EntityManagerInterface $entityManager,
-        UserPasswordEncoderInterface $encoder,
+        UsuarioPasswordEncoderInterface $encoder,
         TokenStorageInterface $tokenStorage,
         SessionInterface $session
     ) {
-        $user = $entityManager->getRepository(User::class)->findOneBy(['passwordRequestToken' => $token]);
-        if (!$token || !$user instanceof User) {
+        $usuario = $entityManager->getRepository(Usuario::class)->findOneBy(['passwordRequestToken' => $token]);
+        if (!$token || !$usuario instanceof Usuario) {
             $this->addFlash('danger', "No se encontró el usuario.");
             return $this->redirectToRoute('reset_password');
         }
@@ -106,11 +106,11 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('password')->getData();
-            $password = $encoder->encodePassword($user, $plainPassword);
-            $user->setPassword($password);
-            $user->setPasswordRequestToken(null);
+            $password = $encoder->encodePassword($usuario, $plainPassword);
+            $usuario->setPassword($password);
+            $usuario->setPasswordRequestToken(null);
             $entityManager->flush();
-            $token = new UsernamePasswordToken($user, $password, 'main');
+            $token = new UsernamePasswordToken($usuario, $password, 'main');
             $tokenStorage->setToken($token);
             $session->set('_security_main', serialize($token));
             $this->addFlash('success', "Se restableció la contraseña");
@@ -124,18 +124,18 @@ class SecurityController extends AbstractController
      */
     public function register(
         Request $request,
-        UserPasswordEncoderInterface $encoder,
+        UsuarioPasswordEncoderInterface $encoder,
         TokenStorageInterface $tokenStorage,
         EntityManagerInterface $entityManager,
         SessionInterface $session
     ) {
-        $user = new User();
-        $form = $this->createForm(UserRegistrationType::class, $user);
+        $usuario = new Usuario();
+        $form = $this->createForm(UsuarioRegistrationType::class, $usuario);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Buscar un usuario con el mismo e-mail
-            $prevUser = $entityManager->getRepository('App\Entity\User')->findBy(['email' => $user->getEmail()]);
-            if ($prevUser) {
+            $prevUsuario = $entityManager->getRepository('App\Entity\Usuario')->findBy(['email' => $usuario->getEmail()]);
+            if ($prevUsuario) {
                 $this->addFlash('success', 'Ya eixste una cuenta con esos datos.');
                 return $this->render(
                     'register.html.twig',
@@ -144,12 +144,12 @@ class SecurityController extends AbstractController
                     ]
                 );
             }
-            $password = $encoder->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($password);
-            $entityManager->persist($user);
+            $password = $encoder->encodePassword($usuario, $usuario->getPlainPassword());
+            $usuario->setPassword($password);
+            $entityManager->persist($usuario);
             $entityManager->flush();
             $this->addFlash('success', 'Su cuenta ha sido creada.');
-            $token = new UsernamePasswordToken($user, $password, 'main');
+            $token = new UsernamePasswordToken($usuario, $password, 'main');
             $tokenStorage->setToken($token);
             $session->set('_security_main', serialize($token));
             return $this->redirectToRoute('home');

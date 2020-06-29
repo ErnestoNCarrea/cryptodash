@@ -3,8 +3,8 @@
 namespace App\Util;
 
 use App\Model\BinanceExchange;
-use App\Model\Order;
-use App\Model\OrderBook;
+use App\Model\Orden;
+use App\Model\Libro;
 use App\Model\Rate;
 use App\Util\AbstractClient;
 use GuzzleHttp\Client;
@@ -41,7 +41,7 @@ class BinanceClient extends AbstractClient
     public function connect()
     {}
 
-    public function getOrderBook(string $pair): ?OrderBook
+    public function getLibro(string $pair): ?Libro
     {
         $res = $this->client->request('GET', 'api/v3/avgPrice', [
             'query' => [
@@ -49,10 +49,10 @@ class BinanceClient extends AbstractClient
             ],
         ]);
 
-        $buyOrders = [new Order(0, $price, 0)];
-        $sellOrders = [new Order(0, $price, 0)];
+        $ordenesCompra = [new Orden(0, $price, 0)];
+        $ordenesVenta = [new Orden(0, $price, 0)];
 
-        return new OrderBook($pair, $buyOrders, $sellOrders);
+        return new Libro($pair, $ordenesCompra, $ordenesVenta);
     }
 
     public function getCurrentPrice(string $pair): Rate

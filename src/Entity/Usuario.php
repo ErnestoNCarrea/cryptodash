@@ -6,12 +6,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-use App\Entity\BookOrder;
+use App\Entity\Orden;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\UsuarioRepository")
  */
-class User implements UserInterface
+class Usuario implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -59,13 +59,13 @@ class User implements UserInterface
     protected $passwordRequestToken;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\BookOrder", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\Orden", mappedBy="usuario")
      */
-    private $bookOrders;
+    private $ordenLibros;
 
     public function __construct()
     {
-        $this->bookOrders = new ArrayCollection();
+        $this->ordenLibros = new ArrayCollection();
     }
 
     public function hasRole(string $role): bool
@@ -103,7 +103,7 @@ class User implements UserInterface
     }
 
     /**
-     * A visual identifier that represents this user.
+     * A visual identifier that represents this usuario.
      *
      * @see UserInterface
      */
@@ -118,7 +118,7 @@ class User implements UserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
+        // guarantee every usuario at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -159,7 +159,7 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
+        // If you store any temporary, sensitive data on the usuario, clear it here
         $this->plainPassword = null;
     }
 
@@ -242,30 +242,30 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|BookOrder[]
+     * @return Collection|Orden[]
      */
-    public function getBookOrders(): Collection
+    public function getOrdens(): Collection
     {
-        return $this->bookOrders;
+        return $this->ordenLibros;
     }
 
-    public function addBookOrder(BookOrder $bookOrder): self
+    public function addOrden(Orden $ordenLibro): self
     {
-        if (!$this->bookOrders->contains($bookOrder)) {
-            $this->bookOrders[] = $bookOrder;
-            $bookOrder->setUser($this);
+        if (!$this->ordenLibros->contains($ordenLibro)) {
+            $this->ordenLibros[] = $ordenLibro;
+            $ordenLibro->setUsuario($this);
         }
 
         return $this;
     }
 
-    public function removeBookOrder(BookOrder $bookOrder): self
+    public function removeOrden(Orden $ordenLibro): self
     {
-        if ($this->bookOrders->contains($bookOrder)) {
-            $this->bookOrders->removeElement($bookOrder);
+        if ($this->ordenLibros->contains($ordenLibro)) {
+            $this->ordenLibros->removeElement($ordenLibro);
             // set the owning side to null (unless already changed)
-            if ($bookOrder->getUser() === $this) {
-                $bookOrder->setUser(null);
+            if ($ordenLibro->getUsuario() === $this) {
+                $ordenLibro->setUsuario(null);
             }
         }
 

@@ -3,9 +3,9 @@
 namespace App\Util;
 
 use App\Entity\Exchange;
-use App\Entity\Order;
+use App\Entity\Orden;
 use App\Entity\Rate;
-use App\Model\OrderBook;
+use App\Model\Libro;
 use App\Model\Opportunity;
 
 class AnalizadorArbitrajes
@@ -30,15 +30,15 @@ class AnalizadorArbitrajes
 
     private function findOpportunitiesBetweenExchanges($exchange1, $exchange2, $pair)
     {
-        /* @var OrderBook */
-        $ob1 = $exchange1->getOrderBookForPair($pair);
+        /* @var Libro */
+        $ob1 = $exchange1->getLibroForPair($pair);
 
-        /* @var OrderBook */
-        $ob2 = $exchange2->getOrderBookForPair($pair);
+        /* @var Libro */
+        $ob2 = $exchange2->getLibroForPair($pair);
 
 
-        $order1 = $ob1->getBestBuyOrder();
-        $order2 = $ob2->getBestSellOrder();
+        $order1 = $ob1->getBestOrdenCompra();
+        $order2 = $ob2->getBestOrdenVenta();
 
         $price1 = $order1->getPrice();
         $price2 = $order2->getPrice();

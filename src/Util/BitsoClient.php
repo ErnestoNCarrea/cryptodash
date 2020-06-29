@@ -2,8 +2,8 @@
 
 namespace App\Util;
 
-use App\Model\Order;
-use App\Model\OrderBook;
+use App\Model\Orden;
+use App\Model\Libro;
 use App\Model\Rate;
 use App\Model\BitsoExchange;
 use App\Util\AbstractClient;
@@ -50,7 +50,7 @@ class BitsoClient extends AbstractClient
         return new Rate((float) $res->payload->bid, (float) $res->payload->ask);
     }
 
-    public function getOrderBook(string $pair): ?OrderBook
+    public function getLibro(string $pair): ?Libro
     {
         $res = $this->client->request('GET', 'order_book/', [
             'query' => [
@@ -59,26 +59,26 @@ class BitsoClient extends AbstractClient
         ]);
 
         if ($res->getStatusCode() === 200) {
-            return $this->decodeOrderBook($pair, json_decode((string) $res->getBody()));
+            return $this->decodeLibro($pair, json_decode((string) $res->getBody()));
         } else {
             return null;
         }
     }
 
-    private function decodeOrderBook(string $pair, object $json): OrderBook
+    private function decodeLibro(string $pair, object $json): Libro
     {
-        $buyOrders = $this->decodeOrderCollection($json->payload->bids);
-        $sellOrders = $this->decodeOrderCollection($json->payload->asks);
+        $ordenesCompra = $this->decodeOrdenCollection($json->payload->bids);
+        $ordenesVenta = $this->decodeOrdenCollection($json->payload->asks);
 
-        return new OrderBook($pair, $buyOrders, $sellOrders);
+        return new Libro($pair, $ordenesCompra, $ordenesVenta);
     }
 
-    private function decodeOrderCollection(array $json_orders): array
+    private function decodeOrdenCollection(array $json_orders): array
     {
         $res = [];
 
         foreach ($json_orders as $json_order) {
-            $order = new Order((float) $json_order->amount, (float) $json_order->price);
+            $order = new Orden((float) $json_order->amount, (float) $json_order->price);
             $res[] = $order;
         }
 

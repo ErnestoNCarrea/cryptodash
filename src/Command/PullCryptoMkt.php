@@ -2,9 +2,9 @@
 
 namespace App\Command;
 
-use App\Entity\BookOrder;
+use App\Entity\Orden;
 use App\Entity\Exchange;
-use App\Model\OrderBook;
+use App\Model\Libro;
 use App\Util\CryptoMktClient;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -38,13 +38,13 @@ class PullCryptoMkt extends Command
         $clientCryptoMkt = new CryptoMktClient();
 
         foreach (['BTC/ARS', 'ETH/ARS', 'XLM/ARS', 'EOS/ARS'] as $pair) {
-            //$ripioOrderBook = $this->em->getRepository('App\Entity\BookOrder')->findBy(['exchange' => $ripioExchange, 'pair' => $pair, 'user' => null]);
-            $orderBook = $clientCryptoMkt->getOrderBook($pair);
+            //$ripioLibro = $this->em->getRepository('App\Entity\Orden')->findBy(['exchange' => $ripioExchange, 'pair' => $pair, 'usuario' => null]);
+            $libro = $clientCryptoMkt->getLibro($pair);
 
-            $deletedOrders = $this->updateOrderBook($exchange, $pair, $orderBook);
-            if ($deletedOrders) {
-                foreach ($deletedOrders as $deletedOrder) {
-                    $this->em->remove($deletedOrder);
+            $ordenesEliminadas = $this->updateLibro($exchange, $pair, $libro);
+            if ($ordenesEliminadas) {
+                foreach ($ordenesEliminadas as $ordenEliminada) {
+                    $this->em->remove($ordenEliminada);
                 }
             }
 
@@ -76,63 +76,63 @@ class PullCryptoMkt extends Command
         return $rateEntity;
     }
 
-    private function updateOrderBook(Exchange $exchange, string $pair, OrderBook $updatedOrderBook): array
+    private function updateLibro(Exchange $exchange, string $pair, Libro $updatedLibro): array
     {
-        foreach ($exchange->getBookOrders() as $bookOrder) {
-            if ($bookOrder->getPair() == $pair) {
-                $bookOrder->setActive(false);
+        foreach ($exchange->getOrdens() as $ordenLibro) {
+            if ($ordenLibro->getPair() == $pair) {
+                $ordenLibro->setActive(false);
             }
         }
 
-        foreach ($updatedOrderBook->getBuyOrders() as $order) {
-            $orderEntityArray = $exchange->getBookOrders()->filter(function (BookOrder $orderEntity) use ($order) {
+        foreach ($updatedLibro->getOrdenesCompra() as $order) {
+            $orderEntityArray = $exchange->getOrdens()->filter(function (Orden $orderEntity) use ($order) {
                 return $order->getPrice() == $orderEntity->getPrice();
             });
 
             if (is_array($orderEntityArray) && count($orderEntityArray) == 1) {
                 $orderEntity = $orderEntityArray[0];
             } else {
-                $orderEntity = new BookOrder();
+                $orderEntity = new Orden();
                 $orderEntity->setDateTime(new \Datetime());
             }
 
-            $orderEntity->setSide(BookOrder::SIDE_BUY);
+            $orderEntity->setSide(Orden::SIDE_BUY);
             $orderEntity->setExchange($exchange);
             $orderEntity->setPrice($order->getPrice());
             $orderEntity->setQuantity($order->getQuantity());
             $orderEntity->setPair($pair);
             $orderEntity->setActive(true);
 
-            $exchange->addBookOrder($orderEntity);
+            $exchange->addOrden($orderEntity);
         }
 
-        foreach ($updatedOrderBook->getSellOrders() as $order) {
-            $orderEntityArray = $exchange->getBookOrders()->filter(function (BookOrder $orderEntity) use ($order) {
+        foreach ($updatedLibro->getOrdenesVenta() as $order) {
+            $orderEntityArray = $exchange->getOrdens()->filter(function (Orden $orderEntity) use ($order) {
                 return $order->getPrice() == $orderEntity->getPrice();
             });
 
             if (is_array($orderEntityArray) && count($orderEntityArray) == 1) {
                 $orderEntity = $orderEntityArray[0];
             } else {
-                $orderEntity = new BookOrder();
+                $orderEntity = new Orden();
                 $orderEntity->setDateTime(new \Datetime());
             }
 
-            $orderEntity->setSide(BookOrder::SIDE_SELL);
+            $orderEntity->setSide(Orden::SIDE_SELL);
             $orderEntity->setExchange($exchange);
             $orderEntity->setPrice($order->getPrice());
             $orderEntity->setQuantity($order->getQuantity());
             $orderEntity->setPair($pair);
             $orderEntity->setActive(true);
 
-            $exchange->addBookOrder($orderEntity);
+            $exchange->addOrden($orderEntity);
         }
 
         $res = [];
-        foreach ($exchange->getBookOrders() as $bookOrder) {
-            if ($bookOrder->getPair() == $pair && $bookOrder->getActive() == false) {
-                $exchange->removeBookOrder($bookOrder);
-                $res[] = $bookOrder;
+        foreach ($exchange->getOrdens() as $ordenLibro) {
+            if ($ordenLibro->getPair() == $pair && $ordenLibro->getActive() == false) {
+                $exchange->removeOrden($ordenLibro);
+                $res[] = $ordenLibro;
             }
         }
 

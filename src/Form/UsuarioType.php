@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\User;
+use App\Entity\Usuario;
 use App\Entity\Establecimiento;
 use App\Entity\Mesa;
 use App\Entity\Localidad;
@@ -20,7 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Doctrine\ORM\EntityRepository;
 
-class UserType extends AbstractType
+class UsuarioType extends AbstractType
 {
     private $em;
 
@@ -57,7 +57,7 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => Usuario::class,
         ]);
     }
 }

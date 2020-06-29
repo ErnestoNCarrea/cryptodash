@@ -3,8 +3,8 @@
 namespace App\Util;
 
 use Ratchet\Client;
-use App\Model\Order;
-use App\Model\OrderBook;
+use App\Model\Orden;
+use App\Model\Libro;
 use App\Model\RipioExchange;
 use App\Util\AbstractWsClient;
 
@@ -43,7 +43,7 @@ class RipioWsClient extends AbstractWsClient
         $connector = new \Ratchet\Client\Connector($loop, $reactConnector);
     }
 
-    public function getOrderBook(string $pair): ?OrderBook
+    public function getLibro(string $pair): ?Libro
     {
         $res = $this->client->request('GET', 'orderbook/' . urlencode($this->formatPair($pair)), [
             'headers' => [
@@ -53,26 +53,26 @@ class RipioWsClient extends AbstractWsClient
         ]);
 
         if ($res->getStatusCode() === 200) {
-            return $this->decodeOrderBook($pair, json_decode((string) $res->getBody()));
+            return $this->decodeLibro($pair, json_decode((string) $res->getBody()));
         } else {
             return null;
         }
     }
 
-    private function decodeOrderBook(string $pair, object $json): OrderBook
+    private function decodeLibro(string $pair, object $json): Libro
     {
-        $buyOrders = $this->decodeOrderCollection($json->buy);
-        $sellOrders = $this->decodeOrderCollection($json->sell);
+        $ordenesCompra = $this->decodeOrdenCollection($json->buy);
+        $ordenesVenta = $this->decodeOrdenCollection($json->sell);
 
-        return new OrderBook($pair, $buyOrders, $sellOrders);
+        return new Libro($pair, $ordenesCompra, $ordenesVenta);
     }
 
-    private function decodeOrderCollection(array $json_orders): array
+    private function decodeOrdenCollection(array $json_orders): array
     {
         $res = [];
 
         foreach ($json_orders as $json_order) {
-            $order = new Order((float) $json_order->amount, (float) $json_order->price, (float) $json_order->total);
+            $order = new Orden((float) $json_order->amount, (float) $json_order->price, (float) $json_order->total);
             $res[] = $order;
         }
 

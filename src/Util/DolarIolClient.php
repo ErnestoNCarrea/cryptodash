@@ -3,8 +3,8 @@
 namespace App\Util;
 
 use App\Model\DolarIolExchange;
-use App\Model\Order;
-use App\Model\OrderBook;
+use App\Model\Orden;
+use App\Model\Libro;
 use App\Model\Rate;
 use App\Util\AbstractClient;
 
@@ -31,14 +31,14 @@ class DolarIolClient extends AbstractClient
         return new Rate($dolar, $dolar);
     }
 
-    public function getOrderBook(?string $pair = null): ?OrderBook
+    public function getLibro(?string $pair = null): ?Libro
     {
         $dolar = (float) $_ENV['DOLAR'];
 
-        $buyOrders = [new Order(999, $dolar, 0)];
-        $sellOrders = [new Order(999, $dolar, 0)];
+        $ordenesCompra = [new Orden(999, $dolar, 0)];
+        $ordenesVenta = [new Orden(999, $dolar, 0)];
 
-        return new OrderBook($pair, $buyOrders, $sellOrders);
+        return new Libro($pair, $ordenesCompra, $ordenesVenta);
     }
 
     public function getSupportedPairs(): array
