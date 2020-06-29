@@ -3,7 +3,7 @@
 namespace App\Util;
 
 use App\Model\BinanceExchange;
-use App\Model\Orden;
+use App\Entity\Orden;
 use App\Model\Libro;
 use App\Model\Rate;
 use App\Util\AbstractClient;

@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use App\Model\Orden;
+use App\Entity\Orden;
 
 class Libro
 {

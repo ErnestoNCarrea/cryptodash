@@ -2,7 +2,7 @@
 
 namespace App\Util;
 
-use App\Model\Orden;
+use App\Entity\Orden;
 use App\Model\Libro;
 use App\Model\Rate;
 use App\Model\BitsoExchange;

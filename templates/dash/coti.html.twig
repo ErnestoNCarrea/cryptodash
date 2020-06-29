@@ -4,7 +4,7 @@
 <div class="container-fluid"><div class="row">
 {% for exchange in analizador.Exchanges %}
     {% set precioDolar = dolar.getCurrentPrice %}
-    {% set rates = exchange.getBestOrdersForAllSymbols %}
+    {% set rates = exchange.obtenerMejorPrecioParaTodasDivisas %}
     {% if rates %}
         <div class="col">
         <h2>{{ exchange }}</h2>

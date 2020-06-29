@@ -3,7 +3,7 @@
 namespace App\Util;
 
 use App\Model\ExchangeInterface;
-use App\Model\Orden;
+use App\Entity\Orden;
 use App\Model\Libro;
 
 interface ExchangeClientInterface

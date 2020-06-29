@@ -3,7 +3,7 @@
 namespace App\Util;
 
 use Ratchet\Client;
-use App\Model\Orden;
+use App\Entity\Orden;
 use App\Model\Libro;
 use App\Model\RipioExchange;
 use App\Util\AbstractWsClient;

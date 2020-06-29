@@ -61,9 +61,9 @@ class Exchange
         foreach ($this->getOrdens() as $ordenLibro) {
             if ($ordenLibro->getPair() == $pair) {
                 if ($ordenLibro->getSide() == Orden::SIDE_SELL) {
-                    $res->addOrdenVenta(new \App\Model\Orden($ordenLibro->getQuantity(), $ordenLibro->getPrice()));
+                    $res->addOrdenVenta(new \App\Entity\Orden($ordenLibro->getQuantity(), $ordenLibro->getPrice()));
                 } else {
-                    $res->addOrdenCompra(new \App\Model\Orden($ordenLibro->getQuantity(), $ordenLibro->getPrice()));
+                    $res->addOrdenCompra(new \App\Entity\Orden($ordenLibro->getQuantity(), $ordenLibro->getPrice()));
                 }
             }
         }
@@ -91,7 +91,7 @@ class Exchange
     /**
      * Obtener cotizaciones de un símbolo contra el resto de los símbolos.
      */
-    public function getBestOrdensForAllSymbols(): array
+    public function obtenerMejorPrecioParaTodasDivisas(): array
     {
         $pairs = [];
 
