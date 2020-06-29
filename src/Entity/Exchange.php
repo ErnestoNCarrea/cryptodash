@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Orden;
-use App\Entity\Rate;
+use App\Entity\Cotizacion;
 use App\Model\Libro;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
@@ -42,10 +42,9 @@ class Exchange
     private $ordenLibros;
 
     /**
-     * @var Rate
-     * @ORM\OneToMany(targetEntity="App\Entity\Rate", mappedBy="exchange", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Cotizacion", mappedBy="exchange", cascade={"persist", "remove"})
      */
-    private $currentRates;
+    private $cotizaciones;
 
     public function __toString(): string
     {
@@ -55,15 +54,15 @@ class Exchange
     /**
      * @return Libro
      */
-    public function getLibroForPair(string $pair): Libro
+    public function getLibroForPar(string $par): Libro
     {
-        $res = new Libro($pair);
-        foreach ($this->getOrdens() as $ordenLibro) {
-            if ($ordenLibro->getPair() == $pair) {
-                if ($ordenLibro->getSide() == Orden::SIDE_SELL) {
-                    $res->addOrdenVenta(new \App\Entity\Orden($ordenLibro->getQuantity(), $ordenLibro->getPrice()));
+        $res = new Libro($par);
+        foreach ($this->getOrdenes() as $ordenLibro) {
+            if ($ordenLibro->getPar() == $par) {
+                if ($ordenLibro->getLado() == Orden::LADO_SELL) {
+                    $res->addOrdenVenta(new \App\Entity\Orden($ordenLibro->getCantidad(), $ordenLibro->getPrecio()));
                 } else {
-                    $res->addOrdenCompra(new \App\Entity\Orden($ordenLibro->getQuantity(), $ordenLibro->getPrice()));
+                    $res->addOrdenCompra(new \App\Entity\Orden($ordenLibro->getCantidad(), $ordenLibro->getPrecio()));
                 }
             }
         }
@@ -74,14 +73,14 @@ class Exchange
     /**
      * Obtener cotizaciones de un símbolo contra el resto de los símbolos.
      */
-    public function getAllRatesForSimbolo(string $simbolo): array
+    public function getAllCotizacionesForSimbolo(string $simbolo): array
     {
         $res = [];
 
-        foreach ($this->currentRates as $rate) {
-            $pair = $rate->getPair();
-            if ($simbolo === '*' || strpos($pair, $simbolo . '/') !== false || strpos($pair, '/' . $simbolo)) {
-                $res[] = $rate;
+        foreach ($this->cotizaciones as $cotizacion) {
+            $par = $cotizacion->getPar();
+            if ($simbolo === '*' || strpos($par, $simbolo . '/') !== false || strpos($par, '/' . $simbolo)) {
+                $res[] = $cotizacion;
             }
         }
 
@@ -93,36 +92,36 @@ class Exchange
      */
     public function obtenerMejorPrecioParaTodasDivisas(): array
     {
-        $pairs = [];
+        $pares = [];
 
         // Get all paris
-        foreach ($this->getOrdens() as $ordenLibro) {
-            if (in_array($ordenLibro->getPair(), $pairs) == false) {
-                $pairs[] = $ordenLibro->getPair();
+        foreach ($this->getOrdenes() as $ordenLibro) {
+            if (in_array($ordenLibro->getPar(), $pares) == false) {
+                $pares[] = $ordenLibro->getPar();
             }
         }
 
         $res = [];
 
-        foreach ($pairs as $pair) {
-            $ob = $this->getLibroForPair($pair);
-            $rate = new Rate();
-            $rate->setExchange($this);
-            $rate->setPair($pair);
-            $rate->setSellPrice($ob->getBestSellPrice() ?: 0);
-            $rate->setBuyPrice($ob->getBestBuyPrice() ?: 0);
+        foreach ($pares as $par) {
+            $ob = $this->getLibroForPar($par);
+            $cotizacion = new Cotizacion();
+            $cotizacion->setExchange($this);
+            $cotizacion->setPar($par);
+            $cotizacion->setPrecioVenta($ob->getBestPrecioVenta() ?: 0);
+            $cotizacion->setPrecioCompra($ob->getBestPrecioCompra() ?: 0);
 
-            $res[] = $rate;
+            $res[] = $cotizacion;
         }
 
         return $res;
     }
 
-    public function getCurrentRateForPair(string $pair): ?Rate
+    public function getCotizacionForPar(string $par): ?Cotizacion
     {
-        foreach ($this->currentRates as $rate) {
-            if ($rate->getPair() == $pair) {
-                return $rate;
+        foreach ($this->cotizaciones as $cotizacion) {
+            if ($cotizacion->getPar() == $par) {
+                return $cotizacion;
             }
         }
 
@@ -173,7 +172,7 @@ class Exchange
     /**
      * @return Collection|PersistentCollection|Orden[]
      */
-    public function getOrdens(): PersistentCollection
+    public function getOrdenes(): PersistentCollection
     {
         return $this->ordenLibros;
     }
@@ -192,7 +191,7 @@ class Exchange
     {
         if ($this->ordenLibros->contains($ordenLibro)) {
             $this->ordenLibros->removeElement($ordenLibro);
-            // set the owning side to null (unless already changed)
+            // set the owning lado to null (unless already changed)
             if ($ordenLibro->getExchange() === $this) {
                 $ordenLibro->setExchange(null);
             }
@@ -202,30 +201,30 @@ class Exchange
     }
 
     /**
-     * @return Collection|PersistentCollection|Rate[]
+     * @return Collection|PersistentCollection|Cotizacion[]
      */
-    public function getCurrentRates(): PersistentCollection
+    public function getCotizaciones(): PersistentCollection
     {
-        return $this->currentRates;
+        return $this->cotizaciones;
     }
 
-    public function addCurrentRate(Rate $currentRate): self
+    public function addCotizacion(Cotizacion $cotizacion): self
     {
-        if (!$this->currentRates->contains($currentRate)) {
-            $this->currentRates[] = $currentRate;
-            $currentRate->setExchange($this);
+        if (!$this->cotizaciones->contains($cotizacion)) {
+            $this->cotizaciones[] = $cotizacion;
+            $cotizacion->setExchange($this);
         }
 
         return $this;
     }
 
-    public function removeCurrentRate(Rate $currentRate): self
+    public function removeCotizacion(Cotizacion $cotizacion): self
     {
-        if ($this->currentRates->contains($currentRate)) {
-            $this->currentRates->removeElement($currentRate);
-            // set the owning side to null (unless already changed)
-            if ($currentRate->getExchange() === $this) {
-                $currentRate->setExchange(null);
+        if ($this->cotizaciones->contains($cotizacion)) {
+            $this->cotizaciones->removeElement($cotizacion);
+            // set the owning lado to null (unless already changed)
+            if ($cotizacion->getExchange() === $this) {
+                $cotizacion->setExchange(null);
             }
         }
 

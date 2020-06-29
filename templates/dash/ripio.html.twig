@@ -30,7 +30,7 @@
                         {% elseif analizador.RipioSellGapBtc < pctInfOjo %}<i class="fa fa-eye text-warning" title="Buen precio para comprar"></i>
                         {% endif %}
                         </td>
-                    <td class="text-right text-muted">{{ (analizador.RipioSellBtc / analizador.ReferenceBtcUsd.SellPrice)|number_format(2) }}</td>
+                    <td class="text-right text-muted">{{ (analizador.RipioSellBtc / analizador.ReferenceBtcUsd.PrecioVenta)|number_format(2) }}</td>
                 </tr>
                 <tr>
                     <td>Compra BTC</td>
@@ -42,7 +42,7 @@
                         {% elseif analizador.RipioBuyGapBtc > pctSupOjo %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
                         {% endif %}
                     </td>
-                    <td class="text-right">{{ (analizador.RipioBuyBtc / analizador.ReferenceBtcUsd.SellPrice)|number_format(2) }}</td>
+                    <td class="text-right">{{ (analizador.RipioBuyBtc / analizador.ReferenceBtcUsd.PrecioVenta)|number_format(2) }}</td>
                 </tr>
 
                 <tr>
@@ -55,7 +55,7 @@
                         {% elseif analizador.RipioSellGapEth < pctInfOjo %}<i class="fa fa-eye text-warning" title="Buen precio para comprar"></i>
                         {% endif %}
                     </td>
-                    <td class="text-right text-muted">{{ (analizador.RipioSellEth / analizador.ReferenceEthUsd.SellPrice)|number_format(2) }}</td>
+                    <td class="text-right text-muted">{{ (analizador.RipioSellEth / analizador.ReferenceEthUsd.PrecioVenta)|number_format(2) }}</td>
                 </tr>
                 <tr>
                     <td>Compra ETH</td>
@@ -67,14 +67,14 @@
                         {% elseif analizador.RipioBuyGapEth > pctSupOjo %}<i class="fa fa-eye text-warning" title="Buen precio para vender"></i>
                         {% endif %}
                     </td>
-                    <td class="text-right">{{ (analizador.RipioBuyEth / analizador.ReferenceEthUsd.SellPrice)|number_format(2) }}</td>
+                    <td class="text-right">{{ (analizador.RipioBuyEth / analizador.ReferenceEthUsd.PrecioVenta)|number_format(2) }}</td>
                 </tr>
             </tbody>
             </table>
             <p class="small">
             Brecha entre puntas: BTC {{ (analizador.GapBtc * 100)|number_format(1) }}%, ETH {{ (analizador.GapEth * 100)|number_format(1) }}%.
-            Venta al {{ pctSupFuego * 100 }}%: BTC {{ (analizador.ReferenceBtcUsd.SellPrice * analizador.Dolar * (1 + pctSupFuego))|number_format }}, 
-                ETH {{ (analizador.ReferenceEthUsd.SellPrice * analizador.Dolar * (1 + pctSupFuego))|number_format }}.
+            Venta al {{ pctSupFuego * 100 }}%: BTC {{ (analizador.ReferenceBtcUsd.PrecioVenta * analizador.Dolar * (1 + pctSupFuego))|number_format }}, 
+                ETH {{ (analizador.ReferenceEthUsd.PrecioVenta * analizador.Dolar * (1 + pctSupFuego))|number_format }}.
             </p>
         </div>
 
@@ -91,13 +91,13 @@
             <tbody>
                 <tr>
                 <td>BTC <i class="fab fa-bitcoin text-muted"></i></td>
-                <td class="text-right">{{ analizador.ReferenceBtcUsd.SellPrice|number_format }}</td>
-                <td class="text-right">{{ (analizador.ReferenceBtcUsd.SellPrice * analizador.Dolar)|number_format }}</td>
+                <td class="text-right">{{ analizador.ReferenceBtcUsd.PrecioVenta|number_format }}</td>
+                <td class="text-right">{{ (analizador.ReferenceBtcUsd.PrecioVenta * analizador.Dolar)|number_format }}</td>
                 </tr>
                 <tr>
                 <td>ETH <i class="fab fa-ethereum text-muted"></i></td>
-                <td class="text-right">{{ analizador.ReferenceEthUsd.SellPrice|number_format(1) }}</td>
-                <td class="text-right">{{ (analizador.ReferenceEthUsd.SellPrice * analizador.Dolar)|number_format }}</td>
+                <td class="text-right">{{ analizador.ReferenceEthUsd.PrecioVenta|number_format(1) }}</td>
+                <td class="text-right">{{ (analizador.ReferenceEthUsd.PrecioVenta * analizador.Dolar)|number_format }}</td>
                 </tr>
                 <tr>
                 <td>USD <i class="fa fa-money-bill text-muted"></i></td>
@@ -106,8 +106,8 @@
                 </tr>
             </tbody>
             </table>
-            ETH/BTC: ref {{ analizador.ReferenceEthBtc.SellPrice|number_format(6) }},
-            {% if (analizador.RipioBuyEth / analizador.RipioSellBtc) > analizador.ReferenceEthBtc.SellPrice %}
+            ETH/BTC: ref {{ analizador.ReferenceEthBtc.PrecioVenta|number_format(6) }},
+            {% if (analizador.RipioBuyEth / analizador.RipioSellBtc) > analizador.ReferenceEthBtc.PrecioVenta %}
                 <span class="text-success">
             {% else %}
                 <span class="text-muted">
@@ -132,52 +132,52 @@
             <td>Inmediato (tomador-tomador)</td>
             <td>Vender ETH, comprar BTC</td>
             <td class="text-right">{{ (analizador.RipioBuyEth / analizador.RipioSellBtc)|number_format(6) }} a 1</td>
-            <td class="text-right">{{ (((analizador.RipioBuyEth / analizador.RipioSellBtc)/analizador.ReferenceEthBtc.SellPrice - 1) * 100)|number_format(1) }}%</td>
+            <td class="text-right">{{ (((analizador.RipioBuyEth / analizador.RipioSellBtc)/analizador.ReferenceEthBtc.PrecioVenta - 1) * 100)|number_format(1) }}%</td>
         </tr>
         <tr>
             <td>Inmediato (tomador-tomador)</td>
             <td>Vender BTC, comprar ETH</td>
             <td class="text-right">{{ (analizador.RipioSellEth / analizador.RipioBuyBtc)|number_format(6) }} a 1</td>
-            <td class="text-right">{{ (((analizador.RipioSellEth / analizador.RipioBuyBtc) / analizador.ReferenceEthBtc.SellPrice - 1) * -100)|number_format(1) }}%</td>
+            <td class="text-right">{{ (((analizador.RipioSellEth / analizador.RipioBuyBtc) / analizador.ReferenceEthBtc.PrecioVenta - 1) * -100)|number_format(1) }}%</td>
         </tr>
 
         <tr>
             <td>Semi pasivo (tomador-colocador)</td>
             <td>Vender ETH, comprar BTC</td>
             <td class="text-right">{{ (analizador.RipioBuyEth / analizador.RipioBuyBtc)|number_format(6) }} a 1</td>
-            <td class="text-right">{{ (((analizador.RipioBuyEth / analizador.RipioBuyBtc)/analizador.ReferenceEthBtc.SellPrice - 1) * 100)|number_format(1) }}%</td>
+            <td class="text-right">{{ (((analizador.RipioBuyEth / analizador.RipioBuyBtc)/analizador.ReferenceEthBtc.PrecioVenta - 1) * 100)|number_format(1) }}%</td>
         </tr>
         <tr>
             <td>Semi pasivo (tomador-colocador)</td>
             <td>Vender BTC, comprar ETH</td>
             <td class="text-right">{{ (analizador.RipioBuyEth / analizador.RipioBuyBtc)|number_format(6) }} a 1</td>
-            <td class="text-right">{{ (((analizador.RipioBuyEth / analizador.RipioBuyBtc)/analizador.ReferenceEthBtc.SellPrice - 1) * -100)|number_format(1) }}%</td>
+            <td class="text-right">{{ (((analizador.RipioBuyEth / analizador.RipioBuyBtc)/analizador.ReferenceEthBtc.PrecioVenta - 1) * -100)|number_format(1) }}%</td>
         </tr>
 
         <tr>
             <td>Semi pasivo (colocador-tomador)</td>
             <td>Vender ETH, comprar BTC</td>
             <td class="text-right">{{ (analizador.RipioSellEth / analizador.RipioSellBtc)|number_format(6) }} a 1</td>
-            <td class="text-right">{{ (((analizador.RipioSellEth / analizador.RipioSellBtc)/analizador.ReferenceEthBtc.SellPrice - 1) * 100)|number_format(1) }}%</td>
+            <td class="text-right">{{ (((analizador.RipioSellEth / analizador.RipioSellBtc)/analizador.ReferenceEthBtc.PrecioVenta - 1) * 100)|number_format(1) }}%</td>
         </tr>
         <tr>
             <td>Semi pasivo (colocador-tomador)</td>
             <td>Vender BTC, comprar ETH</td>
             <td class="text-right">{{ (analizador.RipioSellEth / analizador.RipioSellBtc)|number_format(6) }} a 1</td>
-            <td class="text-right">{{ (((analizador.RipioSellEth / analizador.RipioSellBtc)/analizador.ReferenceEthBtc.SellPrice - 1) * -100)|number_format(1) }}%</td>
+            <td class="text-right">{{ (((analizador.RipioSellEth / analizador.RipioSellBtc)/analizador.ReferenceEthBtc.PrecioVenta - 1) * -100)|number_format(1) }}%</td>
         </tr>
 
         <tr>
             <td>Pasivo (tomador-tomador)</td>
             <td>Vender ETH, comprar BTC</td>
             <td class="text-right">{{ (analizador.RipioSellEth / analizador.RipioBuyBtc)|number_format(6) }} a 1</td>
-            <td class="text-right">{{ (((analizador.RipioSellEth / analizador.RipioBuyBtc)/analizador.ReferenceEthBtc.SellPrice - 1) * 100)|number_format(1) }}%</td>
+            <td class="text-right">{{ (((analizador.RipioSellEth / analizador.RipioBuyBtc)/analizador.ReferenceEthBtc.PrecioVenta - 1) * 100)|number_format(1) }}%</td>
         </tr>
         <tr>
             <td>Pasivo (tomador-tomador)</td>
             <td>Vender BTC, comprar ETH</td>
             <td class="text-right">{{ (analizador.RipioBuyEth / analizador.RipioSellBtc)|number_format(6) }} a 1</td>
-            <td class="text-right">{{ (((analizador.RipioBuyEth / analizador.RipioSellBtc)/analizador.ReferenceEthBtc.SellPrice - 1) * -100)|number_format(1) }}%</td>
+            <td class="text-right">{{ (((analizador.RipioBuyEth / analizador.RipioSellBtc)/analizador.ReferenceEthBtc.PrecioVenta - 1) * -100)|number_format(1) }}%</td>
         </tr>
     </tbody>
     </table>
@@ -223,9 +223,9 @@
     <tbody>
         <tr>
             <td>Compra BTC</td>
-            <td class="text-right">{{ (analizador.exchangeRipio.CurrentRateForPair('BTC/ARS').SellPrice / analizador.Dolar * 0.99)|number_format }}</td>
-            <td class="text-right">{{ (analizador.exchangeRipio.CurrentRateForPair('BTC/ARS').SellPrice * 0.99)|number_format }}</td>
-            {% set gap = analizador.exchangeRipio.CurrentRateForPair('BTC/ARS').SellPrice / (analizador.ReferenceBtcUsd.SellPrice * analizador.Dolar)  - 1.01 %}
+            <td class="text-right">{{ (analizador.exchangeRipio.CotizacionForPar('BTC/ARS').PrecioVenta / analizador.Dolar * 0.99)|number_format }}</td>
+            <td class="text-right">{{ (analizador.exchangeRipio.CotizacionForPar('BTC/ARS').PrecioVenta * 0.99)|number_format }}</td>
+            {% set gap = analizador.exchangeRipio.CotizacionForPar('BTC/ARS').PrecioVenta / (analizador.ReferenceBtcUsd.PrecioVenta * analizador.Dolar)  - 1.01 %}
             <td class="text-right">{{ (gap * 100)|number_format(1) }}%
                 {% if gap < pctInfFuego %}<i class="fa fa-money-bill-wave text-success" title="Deberías tener esta punta"></i>
                 {% elseif gap > pctSupFuego %}<i class="fa fa-fire text-danger" title="¡Vendé!"></i>
@@ -236,9 +236,9 @@
 
         <tr>
             <td>Compra ETH</td>
-            <td class="text-right">{{ (analizador.exchangeRipio.CurrentRateForPair('ETH/ARS').SellPrice / analizador.Dolar * 0.99)|number_format }}</td>
-            <td class="text-right">{{ (analizador.exchangeRipio.CurrentRateForPair('ETH/ARS').SellPrice * 0.99)|number_format }}</td>
-            {% set gap = analizador.exchangeRipio.CurrentRateForPair('ETH/ARS').SellPrice / (analizador.ReferenceEthUsd.SellPrice * analizador.Dolar)  - 1.01 %}
+            <td class="text-right">{{ (analizador.exchangeRipio.CotizacionForPar('ETH/ARS').PrecioVenta / analizador.Dolar * 0.99)|number_format }}</td>
+            <td class="text-right">{{ (analizador.exchangeRipio.CotizacionForPar('ETH/ARS').PrecioVenta * 0.99)|number_format }}</td>
+            {% set gap = analizador.exchangeRipio.CotizacionForPar('ETH/ARS').PrecioVenta / (analizador.ReferenceEthUsd.PrecioVenta * analizador.Dolar)  - 1.01 %}
             <td class="text-right">{{ (gap * 100)|number_format(1) }}%
                 {% if gap < pctInfFuego %}<i class="fa fa-money-bill-wave text-success" title="Deberías tener esta punta"></i>
                 {% elseif gap > pctSupFuego %}<i class="fa fa-fire text-danger" title="¡Vendé!"></i>

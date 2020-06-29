@@ -13,10 +13,11 @@ use App\Entity\Usuario;
  */
 class Orden
 {
-    public const SIDE_BUY = 1;
-    public const SIDE_SELL = 2;
+    public const LADO_NINGUNO = 0;
+    public const LADO_BUY = 1;
+    public const LADO_SELL = 2;
 
-    private bool $active = false;
+    private bool $activo = false;
 
     /**
      * @ORM\Id()
@@ -34,7 +35,7 @@ class Orden
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private string $pair;
+    private string $par;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Usuario", inversedBy="orders")
@@ -45,17 +46,17 @@ class Orden
     /**
      * @ORM\Column(type="float")
      */
-    private float $price = 0;
+    private float $precio = 0;
 
     /**
      * @ORM\Column(type="float")
      */
-    private float $quantity = 0;
+    private float $cantidad = 0;
 
     /**
      * @ORM\Column(type="smallint")
      */
-    private int $side = 0;
+    private int $lado = 0;
 
     /**
      * @ORM\Column(type="datetime")
@@ -67,12 +68,12 @@ class Orden
      */
     private float $total = 0;
 
-    public function __construct(?float $quantity = 0 , ?float $price = 0, ?float $total = 0)
+    public function __construct(?float $cantidad = 0 , ?float $precio = 0, ?float $total = 0)
     {
-        $this->quantity = $quantity;
-        $this->price = $price;
+        $this->cantidad = $cantidad;
+        $this->precio = $precio;
         if (!$total) {
-            $this->total = $quantity * $price;
+            $this->total = $cantidad * $precio;
         } else {
             $this->total = $total;
         }
@@ -107,17 +108,17 @@ class Orden
     /**
      * @ignore
      */
-    public function getPair() : ?string
+    public function getPar() : ?string
     {
-        return $this->pair;
+        return $this->par;
     }
 
     /**
      * @ignore
      */
-    public function setPair(string $pair) : self
+    public function setPar(string $par) : self
     {
-        $this->pair = $pair;
+        $this->par = $par;
 
         return $this;
     }
@@ -143,17 +144,17 @@ class Orden
     /**
      * @ignore
      */
-    public function getPrice(): ?float
+    public function getPrecio(): ?float
     {
-        return $this->price;
+        return $this->precio;
     }
 
     /**
      * @ignore
      */
-    public function setPrice(float $price): self
+    public function setPrecio(float $precio): self
     {
-        $this->price = $price;
+        $this->precio = $precio;
 
         return $this;
     }
@@ -161,17 +162,17 @@ class Orden
     /**
      * @ignore
      */
-    public function getQuantity() : float
+    public function getCantidad() : float
     {
-        return $this->quantity;
+        return $this->cantidad;
     }
 
     /**
      * @ignore
      */
-    public function setQuantity(float $quantity) : self
+    public function setCantidad(float $cantidad) : self
     {
-        $this->quantity = $quantity;
+        $this->cantidad = $cantidad;
 
         return $this;
     }
@@ -179,17 +180,17 @@ class Orden
     /**
      * @ignore
      */
-    public function getSide() : int
+    public function getLado() : int
     {
-        return $this->side;
+        return $this->lado;
     }
 
     /**
      * @ignore
      */
-    public function setSide(int $side) : self
+    public function setLado(int $lado) : self
     {
-        $this->side = $side;
+        $this->lado = $lado;
 
         return $this;
     }
@@ -215,17 +216,17 @@ class Orden
     /**
      * @ignore
      */
-    public function getActive() : bool
+    public function getActivo() : bool
     {
-        return $this->active;
+        return $this->activo;
     }
 
     /**
      * @ignore
      */
-    public function setActive(bool $active) : self
+    public function setActivo(bool $activo) : self
     {
-        $this->active = $active;
+        $this->activo = $activo;
 
         return $this;
     }

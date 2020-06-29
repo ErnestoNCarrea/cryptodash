@@ -4,7 +4,7 @@ namespace App\Util;
 
 use App\Entity\Orden;
 use App\Model\Libro;
-use App\Model\Rate;
+use App\Entity\Cotizacion;
 use App\Model\BitsoExchange;
 use App\Util\AbstractClient;
 use GuzzleHttp\Client;
@@ -12,10 +12,10 @@ use GuzzleHttp\Client;
 class BitsoClient extends AbstractClient
 {
     /** @var array */
-    private $supportedSimbolos = ['ARS', 'BTC', 'ETH', 'XRP'];
+    private $simbolosAdmitidos = ['ARS', 'BTC', 'ETH', 'XRP'];
 
     /** @var array */
-    private $supportedPairs = ['BTC/ARS', 'ETH/BTC', 'XRP/BTC'];
+    private $paresAdmitidos = ['BTC/ARS', 'ETH/BTC', 'XRP/BTC'];
 
     /** @var Client */
     private $client;
@@ -38,39 +38,39 @@ class BitsoClient extends AbstractClient
     public function connect()
     {}
 
-    public function getCurrentPrice(string $pair): Rate
+    public function getCurrentPrecio(string $par): Cotizacion
     {
         $res = $this->client->request('GET', 'ticker/', [
             'query' => [
-                'book' => $this->formatPair($pair),
+                'libro' => $this->formatPar($par),
             ]]);
 
         $res = json_decode((string) $res->getBody());
 
-        return new Rate((float) $res->payload->bid, (float) $res->payload->ask);
+        return new Cotizacion((float) $res->payload->bid, (float) $res->payload->ask);
     }
 
-    public function getLibro(string $pair): ?Libro
+    public function getLibro(string $par): ?Libro
     {
-        $res = $this->client->request('GET', 'order_book/', [
+        $res = $this->client->request('GET', 'order_libro/', [
             'query' => [
-                'book' => $this->formatPair($pair)
+                'libro' => $this->formatPar($par)
             ],
         ]);
 
         if ($res->getStatusCode() === 200) {
-            return $this->decodeLibro($pair, json_decode((string) $res->getBody()));
+            return $this->decodeLibro($par, json_decode((string) $res->getBody()));
         } else {
             return null;
         }
     }
 
-    private function decodeLibro(string $pair, object $json): Libro
+    private function decodeLibro(string $par, object $json): Libro
     {
         $ordenesCompra = $this->decodeOrdenCollection($json->payload->bids);
         $ordenesVenta = $this->decodeOrdenCollection($json->payload->asks);
 
-        return new Libro($pair, $ordenesCompra, $ordenesVenta);
+        return new Libro($par, $ordenesCompra, $ordenesVenta);
     }
 
     private function decodeOrdenCollection(array $json_orders): array
@@ -78,23 +78,23 @@ class BitsoClient extends AbstractClient
         $res = [];
 
         foreach ($json_orders as $json_order) {
-            $order = new Orden((float) $json_order->amount, (float) $json_order->price);
+            $order = new Orden((float) $json_order->amount, (float) $json_order->precio);
             $res[] = $order;
         }
 
         return $res;
     }
 
-    public function getSupportedPairs(): array
+    public function getParesAdmitidos(): array
     {
-        return $this->supportedPairs;
+        return $this->paresAdmitidos;
     }
 
     /**
      * Convert SYM/SYM to the format used by the exchange (SYM_SYM).
      */
-    private function formatPair(string $pair): string
+    private function formatPar(string $par): string
     {
-        return strtolower(str_replace('/', '_', $pair));
+        return strtolower(str_replace('/', '_', $par));
     }
 }

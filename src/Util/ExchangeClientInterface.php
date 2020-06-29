@@ -11,6 +11,6 @@ interface ExchangeClientInterface
     public function connect();
 
     public function getExchange(): ExchangeInterface;
-    public function getLibro(string $pair): ?Libro;
-    public function getSupportedPairs(): array;
+    public function getLibro(string $par): ?Libro;
+    public function getParesAdmitidos(): array;
 }

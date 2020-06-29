@@ -3,53 +3,53 @@
 {% block body %}
 <div class="container-fluid"><div class="row">
 {% for exchange in analizador.Exchanges %}
-    {% set precioDolar = dolar.getCurrentPrice %}
-    {% set rates = exchange.obtenerMejorPrecioParaTodasDivisas %}
-    {% if rates %}
+    {% set precioDolar = dolar.getCurrentPrecio %}
+    {% set cotizaciones = exchange.obtenerMejorPrecioParaTodasDivisas %}
+    {% if cotizaciones %}
         <div class="col">
         <h2>{{ exchange }}</h2>
 
         <table class="table">
-        {% for rate in rates %}
+        {% for cotizacion in cotizaciones %}
             <tr>
-                <td><a href="{{ path('dash_book', { 'exchange': exchange.id, 'pair': rate.pair }) }}">{{ rate.pair }}</a></td>
+                <td><a href="{{ path('dash_libro', { 'exchange': exchange.id, 'par': cotizacion.par }) }}">{{ cotizacion.par }}</a></td>
                 <td class="text-right">
-                    {% if rate.sellPrice > 10 %}
-                        {{ rate.sellPrice|number_format(2) }}
+                    {% if cotizacion.precioVenta > 10 %}
+                        {{ cotizacion.precioVenta|number_format(2) }}
                     {% else %}
-                        {{ rate.sellPrice|number_format(8) }}
+                        {{ cotizacion.precioVenta|number_format(8) }}
                     {% endif %}
 
-                    {% if 'ARS' in rate.pair %}
-                        {% set inversePair = rate.pair|replace({'ARS': 'USD'}) %}
-                        {% set referenceRate = reference.getCurrentRateForPair(inversePair) %}
-                        {% if referenceRate %}
-                            {% set sellPrice = referenceRate.getSellPrice %}
+                    {% if 'ARS' in cotizacion.par %}
+                        {% set inversePar = cotizacion.par|replace({'ARS': 'USD'}) %}
+                        {% set referenceCotizacion = reference.getCotizacionForPar(inversePar) %}
+                        {% if referenceCotizacion %}
+                            {% set precioVenta = referenceCotizacion.getPrecioVenta %}
                             <br />
-                            <span class="small text-muted">DI {{ (rate.sellPrice / sellPrice)|number_format(2) }}</span>
+                            <span class="small text-muted">DI {{ (cotizacion.precioVenta / precioVenta)|number_format(2) }}</span>
                         {% endif %}
 
-                    {% elseif 'USD' in rate.pair %}
+                    {% elseif 'USD' in cotizacion.par %}
                         
                     {% endif %}
                 </td>
                 <td class="text-right">
-                    {% if rate.buyPrice > 10 %}
-                        {{ rate.buyPrice|number_format(2) }}
+                    {% if cotizacion.precioCompra > 10 %}
+                        {{ cotizacion.precioCompra|number_format(2) }}
                     {% else %}
-                        {{ rate.buyPrice|number_format(8) }}
+                        {{ cotizacion.precioCompra|number_format(8) }}
                     {% endif %}
 
-                    {% if 'ARS' in rate.pair %}
-                        {% set inversePair = rate.pair|replace({'ARS': 'USD'}) %}
-                        {% set referenceRate = reference.getCurrentRateForPair(inversePair) %}
-                        {% if referenceRate %}
-                            {% set buyPrice = referenceRate.getBuyPrice %}
+                    {% if 'ARS' in cotizacion.par %}
+                        {% set inversePar = cotizacion.par|replace({'ARS': 'USD'}) %}
+                        {% set referenceCotizacion = reference.getCotizacionForPar(inversePar) %}
+                        {% if referenceCotizacion %}
+                            {% set precioCompra = referenceCotizacion.getPrecioCompra %}
                             <br />
-                            <span class="small text-muted">DI {{ (rate.buyPrice / buyPrice)|number_format(2) }}</span>
+                            <span class="small text-muted">DI {{ (cotizacion.precioCompra / precioCompra)|number_format(2) }}</span>
                         {% endif %}
 
-                    {% elseif 'USD' in rate.pair %}
+                    {% elseif 'USD' in cotizacion.par %}
                         
                     {% endif %}
                     

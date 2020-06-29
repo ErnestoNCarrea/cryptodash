@@ -4,7 +4,7 @@ namespace App\Util;
 
 use App\Entity\Exchange;
 use App\Entity\Orden;
-use App\Entity\Rate;
+use App\Entity\Cotizacion;
 use App\Model\Libro;
 use App\Model\Opportunity;
 
@@ -25,14 +25,14 @@ class AnalizadorCotizaciones
         return $this->exchanges;
     }
 
-    public function getAllRatesForSimbolo(string $simbolo) {
-        $rates = [];
+    public function getAllCotizacionesForSimbolo(string $simbolo) {
+        $cotizaciones = [];
         
         foreach($this->exchanges as $exchange) {
             /* @var Libro */
-            $rates[$exchange->getId()] = $exchange->getAllRatesForSimbolo($simbolo);    
+            $cotizaciones[$exchange->getId()] = $exchange->getAllCotizacionesForSimbolo($simbolo);    
         }
 
-        return $rates;
+        return $cotizaciones;
     }
 }

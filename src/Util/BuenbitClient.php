@@ -4,7 +4,7 @@ namespace App\Util;
 
 use App\Entity\Orden;
 use App\Model\Libro;
-use App\Model\Rate;
+use App\Entity\Cotizacion;
 use App\Model\BuenbitExchange;
 use App\Util\AbstractClient;
 use GuzzleHttp\Client;
@@ -12,10 +12,10 @@ use GuzzleHttp\Client;
 class BuenbitClient extends AbstractClient
 {
     /** @var array */
-    private $supportedSimbolos = ['ARS', 'BTC', 'ETH', 'DAI'];
+    private $simbolosAdmitidos = ['ARS', 'BTC', 'ETH', 'DAI'];
 
     /** @var array */
-    private $supportedPairs = ['BTC/ARS', 'ETH/ARS', 'DAI/ARS', 'BTC/DAI', 'DAI/ARS'];
+    private $paresAdmitidos = ['BTC/ARS', 'ETH/ARS', 'DAI/ARS', 'BTC/DAI', 'DAI/ARS'];
 
     /** @var Client */
     private $client;
@@ -38,22 +38,22 @@ class BuenbitClient extends AbstractClient
     public function connect()
     {}
 
-    public function getCurrentPrice(string $pair): Rate
+    public function getCurrentPrecio(string $par): Cotizacion
     {
         $res = $this->client->request('GET', 'tickers');
 
         $res = json_decode((string) $res->getBody());
 
-        $pairname = $this->formatPair($pair);
+        $parname = $this->formatPar($par);
 
-        return new Rate((float) $res->$pairname->ticker->buy, (float) $res->$pairname->ticker->sell);
+        return new Cotizacion((float) $res->$parname->ticker->buy, (float) $res->$parname->ticker->sell);
     }
 
-    public function getLibro(string $pair): ?Libro
+    public function getLibro(string $par): ?Libro
     {
-        $res = $this->client->request('GET', 'order_book', [
+        $res = $this->client->request('GET', 'order_libro', [
             'query' => [
-                'market' => urlencode($this->formatPair($pair)),
+                'market' => urlencode($this->formatPar($par)),
                 'asks_limit' => 15,
                 'bids_limit' => 15
             ],
@@ -64,18 +64,18 @@ class BuenbitClient extends AbstractClient
         ]);
 
         if ($res->getStatusCode() === 200) {
-            return $this->decodeLibro($pair, json_decode((string) $res->getBody()));
+            return $this->decodeLibro($par, json_decode((string) $res->getBody()));
         } else {
             return null;
         }
     }
 
-    private function decodeLibro(string $pair, object $json): Libro
+    private function decodeLibro(string $par, object $json): Libro
     {
         $ordenesCompra = $this->decodeOrdenCollection($json->bids);
         $ordenesVenta = $this->decodeOrdenCollection($json->asks);
 
-        return new Libro($pair, $ordenesCompra, $ordenesVenta);
+        return new Libro($par, $ordenesCompra, $ordenesVenta);
     }
 
     private function decodeOrdenCollection(array $json_orders): array
@@ -83,21 +83,21 @@ class BuenbitClient extends AbstractClient
         $res = [];
 
         foreach ($json_orders as $json_order) {
-            $order = new Orden((float) $json_order->remaining_volume, (float) $json_order->price);
+            $order = new Orden((float) $json_order->remaining_volume, (float) $json_order->precio);
             $res[] = $order;
         }
 
         return $res;
     }
 
-    public function getSupportedPairs(): array
+    public function getParesAdmitidos(): array
     {
-        return $this->supportedPairs;
+        return $this->paresAdmitidos;
     }
 
-    public function api_getPairs(): array
+    public function api_getPares(): array
     {
-        $res = $this->client->request('GET', 'pair/', [
+        $res = $this->client->request('GET', 'par/', [
             'query' => [
                 'country' => 'AR',
             ],
@@ -114,8 +114,8 @@ class BuenbitClient extends AbstractClient
     /**
      * Convert SYM/SYM to the format used by the exchange (symsym).
      */
-    private function formatPair(string $pair): string
+    private function formatPar(string $par): string
     {
-        return strtolower(str_replace('/', '', $pair));
+        return strtolower(str_replace('/', '', $par));
     }
 }

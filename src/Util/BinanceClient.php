@@ -5,17 +5,17 @@ namespace App\Util;
 use App\Model\BinanceExchange;
 use App\Entity\Orden;
 use App\Model\Libro;
-use App\Model\Rate;
+use App\Entity\Cotizacion;
 use App\Util\AbstractClient;
 use GuzzleHttp\Client;
 
 class BinanceClient extends AbstractClient
 {
     /** @var array */
-    private $supportedSimbolos = ['USD', 'BTC', 'ETH', 'XRP', 'XLM', 'EOS'];
+    private $simbolosAdmitidos = ['USD', 'BTC', 'ETH', 'XRP', 'XLM', 'EOS'];
 
     /** @var array */
-    private $supportedPairs = ['BTC/USD', 'ETH/USD', 'BTC/ETH', 'XRP/USD', 'XLM/USD', 'EOS/USD'];
+    private $paresAdmitidos = ['BTC/USD', 'ETH/USD', 'BTC/ETH', 'XRP/USD', 'XLM/USD', 'EOS/USD'];
 
     /** @var Client */
     private $client;
@@ -41,67 +41,67 @@ class BinanceClient extends AbstractClient
     public function connect()
     {}
 
-    public function getLibro(string $pair): ?Libro
+    public function getLibro(string $par): ?Libro
     {
-        $res = $this->client->request('GET', 'api/v3/avgPrice', [
+        $res = $this->client->request('GET', 'api/v3/avgPrecio', [
             'query' => [
-                'simbolo' => $this->formatPair($this->convertUsdToUsdt($pair)),
+                'simbolo' => $this->formatPar($this->convertUsdToUsdt($par)),
             ],
         ]);
 
-        $ordenesCompra = [new Orden(0, $price, 0)];
-        $ordenesVenta = [new Orden(0, $price, 0)];
+        $ordenesCompra = [new Orden(0, $precio, 0)];
+        $ordenesVenta = [new Orden(0, $precio, 0)];
 
-        return new Libro($pair, $ordenesCompra, $ordenesVenta);
+        return new Libro($par, $ordenesCompra, $ordenesVenta);
     }
 
-    public function getCurrentPrice(string $pair): Rate
+    public function getCurrentPrecio(string $par): Cotizacion
     {
-        $res = $this->client->request('GET', 'api/v3/avgPrice', [
+        $res = $this->client->request('GET', 'api/v3/avgPrecio', [
             'query' => [
-                'simbolo' => $this->formatPair($this->convertUsdToUsdt($pair)),
+                'simbolo' => $this->formatPar($this->convertUsdToUsdt($par)),
             ],
         ]);
 
         $res = json_decode((string) $res->getBody());
 
-        return new Rate((float) $res->price, (float) $res->price);
+        return new Cotizacion((float) $res->precio, (float) $res->precio);
     }
 
-    public function getSupportedPairs(): array
+    public function getParesAdmitidos(): array
     {
-        return $this->supportedPairs;
+        return $this->paresAdmitidos;
     }
 
     /**
-     * Format SYM/SYM pair to SYMSYM.
+     * Format SYM/SYM par to SYMSYM.
      */
-    private function formatPair(string $pair): string
+    private function formatPar(string $par): string
     {
-        return str_replace('/', '', $pair);
+        return str_replace('/', '', $par);
     }
 
     /**
      * Convert USD to USDT if assumeUsdtIsUsd.
      */
-    private function convertUsdToUsdt(string $pair): string
+    private function convertUsdToUsdt(string $par): string
     {
         if ($this->assumeUsdtIsUsd) {
-            return str_replace('USD', 'USDT', $pair);
+            return str_replace('USD', 'USDT', $par);
         } else {
-            return $pair;
+            return $par;
         }
     }
 
     /**
      * Convert USDT to USD if assumeUsdtIsUsd.
      */
-    private function convertUsdtToUsd(string $pair): string
+    private function convertUsdtToUsd(string $par): string
     {
         if ($this->assumeUsdtIsUsd) {
-            return str_replace('USDT', 'USD', $pair);
+            return str_replace('USDT', 'USD', $par);
         } else {
-            return $pair;
+            return $par;
         }
     }
 }

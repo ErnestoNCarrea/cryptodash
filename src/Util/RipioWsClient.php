@@ -11,10 +11,10 @@ use App\Util\AbstractWsClient;
 class RipioWsClient extends AbstractWsClient
 {
     /** @var array */
-    private $supportedSimbolos = ['ARS', 'BTC', 'ETH '];
+    private $simbolosAdmitidos = ['ARS', 'BTC', 'ETH '];
 
     /** @var array */
-    private $supportedPairs = ['BTC/ARS', 'ETH/ARS'];
+    private $paresAdmitidos = ['BTC/ARS', 'ETH/ARS'];
 
     /** @var Client */
     private $client;
@@ -43,9 +43,9 @@ class RipioWsClient extends AbstractWsClient
         $connector = new \Ratchet\Client\Connector($loop, $reactConnector);
     }
 
-    public function getLibro(string $pair): ?Libro
+    public function getLibro(string $par): ?Libro
     {
-        $res = $this->client->request('GET', 'orderbook/' . urlencode($this->formatPair($pair)), [
+        $res = $this->client->request('GET', 'orderlibro/' . urlencode($this->formatPar($par)), [
             'headers' => [
                 'Accept' => '*/*',
                 'Content-type' => 'application/json',
@@ -53,18 +53,18 @@ class RipioWsClient extends AbstractWsClient
         ]);
 
         if ($res->getStatusCode() === 200) {
-            return $this->decodeLibro($pair, json_decode((string) $res->getBody()));
+            return $this->decodeLibro($par, json_decode((string) $res->getBody()));
         } else {
             return null;
         }
     }
 
-    private function decodeLibro(string $pair, object $json): Libro
+    private function decodeLibro(string $par, object $json): Libro
     {
         $ordenesCompra = $this->decodeOrdenCollection($json->buy);
         $ordenesVenta = $this->decodeOrdenCollection($json->sell);
 
-        return new Libro($pair, $ordenesCompra, $ordenesVenta);
+        return new Libro($par, $ordenesCompra, $ordenesVenta);
     }
 
     private function decodeOrdenCollection(array $json_orders): array
@@ -72,7 +72,7 @@ class RipioWsClient extends AbstractWsClient
         $res = [];
 
         foreach ($json_orders as $json_order) {
-            $order = new Orden((float) $json_order->amount, (float) $json_order->price, (float) $json_order->total);
+            $order = new Orden((float) $json_order->amount, (float) $json_order->precio, (float) $json_order->total);
             $res[] = $order;
         }
 
@@ -80,14 +80,14 @@ class RipioWsClient extends AbstractWsClient
     }
 
 
-    public function getSupportedPairs(): array
+    public function getParesAdmitidos(): array
     {
-        return $this->supportedPairs;
+        return $this->paresAdmitidos;
     }
 
-    public function api_getPairs(): array
+    public function api_getPares(): array
     {
-        $res = $this->client->request('GET', 'pair/', [
+        $res = $this->client->request('GET', 'par/', [
             'query' => [
                 'country' => 'AR'
             ],
@@ -102,10 +102,10 @@ class RipioWsClient extends AbstractWsClient
     }
 
     /**
-     * Format SYM/SYM pair to SYM_SYM.
+     * Format SYM/SYM par to SYM_SYM.
      */
-    private function formatPair(string $pair): string
+    private function formatPar(string $par): string
     {
-        return str_replace('/', '_', $pair);
+        return str_replace('/', '_', $par);
     }
 }

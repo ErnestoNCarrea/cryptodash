@@ -37,7 +37,7 @@ class DashController extends AbstractController
         
         $clientDolar = new DolarIolClient();
 
-        $analizador = new AnalizadorRipio($exchangeRipio, $exchangeBinance, $clientDolar->getCurrentPrice('USD/ARS'));
+        $analizador = new AnalizadorRipio($exchangeRipio, $exchangeBinance, $clientDolar->getCurrentPrecio('USD/ARS'));
 
         //dump($analizador);
 
@@ -84,20 +84,20 @@ class DashController extends AbstractController
     }
 
     /**
-     * @Route("/book", name="dash_book")
+     * @Route("/libro", name="dash_libro")
      */
-    public function book(Request $request)
+    public function libro(Request $request)
     {
         $exchangeId = $request->query->get('exchange');
-        $pair = $request->query->get('pair');
+        $par = $request->query->get('par');
 
         $exchange = $this->em->getRepository('App\Entity\Exchange')->find($exchangeId);
-        $book = $exchange->getLibroForPair($pair);
+        $libro = $exchange->getLibroForPar($par);
 
-        return $this->render('dash/book.html.twig', [
+        return $this->render('dash/libro.html.twig', [
             'exchange' => $exchange,
-            'book' => $book,
-            'pair' => $pair,
+            'libro' => $libro,
+            'par' => $par,
         ]);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Util;
 
 use App\Entity\Orden;
 use App\Model\Libro;
-use App\Model\Rate;
+use App\Entity\Cotizacion;
 use App\Model\RipioExchange;
 use App\Util\AbstractClient;
 use GuzzleHttp\Client;
@@ -12,10 +12,10 @@ use GuzzleHttp\Client;
 class RipioClient extends AbstractClient
 {
     /** @var array */
-    private $supportedSimbolos = ['ARS', 'BTC', 'ETH', 'USDC'];
+    private $simbolosAdmitidos = ['ARS', 'BTC', 'ETH', 'USDC'];
 
     /** @var array */
-    private $supportedPairs = ['BTC/ARS', 'ETH/ARS', 'USDC/ARS', 'BTC/USDC', 'ETH/USDC'];
+    private $paresAdmitidos = ['BTC/ARS', 'ETH/ARS', 'USDC/ARS', 'BTC/USDC', 'ETH/USDC'];
 
     /** @var Client */
     private $client;
@@ -38,33 +38,33 @@ class RipioClient extends AbstractClient
     public function connect()
     {}
 
-    public function getCurrentPrice(string $pair): Rate
+    public function getCurrentPrecio(string $par): Cotizacion
     {
-        [$pairBase, $pairQuote] = explode('/', $pair);
+        [$parBase, $parQuote] = explode('/', $par);
 
         $res = $this->client->request('GET', 'https://ripio.com/api/v1/rates/', [
             'query' => [
-                'base' => $pairBase,
+                'base' => $parBase,
             ]]);
 
         $res = json_decode((string) $res->getBody());
 
-        if($pairQuote == 'USDC') {
+        if($parQuote == 'USDC') {
             // A Ripio le preguntás por USDC y en algunos lugares responde USD
-            $pairQuote = 'USD';
+            $parQuote = 'USD';
         }
-        $pairQuote_BUY = $pairQuote . '_BUY';
-        $pairQuote_SELL = $pairQuote . '_SELL';
+        $parQuote_BUY = $parQuote . '_BUY';
+        $parQuote_SELL = $parQuote . '_SELL';
 
-        //echo "$pair \n\n";
-        //if($pair == 'BTC/USDC')
+        //echo "$par \n\n";
+        //if($par == 'BTC/USDC')
         //print_r($res);
-        return new Rate((float) $res->rates->$pairQuote_BUY, (float) $res->rates->$pairQuote_SELL);
+        return new Cotizacion((float) $res->rates->$parQuote_BUY, (float) $res->rates->$parQuote_SELL);
     }
 
-    public function getLibro(string $pair): ?Libro
+    public function getLibro(string $par): ?Libro
     {
-        $res = $this->client->request('GET', 'orderbook/' . urlencode($this->formatPair($pair)), [
+        $res = $this->client->request('GET', 'orderlibro/' . urlencode($this->formatPar($par)), [
             'headers' => [
                 'Accept' => '*/*',
                 'Content-type' => 'application/json',
@@ -72,18 +72,18 @@ class RipioClient extends AbstractClient
         ]);
 
         if ($res->getStatusCode() === 200) {
-            return $this->decodeLibro($pair, json_decode((string) $res->getBody()));
+            return $this->decodeLibro($par, json_decode((string) $res->getBody()));
         } else {
             return null;
         }
     }
 
-    private function decodeLibro(string $pair, object $json): Libro
+    private function decodeLibro(string $par, object $json): Libro
     {
         $ordenesCompra = $this->decodeOrdenCollection($json->buy);
         $ordenesVenta = $this->decodeOrdenCollection($json->sell);
 
-        return new Libro($pair, $ordenesCompra, $ordenesVenta);
+        return new Libro($par, $ordenesCompra, $ordenesVenta);
     }
 
     private function decodeOrdenCollection(array $json_orders): array
@@ -91,21 +91,21 @@ class RipioClient extends AbstractClient
         $res = [];
 
         foreach ($json_orders as $json_order) {
-            $order = new Orden((float) $json_order->amount, (float) $json_order->price, (float) $json_order->total);
+            $order = new Orden((float) $json_order->amount, (float) $json_order->precio, (float) $json_order->total);
             $res[] = $order;
         }
 
         return $res;
     }
 
-    public function getSupportedPairs(): array
+    public function getParesAdmitidos(): array
     {
-        return $this->supportedPairs;
+        return $this->paresAdmitidos;
     }
 
-    public function api_getPairs(): array
+    public function api_getPares(): array
     {
-        $res = $this->client->request('GET', 'pair/', [
+        $res = $this->client->request('GET', 'par/', [
             'query' => [
                 'country' => 'AR',
             ],
@@ -122,8 +122,8 @@ class RipioClient extends AbstractClient
     /**
      * Convert SYM/SYM to the format used by the exchange (SYM_SYM).
      */
-    private function formatPair(string $pair): string
+    private function formatPar(string $par): string
     {
-        return str_replace('/', '_', $pair);
+        return str_replace('/', '_', $par);
     }
 }

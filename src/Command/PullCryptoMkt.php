@@ -37,20 +37,20 @@ class PullCryptoMkt extends Command
         $exchange = $this->em->getRepository('App\Entity\Exchange')->find(9003);
         $clientCryptoMkt = new CryptoMktClient();
 
-        foreach (['BTC/ARS', 'ETH/ARS', 'XLM/ARS', 'EOS/ARS'] as $pair) {
-            //$ripioLibro = $this->em->getRepository('App\Entity\Orden')->findBy(['exchange' => $ripioExchange, 'pair' => $pair, 'usuario' => null]);
-            $libro = $clientCryptoMkt->getLibro($pair);
+        foreach (['BTC/ARS', 'ETH/ARS', 'XLM/ARS', 'EOS/ARS'] as $par) {
+            //$ripioLibro = $this->em->getRepository('App\Entity\Orden')->findBy(['exchange' => $ripioExchange, 'par' => $par, 'usuario' => null]);
+            $libro = $clientCryptoMkt->getLibro($par);
 
-            $ordenesEliminadas = $this->updateLibro($exchange, $pair, $libro);
+            $ordenesEliminadas = $this->updateLibro($exchange, $par, $libro);
             if ($ordenesEliminadas) {
                 foreach ($ordenesEliminadas as $ordenEliminada) {
                     $this->em->remove($ordenEliminada);
                 }
             }
 
-            $rate = $this->updateRate($exchange, $pair, $clientCryptoMkt->getCurrentPrice($pair));
-            if ($rate) {
-                $this->em->persist($rate);
+            $cotizacion = $this->updateCotizacion($exchange, $par, $clientCryptoMkt->getCurrentPrecio($par));
+            if ($cotizacion) {
+                $this->em->persist($cotizacion);
             }
         }
 
@@ -60,77 +60,77 @@ class PullCryptoMkt extends Command
         return 0;
     }
 
-    private function updateRate(Exchange $exchange, string $pair, \App\Model\Rate $rate): \App\Entity\Rate
+    private function updateCotizacion(Exchange $exchange, string $par, \App\Entity\Cotizacion $cotizacion): \App\Entity\Cotizacion
     {
-        $rateEntity = $exchange->getCurrentRateForPair($pair);
-        if ($rateEntity === null) {
-            $rateEntity = new \App\Entity\Rate();
-            $exchange->addCurrentRate($rateEntity);
+        $cotizacionEntity = $exchange->getCotizacionForPar($par);
+        if ($cotizacionEntity === null) {
+            $cotizacionEntity = new \App\Entity\Cotizacion();
+            $exchange->addCotizacion($cotizacionEntity);
         }
 
-        $rateEntity->setPair($pair);
-        $rateEntity->setBuyPrice($rate->getBuyPrice());
-        $rateEntity->setSellPrice($rate->getSellPrice());
-        $rateEntity->setDateTime(new \Datetime());
+        $cotizacionEntity->setPar($par);
+        $cotizacionEntity->setPrecioCompra($cotizacion->getPrecioCompra());
+        $cotizacionEntity->setPrecioVenta($cotizacion->getPrecioVenta());
+        $cotizacionEntity->setDateTime(new \Datetime());
 
-        return $rateEntity;
+        return $cotizacionEntity;
     }
 
-    private function updateLibro(Exchange $exchange, string $pair, Libro $updatedLibro): array
+    private function updateLibro(Exchange $exchange, string $par, Libro $updatedLibro): array
     {
-        foreach ($exchange->getOrdens() as $ordenLibro) {
-            if ($ordenLibro->getPair() == $pair) {
-                $ordenLibro->setActive(false);
+        foreach ($exchange->getOrdenes() as $ordenLibro) {
+            if ($ordenLibro->getPar() == $par) {
+                $ordenLibro->setActivo(false);
             }
         }
 
         foreach ($updatedLibro->getOrdenesCompra() as $order) {
-            $orderEntityArray = $exchange->getOrdens()->filter(function (Orden $orderEntity) use ($order) {
-                return $order->getPrice() == $orderEntity->getPrice();
+            $ordenArray = $exchange->getOrdenes()->filter(function (Orden $orden) use ($order) {
+                return $order->getPrecio() == $orden->getPrecio();
             });
 
-            if (is_array($orderEntityArray) && count($orderEntityArray) == 1) {
-                $orderEntity = $orderEntityArray[0];
+            if (is_array($ordenArray) && count($ordenArray) == 1) {
+                $orden = $ordenArray[0];
             } else {
-                $orderEntity = new Orden();
-                $orderEntity->setDateTime(new \Datetime());
+                $orden = new Orden();
+                $orden->setDateTime(new \Datetime());
             }
 
-            $orderEntity->setSide(Orden::SIDE_BUY);
-            $orderEntity->setExchange($exchange);
-            $orderEntity->setPrice($order->getPrice());
-            $orderEntity->setQuantity($order->getQuantity());
-            $orderEntity->setPair($pair);
-            $orderEntity->setActive(true);
+            $orden->setLado(Orden::LADO_BUY);
+            $orden->setExchange($exchange);
+            $orden->setPrecio($order->getPrecio());
+            $orden->setCantidad($order->getCantidad());
+            $orden->setPar($par);
+            $orden->setActivo(true);
 
-            $exchange->addOrden($orderEntity);
+            $exchange->addOrden($orden);
         }
 
         foreach ($updatedLibro->getOrdenesVenta() as $order) {
-            $orderEntityArray = $exchange->getOrdens()->filter(function (Orden $orderEntity) use ($order) {
-                return $order->getPrice() == $orderEntity->getPrice();
+            $ordenArray = $exchange->getOrdenes()->filter(function (Orden $orden) use ($order) {
+                return $order->getPrecio() == $orden->getPrecio();
             });
 
-            if (is_array($orderEntityArray) && count($orderEntityArray) == 1) {
-                $orderEntity = $orderEntityArray[0];
+            if (is_array($ordenArray) && count($ordenArray) == 1) {
+                $orden = $ordenArray[0];
             } else {
-                $orderEntity = new Orden();
-                $orderEntity->setDateTime(new \Datetime());
+                $orden = new Orden();
+                $orden->setDateTime(new \Datetime());
             }
 
-            $orderEntity->setSide(Orden::SIDE_SELL);
-            $orderEntity->setExchange($exchange);
-            $orderEntity->setPrice($order->getPrice());
-            $orderEntity->setQuantity($order->getQuantity());
-            $orderEntity->setPair($pair);
-            $orderEntity->setActive(true);
+            $orden->setLado(Orden::LADO_SELL);
+            $orden->setExchange($exchange);
+            $orden->setPrecio($order->getPrecio());
+            $orden->setCantidad($order->getCantidad());
+            $orden->setPar($par);
+            $orden->setActivo(true);
 
-            $exchange->addOrden($orderEntity);
+            $exchange->addOrden($orden);
         }
 
         $res = [];
-        foreach ($exchange->getOrdens() as $ordenLibro) {
-            if ($ordenLibro->getPair() == $pair && $ordenLibro->getActive() == false) {
+        foreach ($exchange->getOrdenes() as $ordenLibro) {
+            if ($ordenLibro->getPar() == $par && $ordenLibro->getActivo() == false) {
                 $exchange->removeOrden($ordenLibro);
                 $res[] = $ordenLibro;
             }

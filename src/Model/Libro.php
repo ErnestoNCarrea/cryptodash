@@ -7,7 +7,7 @@ use App\Entity\Orden;
 class Libro
 {
     /** @var string */
-    private $pair;
+    private $par;
 
     /** @var Orden[]|null */
     private $ordenesCompra = null;
@@ -15,9 +15,9 @@ class Libro
     /** @var Orden[]|null */
     private $ordenesVenta = null;
 
-    public function __construct(string $pair, ?array $ordenesCompra = null, ?array $ordenesVenta = null)
+    public function __construct(string $par, ?array $ordenesCompra = null, ?array $ordenesVenta = null)
     {
-        $this->pair = $pair;
+        $this->par = $par;
         $this->ordenesCompra = $ordenesCompra ? $ordenesCompra : [];
         $this->ordenesVenta = $ordenesVenta ? $ordenesVenta : [];
     }
@@ -54,42 +54,42 @@ class Libro
         }
     }
 
-    public function getBestBuyPrice(?float $fillAmount = null): ?float
+    public function getBestPrecioCompra(?float $fillAmount = null): ?float
     {
         $order = $this->getBestOrdenCompra($fillAmount);
         if ($order) {
-            return $order->getPrice();
+            return $order->getPrecio();
         } else {
             return null;
         }
     }
 
-    public function getBestSellPrice(?float $fillAmount = null): ?float
+    public function getBestPrecioVenta(?float $fillAmount = null): ?float
     {
         $order = $this->getBestOrdenVenta($fillAmount);
         if ($order) {
-            return $order->getPrice();
+            return $order->getPrecio();
         } else {
             return null;
         }
     }
 
     /**
-     * Get the value of pair
+     * Get the value of par
      */
-    public function getPair()
+    public function getPar()
     {
-        return $this->pair;
+        return $this->par;
     }
 
     /**
-     * Set the value of pair
+     * Set the value of par
      *
      * @return  self
      */
-    public function setPair($pair)
+    public function setPar($par)
     {
-        $this->pair = $pair;
+        $this->par = $par;
 
         return $this;
     }

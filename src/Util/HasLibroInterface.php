@@ -4,5 +4,5 @@ namespace App\Util;
 
 interface HasLibroInterface
 {
-    public function getLibro(string $pair): ?Libro;
+    public function getLibro(string $par): ?Libro;
 }

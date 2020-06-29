@@ -5,16 +5,16 @@ namespace App\Util;
 use App\Model\DolarIolExchange;
 use App\Entity\Orden;
 use App\Model\Libro;
-use App\Model\Rate;
+use App\Entity\Cotizacion;
 use App\Util\AbstractClient;
 
 class DolarIolClient extends AbstractClient
 {
     /** @var array */
-    private $supportedSimbolos = ['ARS', 'USD'];
+    private $simbolosAdmitidos = ['ARS', 'USD'];
 
     /** @var array */
-    private $supportedPairs = ['USD/ARS'];
+    private $paresAdmitidos = ['USD/ARS'];
 
     public function __construct(?string $authToken = null)
     {
@@ -24,25 +24,25 @@ class DolarIolClient extends AbstractClient
     public function connect()
     {}
 
-    public function getCurrentPrice(?string $pair = null): Rate
+    public function getCurrentPrecio(?string $par = null): Cotizacion
     {
         $dolar = (float) $_ENV['DOLAR'];
 
-        return new Rate($dolar, $dolar);
+        return new Cotizacion($dolar, $dolar);
     }
 
-    public function getLibro(?string $pair = null): ?Libro
+    public function getLibro(?string $par = null): ?Libro
     {
         $dolar = (float) $_ENV['DOLAR'];
 
         $ordenesCompra = [new Orden(999, $dolar, 0)];
         $ordenesVenta = [new Orden(999, $dolar, 0)];
 
-        return new Libro($pair, $ordenesCompra, $ordenesVenta);
+        return new Libro($par, $ordenesCompra, $ordenesVenta);
     }
 
-    public function getSupportedPairs(): array
+    public function getParesAdmitidos(): array
     {
-        return $this->supportedPairs;
+        return $this->paresAdmitidos;
     }
 }

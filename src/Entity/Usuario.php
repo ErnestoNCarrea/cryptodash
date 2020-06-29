@@ -244,7 +244,7 @@ class Usuario implements UserInterface
     /**
      * @return Collection|Orden[]
      */
-    public function getOrdens(): Collection
+    public function getOrdenes(): Collection
     {
         return $this->ordenLibros;
     }
@@ -263,7 +263,7 @@ class Usuario implements UserInterface
     {
         if ($this->ordenLibros->contains($ordenLibro)) {
             $this->ordenLibros->removeElement($ordenLibro);
-            // set the owning side to null (unless already changed)
+            // set the owning lado to null (unless already changed)
             if ($ordenLibro->getUsuario() === $this) {
                 $ordenLibro->setUsuario(null);
             }

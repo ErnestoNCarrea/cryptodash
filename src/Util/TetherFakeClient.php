@@ -10,10 +10,10 @@ use App\Util\AbstractClient;
 class TetherFakeClient extends AbstractClient
 {
     /** @var array */
-    private $supportedSimbolos = ['USD', 'USDT'];
+    private $simbolosAdmitidos = ['USD', 'USDT'];
 
     /** @var array */
-    private $supportedPairs = ['USD/USDT'];
+    private $paresAdmitidos = ['USD/USDT'];
 
     public function __construct(?string $authToken = null)
     {
@@ -23,21 +23,21 @@ class TetherFakeClient extends AbstractClient
     public function connect()
     { }
 
-    public function getLibro(string $pair): ?Libro
+    public function getLibro(string $par): ?Libro
     {
         $ordenesCompra =  [new Orden(0, 1, 0)];
         $ordenesVenta = [new Orden(0, 1, 0)];
 
-        return new Libro($pair, $ordenesCompra, $ordenesVenta);
+        return new Libro($par, $ordenesCompra, $ordenesVenta);
     }
 
-    public function getCurrentPrice(string $pair): float
+    public function getCurrentPrecio(string $par): float
     {
         return (float) 1;
     }
 
-    public function getSupportedPairs(): array
+    public function getParesAdmitidos(): array
     {
-        return $this->supportedPairs;
+        return $this->paresAdmitidos;
     }
 }
