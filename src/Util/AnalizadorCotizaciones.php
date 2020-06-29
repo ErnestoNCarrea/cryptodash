@@ -25,12 +25,12 @@ class AnalizadorCotizaciones
         return $this->exchanges;
     }
 
-    public function getAllRatesForSymbol(string $symbol) {
+    public function getAllRatesForSimbolo(string $simbolo) {
         $rates = [];
         
         foreach($this->exchanges as $exchange) {
             /* @var Libro */
-            $rates[$exchange->getId()] = $exchange->getAllRatesForSymbol($symbol);    
+            $rates[$exchange->getId()] = $exchange->getAllRatesForSimbolo($simbolo);    
         }
 
         return $rates;

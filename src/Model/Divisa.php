@@ -5,14 +5,14 @@ namespace App\Model;
 class Divisa
 {
     /** @var string */
-    private $symbol;
+    private $simbolo;
 
     /** @var string */
-    private $name;
+    private $nombre;
 
-    public function __construct(string $symbol, string $name)
+    public function __construct(string $simbolo, string $nombre)
     {
-        $this->symbol = $symbol;
-        $this->name = $name;
+        $this->simbolo = $simbolo;
+        $this->nombre = $nombre;
     }
 }

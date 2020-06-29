@@ -9,7 +9,7 @@ class CryptoMktExchange extends AbstractExchange
 {
     public function __construct()
     {
-        $this->name = 'CryptoMkt';
+        $this->nombre = 'CryptoMkt';
         $this->makerFee = 0.0048;        // 0.48%
         $this->takerFee = 0.0068;        // 0.68%
 

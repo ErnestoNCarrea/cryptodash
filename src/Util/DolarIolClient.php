@@ -11,7 +11,7 @@ use App\Util\AbstractClient;
 class DolarIolClient extends AbstractClient
 {
     /** @var array */
-    private $supportedSymbols = ['ARS', 'USD'];
+    private $supportedSimbolos = ['ARS', 'USD'];
 
     /** @var array */
     private $supportedPairs = ['USD/ARS'];

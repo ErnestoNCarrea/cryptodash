@@ -12,7 +12,7 @@ use GuzzleHttp\Client;
 class BuenbitClient extends AbstractClient
 {
     /** @var array */
-    private $supportedSymbols = ['ARS', 'BTC', 'ETH', 'DAI'];
+    private $supportedSimbolos = ['ARS', 'BTC', 'ETH', 'DAI'];
 
     /** @var array */
     private $supportedPairs = ['BTC/ARS', 'ETH/ARS', 'DAI/ARS', 'BTC/DAI', 'DAI/ARS'];

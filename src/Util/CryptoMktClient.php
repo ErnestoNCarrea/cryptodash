@@ -12,7 +12,7 @@ use GuzzleHttp\Client;
 class CryptoMktClient extends AbstractClient
 {
     /** @var array */
-    private $supportedSymbols = ['ARS', 'BTC', 'ETH', 'EOS', 'XLM'];
+    private $supportedSimbolos = ['ARS', 'BTC', 'ETH', 'EOS', 'XLM'];
 
     /** @var array */
     private $supportedPairs = ['BTC/ARS', 'ETH/ARS', 'XML/ARS', 'EOS/ARS'];

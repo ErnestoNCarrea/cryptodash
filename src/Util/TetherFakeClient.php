@@ -10,7 +10,7 @@ use App\Util\AbstractClient;
 class TetherFakeClient extends AbstractClient
 {
     /** @var array */
-    private $supportedSymbols = ['USD', 'USDT'];
+    private $supportedSimbolos = ['USD', 'USDT'];
 
     /** @var array */
     private $supportedPairs = ['USD/USDT'];

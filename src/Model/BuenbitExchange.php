@@ -8,7 +8,7 @@ class BuenbitExchange extends AbstractExchange
 {
     public function __construct()
     {
-        $this->name = 'Buenbit';
+        $this->nombre = 'Buenbit';
         $this->makerFee = 0.0035;       // 0.35%
         $this->takerFee = 0.0035;       // 0.35%
 

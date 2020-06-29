@@ -9,7 +9,7 @@ class BinanceExchange extends AbstractExchange
 {
     public function __construct()
     {
-        $this->name = 'Binance';
+        $this->nombre = 'Binance';
         $this->makerFee = 0.001;        // 0.1%
         $this->takerFee = 0.001;        // 0.1%
 

@@ -12,7 +12,7 @@ use GuzzleHttp\Client;
 class BinanceClient extends AbstractClient
 {
     /** @var array */
-    private $supportedSymbols = ['USD', 'BTC', 'ETH', 'XRP', 'XLM', 'EOS'];
+    private $supportedSimbolos = ['USD', 'BTC', 'ETH', 'XRP', 'XLM', 'EOS'];
 
     /** @var array */
     private $supportedPairs = ['BTC/USD', 'ETH/USD', 'BTC/ETH', 'XRP/USD', 'XLM/USD', 'EOS/USD'];
@@ -45,7 +45,7 @@ class BinanceClient extends AbstractClient
     {
         $res = $this->client->request('GET', 'api/v3/avgPrice', [
             'query' => [
-                'symbol' => $this->formatPair($this->convertUsdToUsdt($pair)),
+                'simbolo' => $this->formatPair($this->convertUsdToUsdt($pair)),
             ],
         ]);
 
@@ -59,7 +59,7 @@ class BinanceClient extends AbstractClient
     {
         $res = $this->client->request('GET', 'api/v3/avgPrice', [
             'query' => [
-                'symbol' => $this->formatPair($this->convertUsdToUsdt($pair)),
+                'simbolo' => $this->formatPair($this->convertUsdToUsdt($pair)),
             ],
         ]);
 

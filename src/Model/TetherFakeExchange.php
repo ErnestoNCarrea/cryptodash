@@ -6,7 +6,7 @@ class TetherFakeExchange extends AbstractExchange
 {
     public function __construct()
     {
-        $this->name = 'TetherFakeExchange';
+        $this->nombre = 'TetherFakeExchange';
         $this->makerFee = 0;
         $this->takerFee = 0;
 

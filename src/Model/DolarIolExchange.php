@@ -8,7 +8,7 @@ class DolarIolExchange extends AbstractExchange
 {
     public function __construct()
     {
-        $this->name = 'Dólar IOL';
+        $this->nombre = 'Dólar IOL';
         $this->makerFee = 0;
         $this->takerFee = 0;
 

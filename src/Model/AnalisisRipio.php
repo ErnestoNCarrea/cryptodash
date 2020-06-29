@@ -10,9 +10,9 @@ class AnalisisRipio
     /** @var string */
     private $ripioBtc;
 
-    public function __construct(string $symbol, string $name)
+    public function __construct(string $simbolo, string $nombre)
     {
         $this->dolar = $dolar;
-        $this->name = $name;
+        $this->nombre = $nombre;
     }
 }

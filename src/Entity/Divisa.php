@@ -19,38 +19,38 @@ class Divisa
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $symbol;
+    private $simbolo;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $nombre;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getSymbol(): ?string
+    public function getSimbolo(): ?string
     {
-        return $this->symbol;
+        return $this->simbolo;
     }
 
-    public function setSymbol(string $symbol): self
+    public function setSimbolo(string $simbolo): self
     {
-        $this->symbol = $symbol;
+        $this->simbolo = $simbolo;
 
         return $this;
     }
 
-    public function getName(): ?string
+    public function getNombre(): ?string
     {
-        return $this->name;
+        return $this->nombre;
     }
 
-    public function setName(string $name): self
+    public function setNombre(string $nombre): self
     {
-        $this->name = $name;
+        $this->nombre = $nombre;
 
         return $this;
     }

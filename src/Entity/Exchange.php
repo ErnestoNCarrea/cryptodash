@@ -23,7 +23,7 @@ class Exchange
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $nombre;
 
     /**
      * @ORM\Column(type="boolean")
@@ -34,7 +34,7 @@ class Exchange
      * @var string
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $class;
+    private $clase;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Orden", mappedBy="exchange", cascade={"persist", "remove"})
@@ -49,7 +49,7 @@ class Exchange
 
     public function __toString(): string
     {
-        return $this->name;
+        return $this->nombre;
     }
 
     /**
@@ -74,13 +74,13 @@ class Exchange
     /**
      * Obtener cotizaciones de un símbolo contra el resto de los símbolos.
      */
-    public function getAllRatesForSymbol(string $symbol): array
+    public function getAllRatesForSimbolo(string $simbolo): array
     {
         $res = [];
 
         foreach ($this->currentRates as $rate) {
             $pair = $rate->getPair();
-            if ($symbol === '*' || strpos($pair, $symbol . '/') !== false || strpos($pair, '/' . $symbol)) {
+            if ($simbolo === '*' || strpos($pair, $simbolo . '/') !== false || strpos($pair, '/' . $simbolo)) {
                 $res[] = $rate;
             }
         }
@@ -134,14 +134,14 @@ class Exchange
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getNombre(): ?string
     {
-        return $this->name;
+        return $this->nombre;
     }
 
-    public function setName(string $name): self
+    public function setNombre(string $nombre): self
     {
-        $this->name = $name;
+        $this->nombre = $nombre;
 
         return $this;
     }
@@ -158,14 +158,14 @@ class Exchange
         return $this;
     }
 
-    public function getClass(): ?string
+    public function getClase(): ?string
     {
-        return $this->class;
+        return $this->clase;
     }
 
-    public function setClass(?string $class): self
+    public function setClase(?string $clase): self
     {
-        $this->class = $class;
+        $this->clase = $clase;
 
         return $this;
     }

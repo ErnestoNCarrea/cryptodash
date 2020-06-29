@@ -12,7 +12,7 @@ use GuzzleHttp\Client;
 class RipioClient extends AbstractClient
 {
     /** @var array */
-    private $supportedSymbols = ['ARS', 'BTC', 'ETH', 'USDC'];
+    private $supportedSimbolos = ['ARS', 'BTC', 'ETH', 'USDC'];
 
     /** @var array */
     private $supportedPairs = ['BTC/ARS', 'ETH/ARS', 'USDC/ARS', 'BTC/USDC', 'ETH/USDC'];

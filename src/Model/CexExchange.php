@@ -8,7 +8,7 @@ class CexExchange extends AbstractExchange implements HasLibroInterface
 {
     public function __construct()
     {
-        $this->name = 'CEX';
+        $this->nombre = 'CEX';
         $this->makerFee = 0.0035;
         $this->takerFee = 0.0016;
 

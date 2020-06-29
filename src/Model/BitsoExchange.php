@@ -8,7 +8,7 @@ class BitsoExchange extends AbstractExchange
 {
     public function __construct()
     {
-        $this->name = 'Bitso';
+        $this->nombre = 'Bitso';
         $this->makerFee = 0.002; //0.2%
         $this->takerFee = 0.002; //0.2%
 

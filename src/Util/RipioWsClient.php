@@ -11,7 +11,7 @@ use App\Util\AbstractWsClient;
 class RipioWsClient extends AbstractWsClient
 {
     /** @var array */
-    private $supportedSymbols = ['ARS', 'BTC', 'ETH '];
+    private $supportedSimbolos = ['ARS', 'BTC', 'ETH '];
 
     /** @var array */
     private $supportedPairs = ['BTC/ARS', 'ETH/ARS'];

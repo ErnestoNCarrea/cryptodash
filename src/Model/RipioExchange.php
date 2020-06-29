@@ -8,7 +8,7 @@ class RipioExchange extends AbstractExchange
 {
     public function __construct()
     {
-        $this->name = 'Ripio';
+        $this->nombre = 'Ripio';
         $this->makerFee = 0;
         $this->takerFee = 0;
 

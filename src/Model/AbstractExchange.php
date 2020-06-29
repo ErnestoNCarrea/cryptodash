@@ -5,7 +5,7 @@ namespace App\Model;
 abstract class AbstractExchange implements ExchangeInterface
 {
     /** @var string */
-    private $name;
+    private $nombre;
 
     /** @var float */
     private $takerFee = 0;
