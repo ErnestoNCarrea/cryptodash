@@ -8,32 +8,32 @@
     </style>
 
     <div class="text-center mb-4">
-        <img alt="CryptoDash" class="mb-4" height="72" src="/assets/img/logo.png" width="72"/>
-        <h1 class="h3 mb-3 font-weight-normal">CryptoDash: Nuevo usuario</h1>
+        <h1 class="h3 mb-3 font-weight-normal">Arbitraje de criptomonedas</h1>
+        <h2>Crear cuenta de usuario</h2>
     </div>
 
     {{ form_start(form, { 'attr': { 'class': 'form-signin' }}) }}
     <div class="form-label-group">
-        {{ form_widget(form.nombre) }}
+        {{ form_widget(form.nombre, { 'attr': { 'class': 'form-control' }}) }}
         <label for="nombre">Nombre</label>
     </div>
 
     <div class="form-label-group">
-        {{ form_widget(form.apellido) }}
+        {{ form_widget(form.apellido, { 'attr': { 'class': 'form-control' }}) }}
         <label for="apellido">Apellido</label>
     </div>
 
     <div class="form-label-group">
-        {{ form_widget(form.email) }}
+        {{ form_widget(form.email, { 'attr': { 'class': 'form-control' }}) }}
         <label for="email">Correo electrónico</label>
     </div>
 
     <div class="form-label-group">
-        {{ form_widget(form.plainPassword.first) }}
+        {{ form_widget(form.plainPassword.first, { 'attr': { 'class': 'form-control' }}) }}
         <label for="plainPassword[first]">Contraseña</label>
     </div>
     <div class="form-label-group">
-        {{ form_widget(form.plainPassword.second) }}
+        {{ form_widget(form.plainPassword.second, { 'attr': { 'class': 'form-control' }}) }}
         <label for="plainPassword[second]">Confirmar contraseña</label>
     </div>
 
