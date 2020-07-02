@@ -75,7 +75,7 @@ class BuenbitClient extends AbstractClient
         $ordenesCompra = $this->deserializarOrdenCollection($json->bids);
         $ordenesVenta = $this->deserializarOrdenCollection($json->asks);
 
-        return new Libro($par, $ordenesCompra, $ordenesVenta);
+        return new Libro(array_merge($ordenesCompra, $ordenesVenta), $par);
     }
 
     private function deserializarOrdenCollection(array $json_orders): array

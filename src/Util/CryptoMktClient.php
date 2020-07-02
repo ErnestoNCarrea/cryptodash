@@ -58,7 +58,8 @@ class CryptoMktClient extends AbstractClient
             ],
         ]);
         $ordenesVenta = $this->deserializarOrdenCollection(json_decode((string) $res->getBody()));
-        return new Libro($par, $ordenesCompra, $ordenesVenta);
+        
+        return new Libro(array_merge($ordenesCompra, $ordenesVenta), $par);
     }
 
     private function deserializarOrdenCollection($json_orders): array

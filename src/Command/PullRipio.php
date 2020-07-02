@@ -35,7 +35,7 @@ class PullRipio extends Command
         $output->writeln('Actualizando desde Ripio');
 
         $exchange = $this->em->getRepository('App\Entity\Exchange')->find(9000);
-        $clientRipio = new RipioClient('8f2104688f50a866fe648be370c9d80ef04d2203c59a1dc5ee8eea7118a94e6f');
+        $clientRipio = new RipioClient(getenv('API_KEY_BITSO'));
 
         foreach (['BTC/ARS', 'ETH/ARS', 'USDC/ARS', 'BTC/USDC', 'ETH/USDC'] as $par) {
             //$ripioLibro = $this->em->getRepository('App\Entity\Orden')->findBy(['exchange' => $ripioExchange, 'par' => $par, 'usuario' => null]);

@@ -70,7 +70,7 @@ class BitsoClient extends AbstractClient
         $ordenesCompra = $this->deserializarOrdenCollection($json->payload->bids);
         $ordenesVenta = $this->deserializarOrdenCollection($json->payload->asks);
 
-        return new Libro($par, $ordenesCompra, $ordenesVenta);
+        return new Libro(array_merge($ordenesCompra, $ordenesVenta), $par);
     }
 
     private function deserializarOrdenCollection(array $json_orders): array

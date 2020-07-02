@@ -28,7 +28,7 @@ class TetherFakeClient extends AbstractClient
         $ordenesCompra =  [new Orden(0, 1, 0)];
         $ordenesVenta = [new Orden(0, 1, 0)];
 
-        return new Libro($par, $ordenesCompra, $ordenesVenta);
+        return new Libro(array_merge($ordenesCompra, $ordenesVenta), $par);
     }
 
     public function getPrecioActual(string $par): float

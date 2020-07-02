@@ -35,7 +35,7 @@ class PullBitso extends Command
         $output->writeln('Actualizando desde Bitso');
 
         $exchange = $this->em->getRepository('App\Entity\Exchange')->find(9004);
-        $clientBitso = new BitsoClient('8f2104688f50a866fe648be370c9d80ef04d2203c59a1dc5ee8eea7118a94e6f');
+        $clientBitso = new BitsoClient();
 
         foreach (['BTC/ARS', 'ETH/BTC', 'XRP/BTC'] as $par) {
             $libro = $clientBitso->getLibro($par);

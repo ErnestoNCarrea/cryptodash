@@ -83,7 +83,7 @@ class RipioClient extends AbstractClient
         $ordenesCompra = $this->deserializarOrdenCollection($json->buy);
         $ordenesVenta = $this->deserializarOrdenCollection($json->sell);
 
-        return new Libro($par, $ordenesCompra, $ordenesVenta);
+        return new Libro(array_merge($ordenesCompra, $ordenesVenta), $par);
     }
 
     private function deserializarOrdenCollection(array $json_orders): array
