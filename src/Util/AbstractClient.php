@@ -23,7 +23,7 @@ abstract class AbstractClient implements ExchangeClientInterface
      *
      * @return  self
      */
-    public function setExchange(ExchangeInterface $exchange)
+    public function setExchange(ExchangeInterface $exchange) : self
     {
         $this->exchange = $exchange;
 

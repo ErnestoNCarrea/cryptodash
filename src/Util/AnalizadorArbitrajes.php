@@ -31,10 +31,10 @@ class AnalizadorArbitrajes
     private function findOpportunitiesBetweenExchanges($exchange1, $exchange2, $par)
     {
         /* @var Libro */
-        $ob1 = $exchange1->getLibroForPar($par);
+        $ob1 = $exchange1->obtenerLibro($par);
 
         /* @var Libro */
-        $ob2 = $exchange2->getLibroForPar($par);
+        $ob2 = $exchange2->obtenerLibro($par);
 
 
         $order1 = $ob1->getBestOrdenCompra();

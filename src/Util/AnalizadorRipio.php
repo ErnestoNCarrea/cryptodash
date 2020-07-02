@@ -38,14 +38,14 @@ class AnalizadorRipio
         $this->exchangeRipio = $exchangeRipio;
         $this->exchangeReference = $exchangeReference;
 
-        $this->libroRipioBtcArs = $exchangeRipio->getLibroForPar('BTC/ARS');
-        $this->libroRipioEthArs = $exchangeRipio->getLibroForPar('ETH/ARS');
+        $this->libroRipioBtcArs = $exchangeRipio->obtenerLibro('BTC/ARS');
+        $this->libroRipioEthArs = $exchangeRipio->obtenerLibro('ETH/ARS');
 
         $this->referenceUsdArs = $dolar;
 
-        $this->referenceBtcUsd = $exchangeReference->getCotizacionForPar('BTC/USD');
-        $this->referenceEthUsd = $exchangeReference->getCotizacionForPar('ETH/USD');
-        $this->referenceEthBtc = $exchangeReference->getCotizacionForPar('ETH/BTC');
+        $this->referenceBtcUsd = $exchangeReference->getCotizacionPar('BTC/USD');
+        $this->referenceEthUsd = $exchangeReference->getCotizacionPar('ETH/USD');
+        $this->referenceEthBtc = $exchangeReference->getCotizacionPar('ETH/BTC');
 
     }
 

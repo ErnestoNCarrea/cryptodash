@@ -47,7 +47,7 @@ class PullBinance extends Command
             }
             } */
 
-            $cotizacion = $this->updateCotizacion($exchange, $par, $exchangeClient->getCurrentPrecio($par));
+            $cotizacion = $this->updateCotizacion($exchange, $par, $exchangeClient->getPrecioActual($par));
             if ($cotizacion) {
                 $this->em->persist($cotizacion);
             }
@@ -61,7 +61,7 @@ class PullBinance extends Command
 
     private function updateCotizacion(Exchange $exchange, string $par, \App\Entity\Cotizacion $cotizacion): \App\Entity\Cotizacion
     {
-        $cotizacionEntity = $exchange->getCotizacionForPar($par);
+        $cotizacionEntity = $exchange->getCotizacionPar($par);
         if ($cotizacionEntity === null) {
             $cotizacionEntity = new \App\Entity\Cotizacion();
             $exchange->addCotizacion($cotizacionEntity);
@@ -70,7 +70,7 @@ class PullBinance extends Command
         $cotizacionEntity->setPar($par);
         $cotizacionEntity->setPrecioCompra($cotizacion->getPrecioCompra());
         $cotizacionEntity->setPrecioVenta($cotizacion->getPrecioVenta());
-        $cotizacionEntity->setDateTime(new \Datetime());
+        $cotizacionEntity->setFecha(new \Datetime());
 
         return $cotizacionEntity;
     }
@@ -92,10 +92,10 @@ class PullBinance extends Command
                 $orden = $ordenArray[0];
             } else {
                 $orden = new Orden();
-                $orden->setDateTime(new \Datetime());
+                $orden->setFecha(new \Datetime());
             }
 
-            $orden->setLado(Orden::LADO_BUY);
+            $orden->setLado(Orden::LADO_COMPRA);
             $orden->setExchange($exchange);
             $orden->setPrecio($order->getPrecio());
             $orden->setCantidad($order->getCantidad());
@@ -114,10 +114,10 @@ class PullBinance extends Command
                 $orden = $ordenArray[0];
             } else {
                 $orden = new Orden();
-                $orden->setDateTime(new \Datetime());
+                $orden->setFecha(new \Datetime());
             }
 
-            $orden->setLado(Orden::LADO_SELL);
+            $orden->setLado(Orden::LADO_VENTA);
             $orden->setExchange($exchange);
             $orden->setPrecio($order->getPrecio());
             $orden->setCantidad($order->getCantidad());

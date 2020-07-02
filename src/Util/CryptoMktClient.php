@@ -43,41 +43,41 @@ class CryptoMktClient extends AbstractClient
 
     public function getLibro(string $par): ?Libro
     {
-        $res = $this->client->request('GET', 'libro', [
+        $res = $this->client->request('GET', 'book', [
             'query' => [
-                'market' => $this->formatPar($par),
+                'market' => $this->formatearPar($par),
                 'type' => 'buy'
             ],
         ]);
-        $ordenesCompra = $this->decodeOrdenCollection(json_decode((string) $res->getBody()));
+        $ordenesCompra = $this->deserializarOrdenCollection(json_decode((string) $res->getBody()));
 
-        $res = $this->client->request('GET', 'libro', [
+        $res = $this->client->request('GET', 'book', [
             'query' => [
-                'market' => $this->formatPar($par),
+                'market' => $this->formatearPar($par),
                 'type' => 'sell'
             ],
         ]);
-        $ordenesVenta = $this->decodeOrdenCollection(json_decode((string) $res->getBody()));
+        $ordenesVenta = $this->deserializarOrdenCollection(json_decode((string) $res->getBody()));
         return new Libro($par, $ordenesCompra, $ordenesVenta);
     }
 
-    private function decodeOrdenCollection($json_orders): array
+    private function deserializarOrdenCollection($json_orders): array
     {
         $res = [];
 
         foreach ($json_orders->data as $json_order) {
-            $order = new Orden((float) $json_order->amount, (float) $json_order->precio);
+            $order = new Orden((float) $json_order->amount, (float) $json_order->price);
             $res[] = $order;
         }
 
         return $res;
     }
 
-    public function getCurrentPrecio(string $par): Cotizacion
+    public function getPrecioActual(string $par): Cotizacion
     {
         $res = $this->client->request('GET', 'ticker', [
             'query' => [
-                'market' => $this->formatPar($par),
+                'market' => $this->formatearPar($par),
                 'timeframe' => 5        // 5 minutos
             ],
         ]);
@@ -95,7 +95,7 @@ class CryptoMktClient extends AbstractClient
     /**
      * Format SYM/SYM par to SYMSYM.
      */
-    private function formatPar(string $par): string
+    private function formatearPar(string $par): string
     {
         return str_replace('/', '', $par);
     }

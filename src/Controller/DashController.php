@@ -26,41 +26,6 @@ class DashController extends AbstractController
     }
 
     /**
-     * @Route("/ripio", name="dash_ripio")
-     */
-    public function ripio()
-    {
-        /** @var Exchange */
-        $exchangeRipio = $this->em->getRepository('App\Entity\Exchange')->find(9000);
-        /** @var Exchange */
-        $exchangeBinance = $this->em->getRepository('App\Entity\Exchange')->find(1000);
-        
-        $clientDolar = new DolarIolClient();
-
-        $analizador = new AnalizadorRipio($exchangeRipio, $exchangeBinance, $clientDolar->getCurrentPrecio('USD/ARS'));
-
-        //dump($analizador);
-
-        return $this->render('dash/ripio.html.twig', ['analizador' => $analizador]);
-    }
-
-    /**
-     * @Route("/arbi", name="dash_arbi")
-     */
-    public function arbi()
-    {
-        /** @var Exchange */
-        $exchangeRipio = $this->em->getRepository('App\Entity\Exchange')->find(9000);
-
-        /** @var Exchange */
-        $exchangeBuenbit = $this->em->getRepository('App\Entity\Exchange')->find(9002);
-
-        $analizador = new AnalizadorArbitrajes([$exchangeRipio, $exchangeBuenbit]);
-
-        return $this->render('dash/arbi.html.twig', ['analizador' => $analizador]);
-    }
-
-    /**
      * @Route("/coti", name="dash_coti")
      */
     public function coti()
@@ -92,7 +57,7 @@ class DashController extends AbstractController
         $par = $request->query->get('par');
 
         $exchange = $this->em->getRepository('App\Entity\Exchange')->find($exchangeId);
-        $libro = $exchange->getLibroForPar($par);
+        $libro = $exchange->obtenerLibro($par);
 
         return $this->render('dash/libro.html.twig', [
             'exchange' => $exchange,

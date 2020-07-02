@@ -4,5 +4,5 @@ namespace App\Model;
 
 interface ExchangeInterface
 {
-    public function infiniteSupply(): bool;
+    public function suministroInfinito(): bool;
 }

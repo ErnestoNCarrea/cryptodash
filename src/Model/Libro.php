@@ -3,60 +3,163 @@
 namespace App\Model;
 
 use App\Entity\Orden;
+use Doctrine\ORM\PersistentCollection;
+use Doctrine\Common\Collections\Collection;
 
+/**
+ * Contiene una colección de órdenes.
+ */
 class Libro
 {
-    /** @var string */
-    private $par;
+    /**
+     * El par de las órdenes de este libro, o null si contiene múltiples pares o ninguno.
+     **/
+    private ?string $par = null;
 
-    /** @var Orden[]|null */
-    private $ordenesCompra = null;
+    private $ordenes;
 
-    /** @var Orden[]|null */
-    private $ordenesVenta = null;
-
-    public function __construct(string $par, ?array $ordenesCompra = null, ?array $ordenesVenta = null)
+    public function __construct($ordenes, ?string $par = null)
     {
+        $this->ordenes = $ordenes;
         $this->par = $par;
-        $this->ordenesCompra = $ordenesCompra ? $ordenesCompra : [];
-        $this->ordenesVenta = $ordenesVenta ? $ordenesVenta : [];
     }
 
-    public function addOrdenCompra(Orden $order): self
+    /**
+     * Devuelve la mejor oferta de compra o de venta para un par determinado.
+     */
+    public function obtenerMejorOferta(string $par, int $lado) : ?Orden
     {
-        $this->ordenesCompra[] = $order;
-        return $this;
+        $res = null;
+
+        foreach($this->ordenes as $orden) {
+            if($orden->getLado() == $lado && $orden->getPar() == $par) {
+                if ($res == null) {
+                    // Es la primera orden que se evalúa. Hasta ahora es la mejor.
+                    $res = $orden;
+                } else {
+                    if ($lado == Orden::LADO_VENTA) {
+                        if ($orden->getPrecio() < $res->getPrecio()) {
+                            // Es mejor que la actual (precio de venta más bajo)
+                            $res = $orden;
+                        }
+                    } elseif($lado == Orden::LADO_COMPRA) {
+                        if ($orden->getPrecio() > $res->getPrecio()) {
+                            // Es mejor que la actual (precio de compra más alto)
+                            $res = $orden;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $res;
     }
 
-    public function addOrdenVenta(Orden $order): self
+    /**
+     * Obtiene una lista completa de todas las divisas en el libro de ordenes.
+     * 
+     * @return string[]
+     */
+    public function obtenerTodasLasDivisas(): ?array
     {
-        $this->ordenesVenta[] = $order;
-        return $this;
+        $res = [];
+
+        foreach($this->ordenes as $orden) {
+            [ $divisa1, $divisa2 ] = explode('/', $orden->getPar());
+            if (in_array($divisa1, $res) == false) {
+                $res[] = $divisa1;
+            }
+            if (in_array($divisa2, $res) == false) {
+                $res[] = $divisa2;
+            }
+        }
+
+        return $res;
     }
 
-    public function getBestOrdenCompra(?float $fillAmount = null): ?Orden
+    /**
+     * Devuelve solo las ordenes de un lado.
+     */
+    public function getOrdenesLado(int $lado) : ?array
     {
-        if ($this->ordenesCompra && count($this->ordenesCompra) > 0) {
-            // FIXME: fillAmount
-            return $this->ordenesCompra[0];
+        $res = [];
+        foreach($this->ordenes as $orden) {
+            if ($orden->getLado() == $lado) {
+                $res[] = $orden;
+            }
+        }
+
+        return $res;
+    }
+
+    /**
+     * Devuelve solo las ordenes de compra.
+     */
+    public function getOrdenesCompra() : ?array
+    {
+        return $this->getOrdenesLado(Orden::LADO_COMPRA);
+    }
+
+    /**
+     * Devuelve solo las ordenes de venta.
+     */
+    public function getOrdenesVenta() : ?array
+    {
+        return $this->getOrdenesLado(Orden::LADO_VENTA);
+    }
+
+    /**
+     * Elimina una orden del libro a partir de su id.
+     */
+    public function elminarOrdenPorId(int $id)
+    {
+        if (is_array($this->ordenes)) {
+            $orden = $this->obtenerOrdenPorId($id);
+            if ($orden) {
+                $this->ordenes = array_diff($this->ordenes, [ $orden ]);
+            }
+        } elseif ($this->ordenes instanceof Collection) {
+            $this->ordenes->removeElement($orden);
         } else {
+            throw new Exception('No sé cómo eliminar un elemento de un ' . get_class($this->ordenes));
+        }
+
+
+    }
+
+    /**
+     * Devuelve una orden del libro a partir de su id, o null si no se encuentra una.
+     */
+    public function obtenerOrdenPorId(int $id) : ?Orden
+    {
+        foreach($this->ordenes as $orden) {
+            if ($orden->getId() == $id) {
+                return $orden;
+            }
+        }
+
+        return null;
+    }
+
+    public function getBestOrdenCompra() : ?Orden
+    {
+        if ($this->par == null) {
             return null;
         }
+        return $this->obtenerMejorOferta($this->par, Orden::LADO_COMPRA);
     }
 
-    public function getBestOrdenVenta(?float $fillAmount = null): ?Orden
+    public function getBestOrdenVenta(): ?Orden
     {
-        if ($this->ordenesCompra && count($this->ordenesCompra) > 0) {
-            // FIXME: fillAmount
-            return $this->ordenesVenta[0];
-        } else {
+        if ($this->par == null) {
             return null;
         }
+        return $this->obtenerMejorOferta($this->par, Orden::LADO_VENTA);
     }
 
-    public function getBestPrecioCompra(?float $fillAmount = null): ?float
+    public function getBestPrecioCompra(): ?float
     {
-        $order = $this->getBestOrdenCompra($fillAmount);
+        $order = $this->getBestOrdenCompra();
         if ($order) {
             return $order->getPrecio();
         } else {
@@ -64,9 +167,9 @@ class Libro
         }
     }
 
-    public function getBestPrecioVenta(?float $fillAmount = null): ?float
+    public function getBestPrecioVenta(): ?float
     {
-        $order = $this->getBestOrdenVenta($fillAmount);
+        $order = $this->getBestOrdenVenta();
         if ($order) {
             return $order->getPrecio();
         } else {
@@ -75,19 +178,17 @@ class Libro
     }
 
     /**
-     * Get the value of par
-     */
-    public function getPar()
+     * @ignore
+     */ 
+    public function getPar() : ?string
     {
         return $this->par;
     }
 
     /**
-     * Set the value of par
-     *
-     * @return  self
-     */
-    public function setPar($par)
+     * @ignore
+     */ 
+    public function setPar(?string $par): self
     {
         $this->par = $par;
 
@@ -95,42 +196,12 @@ class Libro
     }
 
     /**
-     * Get the value of ordenesCompra
-     */
-    public function getOrdenesCompra()
+     * @ignore
+     */ 
+    public function count(): int
     {
-        return $this->ordenesCompra;
+        return count($this->ordenes);
     }
 
-    /**
-     * Set the value of ordenesCompra
-     *
-     * @return  self
-     */
-    public function setOrdenesCompra($ordenesCompra)
-    {
-        $this->ordenesCompra = $ordenesCompra;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of ordenesVenta
-     */
-    public function getOrdenesVenta()
-    {
-        return $this->ordenesVenta;
-    }
-
-    /**
-     * Set the value of ordenesVenta
-     *
-     * @return  self
-     */
-    public function setOrdenesVenta($ordenesVenta)
-    {
-        $this->ordenesVenta = $ordenesVenta;
-
-        return $this;
-    }
+    
 }

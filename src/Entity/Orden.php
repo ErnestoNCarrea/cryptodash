@@ -14,8 +14,13 @@ use App\Entity\Usuario;
 class Orden
 {
     public const LADO_NINGUNO = 0;
-    public const LADO_BUY = 1;
-    public const LADO_SELL = 2;
+    public const LADO_COMPRA = 1;
+    public const LADO_VENTA = 2;
+    public const LADOS_NOMBRES = [
+        self::LADO_NINGUNO => 'Ninguno',
+        self::LADO_COMPRA => 'Compra',
+        self::LADO_VENTA => 'Venta',
+    ];
 
     private bool $activo = false;
 
@@ -27,46 +32,68 @@ class Orden
     private int $id;
 
     /**
+     * El exchange al cual pertenece esta orden.
+     * 
      * @ORM\ManyToOne(targetEntity="App\Entity\Exchange")
      * @ORM\JoinColumn(nullable=false)
      */
     private Exchange $exchange;
 
     /**
+     * El par en formato "divisa_base/divisa_precio".
+     * 
      * @ORM\Column(type="string", length=255)
      */
     private string $par;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Usuario", inversedBy="orders")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private Usuario $usuario;
-
-    /**
-     * @ORM\Column(type="float")
+     * El precio de la orden, expresada en divisa_precio.
+     * @ORM\Column(type="decimal", precision=16, scale=8)
      */
     private float $precio = 0;
 
     /**
-     * @ORM\Column(type="float")
+     * La cantidad, expresada en divisa_base.
+     * 
+     * @ORM\Column(type="decimal", precision=16, scale=8)
      */
     private float $cantidad = 0;
 
     /**
+     * El lado (comprador o vendedor).
+     * 
      * @ORM\Column(type="smallint")
      */
     private int $lado = 0;
 
     /**
+     * La fecha en la cual se registró la orden.
+     * 
      * @ORM\Column(type="datetime")
      */
-    private \DateTimeInterface $dateTime;
+    private \DateTimeInterface $fecha;
 
-    /**
-     * Sin mapear.
-     */
-    private float $total = 0;
+    public function __toString() : string
+    {
+        return 'Orden de ' . $this->getLadoNombre() . ' ' . number_format($this->getCantidad(), 4) . ' ' . $this->getDivisaBase() . ' a ' . $this->getDivisaPrecio() . ' ' . number_format($this->getPrecio(), 4);
+    }
+
+    public function getLadoNombre() : string
+    {
+        return self::LADOS_NOMBRES[$this->lado];
+    }
+
+    public function getDivisaBase() : string
+    {
+        [ $divisaBase, $divisaPrecio ] = explode('/', $this->getPar());
+        return $divisaBase;
+    }
+
+    public function getDivisaPrecio() : string
+    {
+        [ $divisaBase, $divisaPrecio ] = explode('/', $this->getPar());
+        return $divisaPrecio;
+    }
 
     public function __construct(?float $cantidad = 0 , ?float $precio = 0, ?float $total = 0)
     {
@@ -119,24 +146,6 @@ class Orden
     public function setPar(string $par) : self
     {
         $this->par = $par;
-
-        return $this;
-    }
-
-    /**
-     * @ignore
-     */
-    public function getUsuario() : ?Usuario
-    {
-        return $this->usuario;
-    }
-
-    /**
-     * @ignore
-     */
-    public function setUsuario(?Usuario $usuario): self
-    {
-        $this->usuario = $usuario;
 
         return $this;
     }
@@ -198,17 +207,17 @@ class Orden
     /**
      * @ignore
      */
-    public function getDateTime() : ?\DateTimeInterface
+    public function getFecha() : ?\DateTimeInterface
     {
-        return $this->dateTime;
+        return $this->fecha;
     }
 
     /**
      * @ignore
      */
-    public function setDateTime(\DateTimeInterface $dateTime) : self
+    public function setFecha(\DateTimeInterface $fecha) : self
     {
-        $this->dateTime = $dateTime;
+        $this->fecha = $fecha;
 
         return $this;
     }
@@ -236,16 +245,6 @@ class Orden
      */
     public function getTotal() : float
     {
-        return $this->total;
-    }
-
-    /**
-     * @ignore
-     */
-    public function setTotal(float $total) : self
-    {
-        $this->total = $total;
-
-        return $this;
+        return $this->cantidad * $this->precio;
     }
 }

@@ -31,19 +31,19 @@ class Cotizacion
     private $par;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=16, scale=8)
      */
     private float $precioCompra = 0;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=16, scale=8)
      */
     private float $precioVenta = 0;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $dateTime;
+    private $fecha;
 
     public function __construct(?float $precioCompra = 0, ?float $precioVenta = 0)
     {
@@ -109,14 +109,14 @@ class Cotizacion
         return $this;
     }
 
-    public function getDateTime() : ?\DateTimeInterface
+    public function getFecha() : ?\DateTimeInterface
     {
-        return $this->dateTime;
+        return $this->fecha;
     }
 
-    public function setDateTime(\DateTimeInterface $dateTime) : self
+    public function setFecha(\DateTimeInterface $fecha) : self
     {
-        $this->dateTime = $dateTime;
+        $this->fecha = $fecha;
 
         return $this;
     }

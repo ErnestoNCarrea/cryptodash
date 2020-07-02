@@ -15,6 +15,6 @@ class RipioExchange extends AbstractExchange
         $this->depositFees = null;
         $this->withdrawalFees = 0.005;      // 0.5%
 
-        $this->infiniteSupply = false;
+        $this->suministroInfinito = false;
     }
 }

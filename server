@@ -1,0 +1,3 @@
+#!/bin/sh
+symfony local:server:stop
+symfony local:server:start -d

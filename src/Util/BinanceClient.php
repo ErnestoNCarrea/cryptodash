@@ -43,9 +43,9 @@ class BinanceClient extends AbstractClient
 
     public function getLibro(string $par): ?Libro
     {
-        $res = $this->client->request('GET', 'api/v3/avgPrecio', [
+        $res = $this->client->request('GET', 'api/v3/avgPrice', [
             'query' => [
-                'simbolo' => $this->formatPar($this->convertUsdToUsdt($par)),
+                'symbol' => $this->formatearPar($this->convertirUsdAUsdt($par)),
             ],
         ]);
 
@@ -55,17 +55,17 @@ class BinanceClient extends AbstractClient
         return new Libro($par, $ordenesCompra, $ordenesVenta);
     }
 
-    public function getCurrentPrecio(string $par): Cotizacion
+    public function getPrecioActual(string $par): Cotizacion
     {
-        $res = $this->client->request('GET', 'api/v3/avgPrecio', [
+        $res = $this->client->request('GET', 'api/v3/avgPrice', [
             'query' => [
-                'simbolo' => $this->formatPar($this->convertUsdToUsdt($par)),
+                'symbol' => $this->formatearPar($this->convertirUsdAUsdt($par)),
             ],
         ]);
 
         $res = json_decode((string) $res->getBody());
 
-        return new Cotizacion((float) $res->precio, (float) $res->precio);
+        return new Cotizacion((float) $res->price, (float) $res->price);
     }
 
     public function getParesAdmitidos(): array
@@ -76,7 +76,7 @@ class BinanceClient extends AbstractClient
     /**
      * Format SYM/SYM par to SYMSYM.
      */
-    private function formatPar(string $par): string
+    private function formatearPar(string $par): string
     {
         return str_replace('/', '', $par);
     }
@@ -84,7 +84,7 @@ class BinanceClient extends AbstractClient
     /**
      * Convert USD to USDT if assumeUsdtIsUsd.
      */
-    private function convertUsdToUsdt(string $par): string
+    private function convertirUsdAUsdt(string $par): string
     {
         if ($this->assumeUsdtIsUsd) {
             return str_replace('USD', 'USDT', $par);
@@ -96,7 +96,7 @@ class BinanceClient extends AbstractClient
     /**
      * Convert USDT to USD if assumeUsdtIsUsd.
      */
-    private function convertUsdtToUsd(string $par): string
+    private function convertirUsdtAUsd(string $par): string
     {
         if ($this->assumeUsdtIsUsd) {
             return str_replace('USDT', 'USD', $par);

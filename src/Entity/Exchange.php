@@ -28,7 +28,7 @@ class Exchange
     /**
      * @ORM\Column(type="boolean")
      */
-    private $infiniteSupply;
+    private $suministroInfinito;
 
     /**
      * @var string
@@ -52,28 +52,17 @@ class Exchange
     }
 
     /**
-     * @return Libro
+     * Devuelve un libro para todas las órdenes de este exchange para un par determinado.
      */
-    public function getLibroForPar(string $par): Libro
+    public function obtenerLibro(string $par): Libro
     {
-        $res = new Libro($par);
-        foreach ($this->getOrdenes() as $ordenLibro) {
-            if ($ordenLibro->getPar() == $par) {
-                if ($ordenLibro->getLado() == Orden::LADO_SELL) {
-                    $res->addOrdenVenta(new \App\Entity\Orden($ordenLibro->getCantidad(), $ordenLibro->getPrecio()));
-                } else {
-                    $res->addOrdenCompra(new \App\Entity\Orden($ordenLibro->getCantidad(), $ordenLibro->getPrecio()));
-                }
-            }
-        }
-
-        return $res;
+        return new Libro($this->getOrdenes(), $par);
     }
 
     /**
      * Obtener cotizaciones de un símbolo contra el resto de los símbolos.
      */
-    public function getAllCotizacionesForSimbolo(string $simbolo): array
+    public function obtenerCotizacionesParaSimbolo(string $simbolo): array
     {
         $res = [];
 
@@ -104,7 +93,7 @@ class Exchange
         $res = [];
 
         foreach ($pares as $par) {
-            $ob = $this->getLibroForPar($par);
+            $ob = $this->obtenerLibro($par);
             $cotizacion = new Cotizacion();
             $cotizacion->setExchange($this);
             $cotizacion->setPar($par);
@@ -117,7 +106,7 @@ class Exchange
         return $res;
     }
 
-    public function getCotizacionForPar(string $par): ?Cotizacion
+    public function getCotizacionPar(string $par): ?Cotizacion
     {
         foreach ($this->cotizaciones as $cotizacion) {
             if ($cotizacion->getPar() == $par) {
@@ -128,16 +117,25 @@ class Exchange
         return null;
     }
 
+    /**
+     * @ignore
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @ignore
+     */
     public function getNombre(): ?string
     {
         return $this->nombre;
     }
 
+    /**
+     * @ignore
+     */
     public function setNombre(string $nombre): self
     {
         $this->nombre = $nombre;
@@ -145,18 +143,27 @@ class Exchange
         return $this;
     }
 
-    public function getInfiniteSupply(): ?bool
+    /**
+     * @ignore
+     */
+    public function getSuministroInfinito(): ?bool
     {
-        return $this->infiniteSupply;
+        return $this->suministroInfinito;
     }
 
-    public function setInfiniteSupply(bool $infiniteSupply): self
+    /**
+     * @ignore
+     */
+    public function setSuministroInfinito(bool $suministroInfinito): self
     {
-        $this->infiniteSupply = $infiniteSupply;
+        $this->suministroInfinito = $suministroInfinito;
 
         return $this;
     }
 
+    /**
+     * @ignore
+     */
     public function getClase(): ?string
     {
         return $this->clase;
@@ -170,6 +177,7 @@ class Exchange
     }
 
     /**
+     * @ignore
      * @return Collection|PersistentCollection|Orden[]
      */
     public function getOrdenes(): PersistentCollection
@@ -177,6 +185,9 @@ class Exchange
         return $this->ordenLibros;
     }
 
+    /**
+     * @ignore
+     */
     public function addOrden(Orden $ordenLibro): self
     {
         if (!$this->ordenLibros->contains($ordenLibro)) {
@@ -187,13 +198,17 @@ class Exchange
         return $this;
     }
 
+
+    /**
+     * @ignore
+     */
     public function removeOrden(Orden $ordenLibro): self
     {
         if ($this->ordenLibros->contains($ordenLibro)) {
             $this->ordenLibros->removeElement($ordenLibro);
             // set the owning lado to null (unless already changed)
             if ($ordenLibro->getExchange() === $this) {
-                $ordenLibro->setExchange(null);
+                //$ordenLibro->setExchange(null);
             }
         }
 
@@ -201,6 +216,7 @@ class Exchange
     }
 
     /**
+     * @ignore
      * @return Collection|PersistentCollection|Cotizacion[]
      */
     public function getCotizaciones(): PersistentCollection
@@ -218,6 +234,9 @@ class Exchange
         return $this;
     }
 
+    /**
+     * @ignore
+     */
     public function removeCotizacion(Cotizacion $cotizacion): self
     {
         if ($this->cotizaciones->contains($cotizacion)) {

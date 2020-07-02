@@ -22,7 +22,7 @@ abstract class AbstractExchange implements ExchangeInterface
     /** @var bool */
     private $infinteSupply = false;
 
-    public function infiniteSupply(): bool
+    public function suministroInfinito(): bool
     {
         return $this->infinteSupply;
     }

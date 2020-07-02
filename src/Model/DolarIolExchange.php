@@ -15,6 +15,6 @@ class DolarIolExchange extends AbstractExchange
         $this->depositFees = null;
         $this->withdrawalFees = null;
 
-        $this->infiniteSupply = true;
+        $this->suministroInfinito = true;
     }
 }

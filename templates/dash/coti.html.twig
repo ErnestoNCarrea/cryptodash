@@ -3,7 +3,7 @@
 {% block body %}
 <div class="container-fluid"><div class="row">
 {% for exchange in analizador.Exchanges %}
-    {% set precioDolar = dolar.getCurrentPrecio %}
+    {% set precioDolar = dolar.getPrecioActual %}
     {% set cotizaciones = exchange.obtenerMejorPrecioParaTodasDivisas %}
     {% if cotizaciones %}
         <div class="col">
@@ -22,7 +22,7 @@
 
                     {% if 'ARS' in cotizacion.par %}
                         {% set inversePar = cotizacion.par|replace({'ARS': 'USD'}) %}
-                        {% set referenceCotizacion = reference.getCotizacionForPar(inversePar) %}
+                        {% set referenceCotizacion = reference.getCotizacionPar(inversePar) %}
                         {% if referenceCotizacion %}
                             {% set precioVenta = referenceCotizacion.getPrecioVenta %}
                             <br />
@@ -42,7 +42,7 @@
 
                     {% if 'ARS' in cotizacion.par %}
                         {% set inversePar = cotizacion.par|replace({'ARS': 'USD'}) %}
-                        {% set referenceCotizacion = reference.getCotizacionForPar(inversePar) %}
+                        {% set referenceCotizacion = reference.getCotizacionPar(inversePar) %}
                         {% if referenceCotizacion %}
                             {% set precioCompra = referenceCotizacion.getPrecioCompra %}
                             <br />

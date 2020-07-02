@@ -26,16 +26,25 @@ class Divisa
      */
     private $nombre;
 
+    /**
+     * @ignore
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @ignore
+     */
     public function getSimbolo(): ?string
     {
         return $this->simbolo;
     }
 
+    /**
+     * @ignore
+     */
     public function setSimbolo(string $simbolo): self
     {
         $this->simbolo = $simbolo;
@@ -43,11 +52,17 @@ class Divisa
         return $this;
     }
 
+    /**
+     * @ignore
+     */
     public function getNombre(): ?string
     {
         return $this->nombre;
     }
 
+    /**
+     * @ignore
+     */
     public function setNombre(string $nombre): self
     {
         $this->nombre = $nombre;

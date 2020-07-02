@@ -16,6 +16,6 @@ class CryptoMktExchange extends AbstractExchange
         $this->depositFees = null;
         $this->withdrawalFees = null;
 
-        $this->infiniteSupply = false;
+        $this->suministroInfinito = false;
     }
 }

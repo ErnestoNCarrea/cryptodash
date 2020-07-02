@@ -73,16 +73,25 @@ class Usuario implements UserInterface
         return in_array($role, $this->roles);
     }
 
+    /**
+     * @ignore
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @ignore
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * @ignore
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -90,11 +99,17 @@ class Usuario implements UserInterface
         return $this;
     }
 
+    /**
+     * @ignore
+     */
     public function getRolesString(): ?string
     {
         return json_encode($this->roles);
     }
 
+    /**
+     * @ignore
+     */
     public function setRolesString(string $roles): self
     {
         $this->roles = json_decode($roles);
@@ -103,8 +118,7 @@ class Usuario implements UserInterface
     }
 
     /**
-     * A visual identifier that represents this usuario.
-     *
+     * @ignore
      * @see UserInterface
      */
     public function getUsername(): string
@@ -113,6 +127,7 @@ class Usuario implements UserInterface
     }
 
     /**
+     * @ignore
      * @see UserInterface
      */
     public function getRoles(): array
@@ -124,6 +139,9 @@ class Usuario implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @ignore
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -132,6 +150,7 @@ class Usuario implements UserInterface
     }
 
     /**
+     * @ignore
      * @see UserInterface
      */
     public function getPassword(): string
@@ -147,6 +166,7 @@ class Usuario implements UserInterface
     }
 
     /**
+     * @ignore
      * @see UserInterface
      */
     public function getSalt()
@@ -155,6 +175,7 @@ class Usuario implements UserInterface
     }
 
     /**
+     * @ignore
      * @see UserInterface
      */
     public function eraseCredentials()
@@ -184,7 +205,7 @@ class Usuario implements UserInterface
     /**
      * @ignore
      */
-    public function getNombre()
+    public function getNombre() : ?nombre
     {
         return $this->nombre;
     }
@@ -192,7 +213,7 @@ class Usuario implements UserInterface
     /**
      * @ignore
      */
-    public function setNombre($nombre)
+    public function setNombre(string $nombre) : self
     {
         $this->nombre = $nombre;
 
@@ -202,7 +223,7 @@ class Usuario implements UserInterface
     /**
      * @ignore
      */
-    public function getApellido()
+    public function getApellido() : ?string
     {
         return $this->apellido;
     }
@@ -210,7 +231,7 @@ class Usuario implements UserInterface
     /**
      * @ignore
      */
-    public function setApellido($apellido)
+    public function setApellido(string $apellido) : self
     {
         $this->apellido = $apellido;
 
@@ -218,56 +239,19 @@ class Usuario implements UserInterface
     }
 
     /**
-     * Get the value of passwordRequestToken
-     *
-     * @return  string|null
+     * @ignore
      */
-    public function getPasswordRequestToken()
+    public function getPasswordRequestToken() : ?string
     {
         return $this->passwordRequestToken;
     }
 
     /**
-     * Set the value of passwordRequestToken
-     *
-     * @param  string|null  $passwordRequestToken
-     *
-     * @return  self
+     * @ignore
      */
-    public function setPasswordRequestToken($passwordRequestToken)
+    public function setPasswordRequestToken(?string $passwordRequestToken) : self
     {
         $this->passwordRequestToken = $passwordRequestToken;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Orden[]
-     */
-    public function getOrdenes(): Collection
-    {
-        return $this->ordenLibros;
-    }
-
-    public function addOrden(Orden $ordenLibro): self
-    {
-        if (!$this->ordenLibros->contains($ordenLibro)) {
-            $this->ordenLibros[] = $ordenLibro;
-            $ordenLibro->setUsuario($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrden(Orden $ordenLibro): self
-    {
-        if ($this->ordenLibros->contains($ordenLibro)) {
-            $this->ordenLibros->removeElement($ordenLibro);
-            // set the owning lado to null (unless already changed)
-            if ($ordenLibro->getUsuario() === $this) {
-                $ordenLibro->setUsuario(null);
-            }
-        }
 
         return $this;
     }

@@ -21,6 +21,6 @@ class CexExchange extends AbstractExchange implements HasLibroInterface
             'XRP' => 0.02,
         ];
 
-        $this->infiniteSupply = false;
+        $this->suministroInfinito = false;
     }
 }

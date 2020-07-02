@@ -15,6 +15,6 @@ class BuenbitExchange extends AbstractExchange
         $this->depositFees = 0.006;     // 0.6%
         $this->withdrawalFees = 0.006;  // 0.6%
 
-        $this->infiniteSupply = false;
+        $this->suministroInfinito = false;
     }
 }

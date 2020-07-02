@@ -31,7 +31,7 @@ class TetherFakeClient extends AbstractClient
         return new Libro($par, $ordenesCompra, $ordenesVenta);
     }
 
-    public function getCurrentPrecio(string $par): float
+    public function getPrecioActual(string $par): float
     {
         return (float) 1;
     }

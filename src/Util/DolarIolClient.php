@@ -24,7 +24,7 @@ class DolarIolClient extends AbstractClient
     public function connect()
     {}
 
-    public function getCurrentPrecio(?string $par = null): Cotizacion
+    public function getPrecioActual(?string $par = null): Cotizacion
     {
         $dolar = (float) $_ENV['DOLAR'];
 

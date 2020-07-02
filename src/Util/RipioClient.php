@@ -38,7 +38,7 @@ class RipioClient extends AbstractClient
     public function connect()
     {}
 
-    public function getCurrentPrecio(string $par): Cotizacion
+    public function getPrecioActual(string $par): Cotizacion
     {
         [$parBase, $parQuote] = explode('/', $par);
 
@@ -64,7 +64,7 @@ class RipioClient extends AbstractClient
 
     public function getLibro(string $par): ?Libro
     {
-        $res = $this->client->request('GET', 'orderlibro/' . urlencode($this->formatPar($par)), [
+        $res = $this->client->request('GET', 'orderbook/' . urlencode($this->formatearPar($par)), [
             'headers' => [
                 'Accept' => '*/*',
                 'Content-type' => 'application/json',
@@ -72,26 +72,26 @@ class RipioClient extends AbstractClient
         ]);
 
         if ($res->getStatusCode() === 200) {
-            return $this->decodeLibro($par, json_decode((string) $res->getBody()));
+            return $this->deserializarLibro($par, json_decode((string) $res->getBody()));
         } else {
             return null;
         }
     }
 
-    private function decodeLibro(string $par, object $json): Libro
+    private function deserializarLibro(string $par, object $json): Libro
     {
-        $ordenesCompra = $this->decodeOrdenCollection($json->buy);
-        $ordenesVenta = $this->decodeOrdenCollection($json->sell);
+        $ordenesCompra = $this->deserializarOrdenCollection($json->buy);
+        $ordenesVenta = $this->deserializarOrdenCollection($json->sell);
 
         return new Libro($par, $ordenesCompra, $ordenesVenta);
     }
 
-    private function decodeOrdenCollection(array $json_orders): array
+    private function deserializarOrdenCollection(array $json_orders): array
     {
         $res = [];
 
         foreach ($json_orders as $json_order) {
-            $order = new Orden((float) $json_order->amount, (float) $json_order->precio, (float) $json_order->total);
+            $order = new Orden((float) $json_order->amount, (float) $json_order->price, (float) $json_order->total);
             $res[] = $order;
         }
 
@@ -122,7 +122,7 @@ class RipioClient extends AbstractClient
     /**
      * Convert SYM/SYM to the format used by the exchange (SYM_SYM).
      */
-    private function formatPar(string $par): string
+    private function formatearPar(string $par): string
     {
         return str_replace('/', '_', $par);
     }
