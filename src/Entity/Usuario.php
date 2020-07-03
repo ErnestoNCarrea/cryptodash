@@ -205,7 +205,7 @@ class Usuario implements UserInterface
     /**
      * @ignore
      */
-    public function getNombre() : ?nombre
+    public function getNombre() : ?string
     {
         return $this->nombre;
     }
