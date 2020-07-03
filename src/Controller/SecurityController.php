@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Encoder\UsuarioPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\UsuarioLoginType;
 use App\Form\UsuarioRegistrationType;
@@ -93,7 +93,7 @@ class SecurityController extends AbstractController
         Request $request,
         string $token,
         EntityManagerInterface $entityManager,
-        UsuarioPasswordEncoderInterface $encoder,
+        UserPasswordEncoderInterface $encoder,
         TokenStorageInterface $tokenStorage,
         SessionInterface $session
     ) {
@@ -124,7 +124,7 @@ class SecurityController extends AbstractController
      */
     public function register(
         Request $request,
-        UsuarioPasswordEncoderInterface $encoder,
+        UserPasswordEncoderInterface $encoder,
         TokenStorageInterface $tokenStorage,
         EntityManagerInterface $entityManager,
         SessionInterface $session

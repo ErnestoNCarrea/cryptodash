@@ -9,7 +9,7 @@ use App\Repository\UsuarioRepository;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\Encoder\UsuarioPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -91,7 +91,7 @@ class UsuarioController extends AbstractController
     public function password(
         Request $request,
         Usuario $usuario,
-        UsuarioPasswordEncoderInterface $encoder,
+        UserPasswordEncoderInterface $encoder,
         TokenStorageInterface $tokenStorage,
         SessionInterface $session
     ) {
