@@ -137,6 +137,16 @@ class Libro
     }
 
     /**
+     * Restablece a su valor inicial el campo CantidadRemanente en todo el libro.
+     */
+    public function restablecerVolumenDelLibro()
+    {
+        foreach($this->ordenes as $orden) {
+            $orden->setCantidadRemanente(null);
+        }
+    }
+
+    /**
      * Elimina una orden del libro a partir de su id.
      */
     public function elminarOrdenPorId(int $id)

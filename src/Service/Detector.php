@@ -67,7 +67,9 @@ class Detector
 
         $oportunidades = [];
         
-        // Buscar en el libro de ventas
+        // Buscar en cada lado del libro
+        // TODO: el orden de los lados debe decidirse basándose en la preferencia
+        // de obtener la ganacias en una moneda o en la otra
         foreach([ Orden::LADO_VENTA, Orden::LADO_COMPRA ] as $lado) {
             $this->logger->info('detectarOportunidadesPar en el libro de {lado}', [ 'lado' => Orden::LADOS_NOMBRES[$lado]]);
             $mejorOferta = $this->libro->obtenerMejorOferta($lado, $par);
@@ -75,17 +77,21 @@ class Detector
             if ($mejorOferta) {
                 $otraPierna = $this->buscarOtraPierna($par, $mejorOferta);
                 if ($otraPierna) {
-                    $this->logger->info('Otra pierna: {orden}', ['orden' => $otraPierna]);
-                    // Existe una diferencia arbitrable bruta.
-                    
                     // Crear una oportunidad
                     $opor = new Oportunidad();
                     $opor->addPierna($mejorOferta);
-                    $opor->addPierna($otraPierna);
+                    do {
+                        // Existe una diferencia arbitrable bruta.
+                        $this->logger->info('Otra pierna: {orden}', ['orden' => $otraPierna]);
+                        $opor->addPierna($otraPierna);
 
-                    // Eliminar el volumen de los libros, para seguir buscando
-                    // oportunidades y no volver a encontrar la misma
-                    $this->quitarVolumenDelLibro($opor);
+                        // Eliminar el volumen de los libros, para seguir buscando
+                        // oportunidades y no volver a encontrar la misma
+                        $this->quitarVolumenDelLibro($opor);
+
+                        // Seguir buscando más piernas, hasta agotar el volumen
+                    } while (null !== ($otraPierna = $this->buscarOtraPierna($par, $mejorOferta)));
+                    $this->restablecerVolumenDelLibro();
 
                     // Agregar esta oportunidad al resultado
                     $oportunidades[] = $opor;
@@ -103,18 +109,26 @@ class Detector
     }
 
     /**
+     * Restablece a su valor inicial todo el volumen en el libro para analizar nuevamente.
+     */
+    private function restablecerVolumenDelLibro()
+    {
+        $this->libro->restablecerVolumenDelLibro();
+    }
+
+    /**
      * Elimina total o parcialmente una o más ordenes del libro.
      */
     private function quitarVolumenDelLibro(Oportunidad $opor)
     {
-        // La cantidad máxima a eliminar
-        $cantidad = $opor-> getCantidad();
-        
+        $cantidad = $opor->getCantidadRemanente();
+
         // Eliminar
         foreach($opor->getPiernas() as $pierna) {
             if ($pierna->getCantidadRemanente() >= $cantidad) {
                 // Consumir la orden totalmente (eliminarla del libro)
                 $this->libro->elminarOrdenPorId($pierna->getId());
+                $pierna->setCantidadRemanente(0);
             } else {
                 // Consumir la orden parcialmente. Queda en el libro, pero
                 // se resta la cantidad que fue considerada en este arbitraje
@@ -124,8 +138,8 @@ class Detector
                 $cantidadActual = $pierna->getCantidadRemanente();
                 $cantidadNueva = $cantidadActual - $cantidad;
 
-                $orden = $this->libro->obtenerOrdenPorId($pierna->getId());
-                $orden->setCantidadRemanente($cantidadNueva);
+                //$orden = $this->libro->obtenerOrdenPorId($pierna->getId());
+                $pierna->setCantidadRemanente($cantidadNueva);
             }
         }
     }

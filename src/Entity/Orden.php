@@ -298,7 +298,7 @@ class Orden
     /**
      * @ignore
      */
-    public function setCantidadRemanente(float $cantidadRemanente) : self
+    public function setCantidadRemanente(?float $cantidadRemanente) : self
     {
         $this->cantidadRemanente = $cantidadRemanente;
 

@@ -53,7 +53,7 @@ class Oportunidad
             } else {
                 $res .= "  Comprar ";
             }
-            $res .= $pierna->getDivisaBase() . ' a ' . number_format($pierna->getPrecio()) . ' ' . $pierna->getDivisaPrecio() . ' en ' . $pierna->getExchange();
+            $res .= $pierna->getCantidad(). ' ' . $pierna->getDivisaBase() . ' a ' . number_format($pierna->getPrecio()) . ' ' . $pierna->getDivisaPrecio() . ' en ' . $pierna->getExchange();
             $res .= ",\n";
         }
 
@@ -101,6 +101,20 @@ class Oportunidad
         return abs($dinero);
     }
 
+    /**
+     * Devuelve la cantidad remanente.
+     */
+    public function getCantidadRemanente() : float
+    {
+        /** @var float */
+        $res = 0;
+
+        foreach($this->piernas as $pierna) {
+            $res += $pierna->getCantidadRemanente();
+        }
+
+        return $res;
+    }
 
     /**
      * Devuelve la cantidad máxima arbitrable.
