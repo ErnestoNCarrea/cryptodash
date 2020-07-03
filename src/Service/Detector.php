@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Analiza un libro de órdenes y detecta oportunidades de arbitraje.
  */
-class DetectorDeOportunidades
+class Detector
 {
     private Libro $libro;
 

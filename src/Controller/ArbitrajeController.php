@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Exchange;
-use App\Service\DetectorDeOportunidades;
+use App\Service\Detector;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,9 +16,9 @@ class ArbitrajeController extends AbstractController
 {
     private EntityManagerInterface $em;
 
-    private DetectorDeOportunidades $detector;
+    private Detector $detector;
 
-    public function __construct(EntityManagerInterface $em, DetectorDeOportunidades $detector)
+    public function __construct(EntityManagerInterface $em, Detector $detector)
     {
         $this->em = $em;
         $this->detector = $detector;

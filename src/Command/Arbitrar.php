@@ -5,7 +5,7 @@ namespace App\Command;
 use App\Entity\Orden;
 use App\Entity\Exchange;
 use App\Model\Libro;
-use App\Service\DetectorDeOportunidades;
+use App\Service\Detector;
 use App\Service\Arbitrador;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -19,10 +19,10 @@ class Arbitrar extends Command
 
     private EntityManagerInterface $em;
 
-    private DetectorDeOportunidades $detector;
+    private Detector $detector;
     private Arbitrador $arbitrador;
 
-    public function __construct(EntityManagerInterface $em, DetectorDeOportunidades $detector, Arbitrador $arbitrador)
+    public function __construct(EntityManagerInterface $em, Detector $detector, Arbitrador $arbitrador)
     {
         parent::__construct();
 
