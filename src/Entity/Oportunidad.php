@@ -46,19 +46,19 @@ class Oportunidad
     public function __toString() : string
     {
         $res = "Oportunidad: {\n";
-        $res .= "  Volumen: " . number_format($this->cantidad, 8) . ' ' . $this->getDivisaBase() . ",\n";
+        $res .= "  Volumen: " . $this->cantidad . ' ' . $this->getDivisaBase() . ",\n";
         foreach($this->piernas as $pierna) {
             if($pierna->getLado() == Orden::LADO_COMPRA) {
                 $res .= "  Vender ";
             } else {
                 $res .= "  Comprar ";
             }
-            $res .= $pierna->getCantidad(). ' ' . $pierna->getDivisaBase() . ' a ' . number_format($pierna->getPrecio()) . ' ' . $pierna->getDivisaPrecio() . ' en ' . $pierna->getExchange();
+            $res .= $pierna->getCantidad(). ' ' . $pierna->getDivisaBase() . ' a ' . $pierna->getPrecio() . ' ' . $pierna->getDivisaPrecio() . ' en ' . $pierna->getExchange();
             $res .= ",\n";
         }
 
-        $res .= "  Diferencia de precio: " . number_format($this->getDiferenciaPrecio(), 8) . ",\n";
-        $res .= "  Ganacia: " . number_format($this->getGanaciaBruta(), 8) . ' ' . $this->getDivisaPrecio() . ",\n";
+        $res .= "  Diferencia de precio: " . $this->getDiferenciaPrecio() . ",\n";
+        $res .= "  Ganacia: " . $this->getGanaciaBruta() . ' ' . $this->getDivisaPrecio() . ",\n";
 
         $res .= "};\n";
 
