@@ -60,8 +60,10 @@ class Arbitrar extends Command
 
             # Ejecutar arbitrajes
             $this->arbitrador->arbitrarOprtunidades($oportunidades);
-        }
 
-        return 0;
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }
