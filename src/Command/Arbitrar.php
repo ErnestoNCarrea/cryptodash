@@ -10,6 +10,7 @@ use App\Service\Arbitrador;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Arbitrar extends Command
@@ -32,17 +33,26 @@ class Arbitrar extends Command
 
     protected function configure()
     {
-        $this->setDescription('Proceso principal de arbitraje.');
+        $this
+            ->setDescription('Proceso principal de arbitraje.')
+            ->addArgument('par', InputArgument::OPTIONAL, 'El par a arbitrar.')
+            ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $par = $input->getArgument('par');
+
         $output->writeln('Buscando oportunidades de arbitraje');
 
         $ordenes = $this->em->getRepository('App\Entity\Orden')->findAll(); //By(['activo' => 1]);
         $this->detector->setLibro(new Libro($ordenes));
 
-        $oportunidades = $this->detector->detectarOportunidadesPar('BTC/ARS');
+        if ($par) {
+            $oportunidades = $this->detector->detectarOportunidadesPar($par);
+        } else {
+            $oportunidades = $this->detector->detectarOportunidades('BTC/ARS');
+        }
 
         if ($oportunidades == null) {
             $output->writeln('No se encontraron oportunidades.');
