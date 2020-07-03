@@ -71,7 +71,15 @@ class Arbitrar extends Command
             # Ejecutar arbitrajes
             $this->arbitrador->arbitrarOprtunidades($oportunidades);
 
-            return 1;
+            foreach($oportunidades as $opor) {
+                if($opor->getGananciaBrutaPct() > 0.2) {
+                    // Existe al menos una oportunidad con una ganacia de al menos 0.2%
+                    return 1;
+                }
+            }
+
+            // No hay oportunidades interesantes
+            return 0;
         } else {
             return 0;
         }
