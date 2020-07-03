@@ -1,4 +1,5 @@
 #!/bin/sh
+# Esto se debe ejecutar en un cron cada 1 minuto
 while :
 do
     bin/console pull:ripio
@@ -6,5 +7,6 @@ do
     bin/console pull:cryptomkt
     bin/console pull:buenbit
     bin/console pull:bitso
-    sleep 10
+    echo Esperando...
+    sleep 20
 done
