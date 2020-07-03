@@ -23,9 +23,18 @@ class Orden
     ];
 
     /**
-     * Sin mapear.
+     * Indica si esta orden todavía existe, durante una actualización.
+     * 
+     * No se persiste.
      */
     private bool $activa = false;
+
+    /**
+     * Indica la cantidad remanente, durante un arbitraje.
+     * 
+     * No se persiste.
+     */
+    private ?float $cantidadRemanente = null;
 
     /**
      * @ORM\Id()
@@ -68,6 +77,13 @@ class Orden
      * @ORM\Column(type="smallint")
      */
     private int $lado = 0;
+
+    /**
+     * Indica si esta orden fue parcial del libro (es un dato histórico).
+     * 
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private bool $parcial = false;
 
     /**
      * La fecha en la cual se registró la orden.
@@ -247,5 +263,45 @@ class Orden
     public function getTotal() : float
     {
         return $this->cantidad * $this->precio;
+    }
+
+    /**
+     * @ignore
+     */
+    public function getParcial() : bool
+    {
+        return $this->parcial;
+    }
+
+    /**
+     * @ignore
+     */
+    public function setParcial(bool $parcial) : self
+    {
+        $this->parcial = $parcial;
+
+        return $this;
+    }
+
+    /**
+     * @ignore
+     */
+    public function getCantidadRemanente() : float
+    {
+        if ($this->cantidadRemanente === null) {
+            return $this->cantidad;
+        } else {
+            return $this->cantidadRemanente;
+        }
+    }
+
+    /**
+     * @ignore
+     */
+    public function setCantidadRemanente(float $cantidadRemanente) : self
+    {
+        $this->cantidadRemanente = $cantidadRemanente;
+
+        return $this;
     }
 }

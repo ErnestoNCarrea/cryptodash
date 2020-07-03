@@ -123,6 +123,20 @@ class Libro
     }
 
     /**
+     * Añade una orden al libro.
+     */
+    public function addOrden(Orden $orden)
+    {
+        if (is_array($this->ordenes)) {
+            $this->ordenes[] = $orden;
+        } elseif ($this->ordenes instanceof Collection) {
+            $this->ordenes->add($orden);
+        } else {
+            throw new Exception('No sé cómo añadir un elemento a un ' . get_class($this->ordenes));
+        }
+    }
+
+    /**
      * Elimina una orden del libro a partir de su id.
      */
     public function elminarOrdenPorId(int $id)
@@ -214,6 +228,5 @@ class Libro
     {
         return count($this->ordenes);
     }
-
-    
+   
 }

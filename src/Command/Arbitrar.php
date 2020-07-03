@@ -53,10 +53,10 @@ class Arbitrar extends Command
         
         if ($oportunidades) {
             # Persistir oportunidades detectadas
-            foreach ($oportunidades as $oportunidad) {
-                //$this->em->persist($oportunidad);
+            /* foreach ($oportunidades as $oportunidad) {
+                $this->em->persist($oportunidad);
             }
-            //$this->em->flush();
+            $this->em->flush(); */
 
             # Ejecutar arbitrajes
             $this->arbitrador->arbitrarOprtunidades($oportunidades);

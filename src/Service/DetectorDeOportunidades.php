@@ -80,8 +80,8 @@ class DetectorDeOportunidades
                     
                     // Crear una oportunidad
                     $opor = new Oportunidad();
-                    $opor->addPierna(clone $mejorOferta);
-                    $opor->addPierna(clone $otraPierna);
+                    $opor->addPierna($mejorOferta);
+                    $opor->addPierna($otraPierna);
 
                     // Eliminar el volumen de los libros, para seguir buscando
                     // oportunidades y no volver a encontrar la misma
@@ -112,17 +112,20 @@ class DetectorDeOportunidades
         
         // Eliminar
         foreach($opor->getPiernas() as $pierna) {
-            if ($pierna->getCantidad() >= $cantidad) {
+            if ($pierna->getCantidadRemanente() >= $cantidad) {
                 // Consumir la orden totalmente (eliminarla del libro)
                 $this->libro->elminarOrdenPorId($pierna->getId());
             } else {
                 // Consumir la orden parcialmente. Queda en el libro, pero
                 // se resta la cantidad que fue considerada en este arbitraje
                 // para que no se tome en cuenta en nuevas búsquedas.
+
+                // Calcular la cantidad remanente
+                $cantidadActual = $pierna->getCantidadRemanente();
+                $cantidadNueva = $cantidadActual - $cantidad;
+
                 $orden = $this->libro->obtenerOrdenPorId($pierna->getId());
-                $cantidadActual = $orden->getCantidad();
-                $cantidadRemanente = $cantidadActual - $cantidad;
-                $orden->setCantidad($cantidadRemanente);
+                $orden->setCantidadRemanente($cantidadNueva);
             }
         }
     }
