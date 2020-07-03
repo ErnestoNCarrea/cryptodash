@@ -31,11 +31,11 @@ class DetectorDeOportunidades
      */
     public function detectarOportunidades(): ?array
     {
-        $this->logger->debug('detectarOportunidades para ' . $this->libro->count());
+        $this->logger->info('detectarOportunidades para ' . $this->libro->count());
 
         $todasLasDivisas = $this->libro->obtenerTodasLasDivisas();
 
-        $this->logger->debug('detectarOportunidades para las divisas', $todasLasDivisas);
+        $this->logger->info('detectarOportunidades para las divisas', $todasLasDivisas);
 
         $oportunidades = [];
 
@@ -63,19 +63,19 @@ class DetectorDeOportunidades
      */
     public function detectarOportunidadesPar(string $par): ?array
     {
-        $this->logger->debug('detectarOportunidadesPar para {par}', ['par' => $par]);
+        $this->logger->info('detectarOportunidadesPar para {par}', ['par' => $par]);
 
         $oportunidades = [];
         
         // Buscar en el libro de ventas
         foreach([ Orden::LADO_VENTA, Orden::LADO_COMPRA ] as $lado) {
-            $this->logger->debug('detectarOportunidadesPar en el libro de {lado}', [ 'lado' => Orden::LADOS_NOMBRES[$lado]]);
+            $this->logger->info('detectarOportunidadesPar en el libro de {lado}', [ 'lado' => Orden::LADOS_NOMBRES[$lado]]);
             $mejorOferta = $this->libro->obtenerMejorOferta($lado, $par);
-            $this->logger->debug('Mejor oferta: {orden}', ['orden' => $mejorOferta]);
+            $this->logger->info('Mejor oferta: {orden}', ['orden' => $mejorOferta]);
             if ($mejorOferta) {
                 $otraPierna = $this->buscarOtraPierna($par, $mejorOferta);
                 if ($otraPierna) {
-                    $this->logger->debug('Otra pierna: {orden}', ['orden' => $otraPierna]);
+                    $this->logger->info('Otra pierna: {orden}', ['orden' => $otraPierna]);
                     // Existe una diferencia arbitrable bruta.
                     
                     // Crear una oportunidad
