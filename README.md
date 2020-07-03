@@ -22,8 +22,8 @@ funcionar también en una estación macOS.
 ## Descargar código e iniciar proyecto
 
 ```bash
-git clone https://github.com/EquisTango/CryptoDash.git
-cd CryptoDash
+git clone https://gitlab.com/ErnestoNicolasCarrea/cryptodash.git
+cd cryptodash
 composer install
 ```
 
