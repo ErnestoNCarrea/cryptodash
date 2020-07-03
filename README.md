@@ -22,7 +22,8 @@ funcionar también en una estación macOS.
 ## Descargar código e iniciar proyecto
 
 ```bash
-git clone (URL del repo)
+git clone https://github.com/EquisTango/CryptoDash.git
+cd CryptoDash
 composer install
 ```
 
@@ -37,8 +38,7 @@ GRANT ALL ON cryptodash_dev.* TO 'cryptodash_dev'@'localhost' IDENTIFIED BY '123
 exit
 ```
 ```bash
-mysql < data/*.sql
-cat data/*.sql | mysql --database=cryptodash_dev
+mysql --database=cryptodash_dev < data/cryptodash_dev.sql
 ```
 
 ## Ejecutar el proceso principal
