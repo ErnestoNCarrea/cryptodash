@@ -46,7 +46,11 @@ class Oportunidad
     public function __toString() : string
     {
         $res = "Oportunidad: {\n";
-        $res .= "  Volumen: " . $this->cantidad . ' ' . $this->getDivisaBase() . ",\n";
+        $res .= "  Volumen inical       : " . $this->getCantidadInicial() . ' ' . $this->getDivisaBase() . ",\n";
+        $res .= "  Volumen arbitrable   : " . $this->getCantidadArbitrable() . ' ' . $this->getDivisaBase() . ",\n";
+        $res .= "  Volumen máximo       : " . $this->cantidad . ' ' . $this->getDivisaBase() . ",\n";
+        $res .= "  Precio inical        : " . $this->getPrecioInicial() . ' ' . $this->getDivisaBase() . ",\n";
+        $res .= "  Precio arb. promedio : " . $this->getPrecioArbitrablePromedio() . ' ' . $this->getDivisaBase() . ",\n";
         foreach($this->piernas as $pierna) {
             if($pierna->getLado() == Orden::LADO_COMPRA) {
                 $res .= "  Vender ";
@@ -56,9 +60,7 @@ class Oportunidad
             $res .= $pierna->getCantidad(). ' ' . $pierna->getDivisaBase() . ' a ' . $pierna->getPrecio() . ' ' . $pierna->getDivisaPrecio() . ' en ' . $pierna->getExchange();
             $res .= ",\n";
         }
-
-        $res .= "  Diferencia de precio: " . $this->getDiferenciaPrecio() . ",\n";
-        $res .= "  Ganacia: " . $this->getGanaciaBruta() . ' ' . $this->getDivisaPrecio() . ",\n";
+        $res .= "  Ganancia: " . $this->getGananciaBruta() . ' ' . $this->getDivisaPrecio() . ' (' . number_format($this->getGananciaBrutaPct(), 2) . "%),\n";
 
         $res .= "};\n";
 
@@ -78,11 +80,18 @@ class Oportunidad
     /**
      * Obtiene la ganancia bruta de la oportunidad, expresada en DivisaPrecio.
      */
-    public function getGanaciaBruta() : float
+    public function getGananciaBruta() : float
     {
-        return $this->getDiferenciaPrecio() * $this->cantidad;
+        return abs($this->getPrecioInicial() - $this->getPrecioArbitrablePromedio()) * $this->cantidad;
     }
 
+    /**
+     * Obtiene la ganancia bruta de la oportunidad, expresada en porcentaje de la inversión inicial.
+     */
+    public function getGananciaBrutaPct() : float
+    {
+        return $this->getGananciaBruta() / $this->getPrecioInicial() * 100;
+    }
 
     /**
      * Obtiene la diferencia de precio entre las piernas, expresada en DivisaPrecio.
@@ -99,6 +108,62 @@ class Oportunidad
         }
 
         return abs($dinero);
+    }
+
+    /**
+     * Devuelve la cantidad de la órden que inicia el arbitraje.
+     */
+    public function getCantidadInicial() : float
+    {
+        if ($this->piernas && count($this->piernas) > 0) {
+            return $this->piernas[0]->getCantidad();
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Devuelve el precio de la órden que inicia el arbitraje.
+     */
+    public function getPrecioInicial() : float
+    {
+        if ($this->piernas && count($this->piernas) > 0) {
+            return $this->piernas[0]->getPrecio();
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Devuelve la cantidad de las órdenes de arbitraje (segunda en adelante).
+     */
+    public function getCantidadArbitrable() : float
+    {
+        $i = 0;
+        $res = 0;
+        foreach($this->piernas as $pierna) {
+            if ($i > 0) {
+                $res += $pierna->getCantidad();
+            }
+            $i++;
+        }
+        return $res;
+    }
+
+    /**
+     * Devuelve el precio promedio de las órdenes de arbitraje (segunda en adelante).
+     */
+    public function getPrecioArbitrablePromedio() : float
+    {
+        $i = 0;
+        $res = 0;
+        foreach($this->piernas as $pierna) {
+            if ($i > 0) {
+                $res += $pierna->getPrecio();
+            }
+            $i++;
+        }
+        return $res / (count($this->piernas) - 1);
     }
 
     /**
@@ -121,11 +186,16 @@ class Oportunidad
      */
     private function calcularCantidadMaxima() : float
     {
+        return min(
+            $this->getCantidadInicial(),
+            $this->getCantidadArbitrable()
+        );
+
         /** @var float */
         $res = 0;
 
         foreach($this->piernas as $pierna) {
-            if ($pierna->getCantidad() > $res) {
+            if ($res == 0 || $pierna->getCantidad() < $res) {
                 $res = $pierna->getCantidad();
             }
         }

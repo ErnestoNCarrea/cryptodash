@@ -89,8 +89,11 @@ class Detector
                         // oportunidades y no volver a encontrar la misma
                         $this->quitarVolumenDelLibro($opor);
 
-                        // Seguir buscando más piernas, hasta agotar el volumen
-                    } while (null !== ($otraPierna = $this->buscarOtraPierna($par, $mejorOferta)));
+                        // Seguir buscando más piernas
+                    } while (
+                            null !== ($otraPierna = $this->buscarOtraPierna($par, $mejorOferta))    // hasta que no queden oportunidades
+                            && $opor->getCantidadArbitrable() < $opor->getCantidadInicial()        // Ose agote el volumen arbitrable
+                        );
                     $this->restablecerVolumenDelLibro();
 
                     // Agregar esta oportunidad al resultado
