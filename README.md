@@ -33,7 +33,7 @@ mysql
 ```
 ```sql
 CREATE DATABASE cryptodash_dev;
-GRANT ALL ON cryptodash_dev.* TO 'cryptodash_dev'@'localhost' IDENTIFIED BY 'contrasenia';
+GRANT ALL ON cryptodash_dev.* TO 'cryptodash_dev'@'localhost' IDENTIFIED BY '123456';
 exit
 ```
 ```bash
