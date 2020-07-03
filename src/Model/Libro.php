@@ -139,7 +139,7 @@ class Libro
     /**
      * Restablece a su valor inicial el campo CantidadRemanente en todo el libro.
      */
-    public function restablecerVolumenDelLibro()
+    public function restablecerVolumen()
     {
         foreach($this->ordenes as $orden) {
             $orden->setCantidadRemanente(null);

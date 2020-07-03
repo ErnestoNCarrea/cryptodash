@@ -113,7 +113,7 @@ class Detector
      */
     private function restablecerVolumenDelLibro()
     {
-        $this->libro->restablecerVolumenDelLibro();
+        $this->libro->restablecerVolumen();
     }
 
     /**
