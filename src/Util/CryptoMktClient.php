@@ -49,7 +49,7 @@ class CryptoMktClient extends AbstractClient
                 'type' => 'buy'
             ],
         ]);
-        $ordenesCompra = $this->deserializarOrdenCollection(json_decode((string) $res->getBody()));
+        $ordenesCompra = $this->deserializarOrdenCollection(json_decode((string) $res->getBody()), $par, Orden::LADO_COMPRA);
 
         $res = $this->client->request('GET', 'book', [
             'query' => [
@@ -57,17 +57,18 @@ class CryptoMktClient extends AbstractClient
                 'type' => 'sell'
             ],
         ]);
-        $ordenesVenta = $this->deserializarOrdenCollection(json_decode((string) $res->getBody()));
+        $ordenesVenta = $this->deserializarOrdenCollection(json_decode((string) $res->getBody()), $par, Orden::LADO_VENTA);
         
         return new Libro(array_merge($ordenesCompra, $ordenesVenta), $par);
     }
 
-    private function deserializarOrdenCollection($json_orders): array
+    private function deserializarOrdenCollection($json_orders, string $par, int $lado): array
     {
         $res = [];
 
         foreach ($json_orders->data as $json_order) {
-            $order = new Orden((float) $json_order->amount, (float) $json_order->price);
+            $order = new Orden((float) $json_order->amount, (float) $json_order->price, $par);
+            $order->setLado($lado);
             $res[] = $order;
         }
 

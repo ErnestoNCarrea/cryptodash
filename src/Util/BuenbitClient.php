@@ -72,18 +72,19 @@ class BuenbitClient extends AbstractClient
 
     private function deserializarLibro(string $par, object $json): Libro
     {
-        $ordenesCompra = $this->deserializarOrdenCollection($json->bids);
-        $ordenesVenta = $this->deserializarOrdenCollection($json->asks);
+        $ordenesCompra = $this->deserializarOrdenCollection($json->bids, $par, Orden::LADO_COMPRA);
+        $ordenesVenta = $this->deserializarOrdenCollection($json->asks, $par, Orden::LADO_VENTA);
 
         return new Libro(array_merge($ordenesCompra, $ordenesVenta), $par);
     }
 
-    private function deserializarOrdenCollection(array $json_orders): array
+    private function deserializarOrdenCollection(array $json_orders, string $par, int $lado): array
     {
         $res = [];
 
         foreach ($json_orders as $json_order) {
-            $order = new Orden((float) $json_order->remaining_volume, (float) $json_order->price);
+            $order = new Orden((float) $json_order->remaining_volume, (float) $json_order->price, $par);
+            $order->setLado($lado);
             $res[] = $order;
         }
 

@@ -22,7 +22,10 @@ class Orden
         self::LADO_VENTA => 'Venta',
     ];
 
-    private bool $activo = false;
+    /**
+     * Sin mapear.
+     */
+    private bool $activa = false;
 
     /**
      * @ORM\Id()
@@ -95,14 +98,12 @@ class Orden
         return $divisaPrecio;
     }
 
-    public function __construct(?float $cantidad = 0 , ?float $precio = 0, ?float $total = 0)
+    public function __construct(?float $cantidad = 0 , ?float $precio = 0, ?string $par = null)
     {
         $this->cantidad = $cantidad;
         $this->precio = $precio;
-        if (!$total) {
-            $this->total = $cantidad * $precio;
-        } else {
-            $this->total = $total;
+        if ($par != null) {
+            $this->par = $par;
         }
     }
 
@@ -225,17 +226,17 @@ class Orden
     /**
      * @ignore
      */
-    public function getActivo() : bool
+    public function getActiva() : bool
     {
-        return $this->activo;
+        return $this->activa;
     }
 
     /**
      * @ignore
      */
-    public function setActivo(bool $activo) : self
+    public function setActiva(bool $activa) : self
     {
-        $this->activo = $activo;
+        $this->activa = $activa;
 
         return $this;
     }

@@ -39,7 +39,7 @@ class Exchange
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Orden", mappedBy="exchange", cascade={"persist", "remove"})
      */
-    private $ordenLibros;
+    private $ordenes;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Cotizacion", mappedBy="exchange", cascade={"persist", "remove"})
@@ -54,9 +54,25 @@ class Exchange
     /**
      * Devuelve un libro para todas las órdenes de este exchange para un par determinado.
      */
-    public function obtenerLibro(string $par): Libro
+    public function obtenerOrdenesPorPar(string $par) : array
     {
-        return new Libro($this->getOrdenes(), $par);
+        $res = [];
+
+        foreach($this->ordenes as $orden) {
+            if($orden->getPar() == $par) {
+                $res[] = $orden;
+            }
+        }
+
+        return $res;
+    }
+
+    /**
+     * Devuelve un libro para todas las órdenes de este exchange para un par determinado.
+     */
+    public function obtenerLibroPorPar(string $par) : Libro
+    {
+        return new Libro($this->obtenerOrdenesPorPar($par), $par);
     }
 
     /**
@@ -77,9 +93,9 @@ class Exchange
     }
 
     /**
-     * Obtener cotizaciones de un símbolo contra el resto de los símbolos.
+     * Devuelve todos los pares que existen en el libro.
      */
-    public function obtenerMejorPrecioParaTodasDivisas(): array
+    public function obtenerParesEnLibro() : array
     {
         $pares = [];
 
@@ -90,17 +106,27 @@ class Exchange
             }
         }
 
+        return $pares;
+    }
+
+    /**
+     * Obtener cotizaciones de un símbolo contra el resto de los símbolos.
+     */
+    public function obtenerMejorPrecioParaTodasDivisas(): array
+    {
+        $pares = $this->obtenerParesEnLibro();
+
         $res = [];
 
         foreach ($pares as $par) {
-            $ob = $this->obtenerLibro($par);
+            $ob = $this->obtenerLibroPorPar($par);
             $cotizacion = new Cotizacion();
             $cotizacion->setExchange($this);
             $cotizacion->setPar($par);
-            $cotizacion->setPrecioVenta($ob->getBestPrecioVenta() ?: 0);
-            $cotizacion->setPrecioCompra($ob->getBestPrecioCompra() ?: 0);
+            $cotizacion->setPrecioVenta($ob->getMejorPrecioVenta() ?: 0);
+            $cotizacion->setPrecioCompra($ob->getMejorPrecioCompra() ?: 0);
 
-            $res[] = $cotizacion;
+            $res[$par] = $cotizacion;
         }
 
         return $res;
@@ -182,7 +208,7 @@ class Exchange
      */
     public function getOrdenes(): PersistentCollection
     {
-        return $this->ordenLibros;
+        return $this->ordenes;
     }
 
     /**
@@ -190,8 +216,8 @@ class Exchange
      */
     public function addOrden(Orden $ordenLibro): self
     {
-        if (!$this->ordenLibros->contains($ordenLibro)) {
-            $this->ordenLibros[] = $ordenLibro;
+        if (!$this->ordenes->contains($ordenLibro)) {
+            $this->ordenes[] = $ordenLibro;
             $ordenLibro->setExchange($this);
         }
 
@@ -204,8 +230,8 @@ class Exchange
      */
     public function removeOrden(Orden $ordenLibro): self
     {
-        if ($this->ordenLibros->contains($ordenLibro)) {
-            $this->ordenLibros->removeElement($ordenLibro);
+        if ($this->ordenes->contains($ordenLibro)) {
+            $this->ordenes->removeElement($ordenLibro);
             // set the owning lado to null (unless already changed)
             if ($ordenLibro->getExchange() === $this) {
                 //$ordenLibro->setExchange(null);

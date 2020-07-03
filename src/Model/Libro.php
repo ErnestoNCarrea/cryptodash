@@ -16,6 +16,9 @@ class Libro
      **/
     private ?string $par = null;
 
+    /**
+     * Las ordenes del libro.
+     */
     private $ordenes;
 
     public function __construct($ordenes, ?string $par = null)
@@ -27,13 +30,16 @@ class Libro
     /**
      * Devuelve la mejor oferta de compra o de venta para un par determinado.
      */
-    public function obtenerMejorOferta(string $par, int $lado) : ?Orden
+    public function obtenerMejorOferta(int $lado, ?string $par = null) : ?Orden
     {
+        if ($par === null) {
+            $par = $this->par;
+        }
         $res = null;
 
         foreach($this->ordenes as $orden) {
             if($orden->getLado() == $lado && $orden->getPar() == $par) {
-                if ($res == null) {
+                if ($res === null) {
                     // Es la primera orden que se evalúa. Hasta ahora es la mejor.
                     $res = $orden;
                 } else {
@@ -75,6 +81,14 @@ class Libro
         }
 
         return $res;
+    }
+
+    /**
+     * Devuelve todas las órdenes del libro.
+     */
+    public function getOrdenes() : ?array
+    {
+        return $this->ordenes;
     }
 
     /**
@@ -123,8 +137,6 @@ class Libro
         } else {
             throw new Exception('No sé cómo eliminar un elemento de un ' . get_class($this->ordenes));
         }
-
-
     }
 
     /**
@@ -141,39 +153,39 @@ class Libro
         return null;
     }
 
-    public function getBestOrdenCompra() : ?Orden
+    public function getMejorOrdenCompra() : ?Orden
     {
-        if ($this->par == null) {
+        if ($this->par === null) {
             return null;
         }
-        return $this->obtenerMejorOferta($this->par, Orden::LADO_COMPRA);
+        return $this->obtenerMejorOferta(Orden::LADO_COMPRA);
     }
 
-    public function getBestOrdenVenta(): ?Orden
+    public function getMejorOrdenVenta(): ?Orden
     {
-        if ($this->par == null) {
+        if ($this->par === null) {
             return null;
         }
-        return $this->obtenerMejorOferta($this->par, Orden::LADO_VENTA);
+        return $this->obtenerMejorOferta(Orden::LADO_VENTA);
     }
 
-    public function getBestPrecioCompra(): ?float
+    public function getMejorPrecioCompra(): ?float
     {
-        $order = $this->getBestOrdenCompra();
-        if ($order) {
-            return $order->getPrecio();
+        $orden = $this->getMejorOrdenCompra();
+        if ($orden === null) {
+            return null;
         } else {
-            return null;
+            return $orden->getPrecio();
         }
     }
 
-    public function getBestPrecioVenta(): ?float
+    public function getMejorPrecioVenta(): ?float
     {
-        $order = $this->getBestOrdenVenta();
-        if ($order) {
-            return $order->getPrecio();
-        } else {
+        $orden = $this->getMejorOrdenVenta();
+        if ($orden === null) {
             return null;
+        } else {
+            return $orden->getPrecio();
         }
     }
 

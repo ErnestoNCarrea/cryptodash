@@ -49,8 +49,13 @@ class BinanceClient extends AbstractClient
             ],
         ]);
 
-        $ordenesCompra = [new Orden(0, $precio, 0)];
-        $ordenesVenta = [new Orden(0, $precio, 0)];
+        $ordenc = new Orden(0, $precio, $par);
+        $ordenc->setLado(Orden::LADO_COMPRA);
+        $ordenesCompra = [ $ordenc ];
+
+        $ordenv = new Orden(0, $precio, $par);
+        $ordenv->setLado(Orden::LADO_VENTA);
+        $ordenesVenta = [ $ordenv ];
 
         return new Libro(array_merge($ordenesCompra, $ordenesVenta), $par);
     }

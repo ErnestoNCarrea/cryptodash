@@ -70,7 +70,7 @@ class DetectorDeOportunidades
         // Buscar en el libro de ventas
         foreach([ Orden::LADO_VENTA, Orden::LADO_COMPRA ] as $lado) {
             $this->logger->debug('detectarOportunidadesPar en el libro de {lado}', [ 'lado' => Orden::LADOS_NOMBRES[$lado]]);
-            $mejorOferta = $this->libro->obtenerMejorOferta($par, $lado);
+            $mejorOferta = $this->libro->obtenerMejorOferta($lado, $par);
             $this->logger->debug('Mejor oferta: {orden}', ['orden' => $mejorOferta]);
             if ($mejorOferta) {
                 $otraPierna = $this->buscarOtraPierna($par, $mejorOferta);
@@ -133,7 +133,7 @@ class DetectorDeOportunidades
     private function buscarOtraPierna(string $par, Orden $orden) : ?Orden
     {
         $otroLado = $orden->getLado() == Orden::LADO_VENTA ? Orden::LADO_COMPRA : Orden::LADO_VENTA;
-        $otraPierna = $this->libro->obtenerMejorOferta($par, $otroLado);
+        $otraPierna = $this->libro->obtenerMejorOferta($otroLado, $par);
 
         if ($this->existeDiferenciaBruta($orden, $otraPierna)) {
             // Existe una diferencia bruta (falta descontar comisiones)

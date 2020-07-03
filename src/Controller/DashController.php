@@ -30,7 +30,7 @@ class DashController extends AbstractController
      */
     public function coti()
     {
-        $exchangesIds = [1000, 9000, 9004, 9003, 9002];
+        $exchangesIds = [ 1000, 9000, 9004, 9003, 9002 ];
         $exchanges = [];
         foreach($exchangesIds as $exchangeId) {
             $exchanges[] = $this->em->getRepository('App\Entity\Exchange')->find($exchangeId);
@@ -42,10 +42,11 @@ class DashController extends AbstractController
         $reference = $exchanges[0];
 
         return $this->render('dash/coti.html.twig', [
+            'exchanges' => $exchanges,
             'analizador' => $analizador,
             'reference' => $reference,
             'dolar' => $clientDolar
-            ]);
+        ]);
     }
 
     /**
@@ -57,7 +58,7 @@ class DashController extends AbstractController
         $par = $request->query->get('par');
 
         $exchange = $this->em->getRepository('App\Entity\Exchange')->find($exchangeId);
-        $libro = $exchange->obtenerLibro($par);
+        $libro = $exchange->obtenerLibroPorPar($par);
 
         return $this->render('dash/libro.html.twig', [
             'exchange' => $exchange,

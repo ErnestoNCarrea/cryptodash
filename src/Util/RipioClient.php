@@ -80,18 +80,19 @@ class RipioClient extends AbstractClient
 
     private function deserializarLibro(string $par, object $json): Libro
     {
-        $ordenesCompra = $this->deserializarOrdenCollection($json->buy);
-        $ordenesVenta = $this->deserializarOrdenCollection($json->sell);
+        $ordenesCompra = $this->deserializarOrdenCollection($json->buy, $par, Orden::LADO_COMPRA);
+        $ordenesVenta = $this->deserializarOrdenCollection($json->sell, $par, Orden::LADO_VENTA);
 
         return new Libro(array_merge($ordenesCompra, $ordenesVenta), $par);
     }
 
-    private function deserializarOrdenCollection(array $json_orders): array
+    private function deserializarOrdenCollection(array $json_orders, string $par, int $lado): array
     {
         $res = [];
 
         foreach ($json_orders as $json_order) {
-            $order = new Orden((float) $json_order->amount, (float) $json_order->price, (float) $json_order->total);
+            $order = new Orden((float) $json_order->amount, (float) $json_order->price, $par);
+            $order->setLado($lado);
             $res[] = $order;
         }
 

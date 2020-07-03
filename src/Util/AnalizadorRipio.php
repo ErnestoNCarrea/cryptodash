@@ -38,8 +38,8 @@ class AnalizadorRipio
         $this->exchangeRipio = $exchangeRipio;
         $this->exchangeReference = $exchangeReference;
 
-        $this->libroRipioBtcArs = $exchangeRipio->obtenerLibro('BTC/ARS');
-        $this->libroRipioEthArs = $exchangeRipio->obtenerLibro('ETH/ARS');
+        $this->libroRipioBtcArs = $exchangeRipio->obtenerLibroPorPar('BTC/ARS');
+        $this->libroRipioEthArs = $exchangeRipio->obtenerLibroPorPar('ETH/ARS');
 
         $this->referenceUsdArs = $dolar;
 
@@ -103,42 +103,42 @@ class AnalizadorRipio
 
     public function getRipioBuyBtc(): float
     {
-        return $this->libroRipioBtcArs->getBestPrecioCompra(1000);
+        return $this->libroRipioBtcArs->getMejorPrecioCompra(1000);
     }
 
     public function getRipioBuyEth(): float
     {
-        return $this->libroRipioEthArs->getBestPrecioCompra(1000);
+        return $this->libroRipioEthArs->getMejorPrecioCompra(1000);
     }
 
     public function getRipioSellBtc(): float
     {
-        return $this->libroRipioBtcArs->getBestPrecioVenta(1000);
+        return $this->libroRipioBtcArs->getMejorPrecioVenta(1000);
     }
 
     public function getRipioSellEth(): float
     {
-        return $this->libroRipioEthArs->getBestPrecioVenta(1000);
+        return $this->libroRipioEthArs->getMejorPrecioVenta(1000);
     }
 
     public function getRipioBuyGapBtc(): float
     {
-        return $this->libroRipioBtcArs->getBestPrecioCompra() / ($this->getReferenceBtcUsd()->getPrecioVenta() * $this->getDolar()) - 1;
+        return $this->libroRipioBtcArs->getMejorPrecioCompra() / ($this->getReferenceBtcUsd()->getPrecioVenta() * $this->getDolar()) - 1;
     }
 
     public function getRipioBuyGapEth(): float
     {
-        return $this->libroRipioEthArs->getBestPrecioCompra() / ($this->getReferenceEthUsd()->getPrecioVenta() * $this->getDolar()) - 1;
+        return $this->libroRipioEthArs->getMejorPrecioCompra() / ($this->getReferenceEthUsd()->getPrecioVenta() * $this->getDolar()) - 1;
     }
 
     public function getRipioSellGapBtc(): float
     {
-        return $this->libroRipioBtcArs->getBestPrecioVenta() / ($this->getReferenceBtcUsd()->getPrecioVenta() * $this->getDolar()) - 1;
+        return $this->libroRipioBtcArs->getMejorPrecioVenta() / ($this->getReferenceBtcUsd()->getPrecioVenta() * $this->getDolar()) - 1;
     }
 
     public function getRipioSellGapEth(): float
     {
-        return $this->libroRipioEthArs->getBestPrecioVenta() / ($this->getReferenceEthUsd()->getPrecioVenta() * $this->getDolar()) - 1;
+        return $this->libroRipioEthArs->getMejorPrecioVenta() / ($this->getReferenceEthUsd()->getPrecioVenta() * $this->getDolar()) - 1;
     }
 
     /**

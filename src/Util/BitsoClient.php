@@ -67,18 +67,19 @@ class BitsoClient extends AbstractClient
 
     private function deserializarLibro(string $par, object $json): Libro
     {
-        $ordenesCompra = $this->deserializarOrdenCollection($json->payload->bids);
-        $ordenesVenta = $this->deserializarOrdenCollection($json->payload->asks);
+        $ordenesCompra = $this->deserializarOrdenCollection($json->payload->bids, $par, Orden::LADO_COMPRA);
+        $ordenesVenta = $this->deserializarOrdenCollection($json->payload->asks, $par, Orden::LADO_VENTA);
 
         return new Libro(array_merge($ordenesCompra, $ordenesVenta), $par);
     }
 
-    private function deserializarOrdenCollection(array $json_orders): array
+    private function deserializarOrdenCollection(array $json_orders, string $par, int $lado): array
     {
         $res = [];
 
         foreach ($json_orders as $json_order) {
-            $order = new Orden((float) $json_order->amount, (float) $json_order->price);
+            $order = new Orden((float) $json_order->amount, (float) $json_order->price, $par);
+            $order->setLado($lado);
             $res[] = $order;
         }
 
