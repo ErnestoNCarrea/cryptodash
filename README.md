@@ -1,5 +1,5 @@
 # Universidad Siglo 21
-## Licenciatura en ifnromática
+## Licenciatura en Informática
 ## Arbitraje de Criptomonedas
 
 * Alumno: Ernesto Nicolás Carrea
