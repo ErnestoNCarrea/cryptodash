@@ -1,10 +1,10 @@
-# Arbitraje de Criptomonedas
-
-## Trabajo Final de Garado
-## Universidad Siglo 21
+# Universidad Siglo 21
+## Licenciatura en ifnromática
+## Arbitraje de Criptomonedas
 
 Alumno: Ernesto Nicolás Carrea
-Legajo: VINF6439
+Legajo VINF6439
+Año 2020
 
 # Instalación en entorno de desarrollo
 
@@ -16,8 +16,8 @@ Legajo: VINF6439
 * Composer
 * Servidor o estación de trabajo GNU/Linux
 
-Las instrucciones a continuación son para una estación de trabajo GNU/Linux. Deberían
-funcionar también en una estación macOS.
+Las instrucciones a continuación son para una estación de trabajo GNU/Linux. Pueden funcionar
+también en macOS si se dispone de las herramientas apropiadas (por ejemplo Brew).
 
 ## Descargar código e iniciar proyecto
 
