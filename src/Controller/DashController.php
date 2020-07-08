@@ -30,11 +30,7 @@ class DashController extends AbstractController
      */
     public function coti()
     {
-        $exchangesIds = [ 1000, 9000, 9004, 9003, 9002 ];
-        $exchanges = [];
-        foreach($exchangesIds as $exchangeId) {
-            $exchanges[] = $this->em->getRepository('App\Entity\Exchange')->find($exchangeId);
-        }
+        $exchanges = $this->em->getRepository('App\Entity\Exchange')->findAll();
 
         $clientDolar = new DolarIolClient();
 
