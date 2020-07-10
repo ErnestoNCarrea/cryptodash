@@ -9,9 +9,9 @@
     <h3>Compra</h3>
     <table class="table">
     <tr>
-        <th>Cantidad</tg>
-        <th class="text-center">Total</tg>
-        <th class="text-right">Precio</tg>
+        <th>Cantidad</th>
+        <th class="text-center">Total</th>
+        <th class="text-right">Precio</th>
     </tr>
     {% for orden in libro.ordenesCompra|slice(0, 8) %}
     <tr>
@@ -26,9 +26,9 @@
     <h3>Venta</h3>
     <table class="table">
     <tr>
-        <th>Cantidad</tg>
-        <th class="text-center">Total</tg>
-        <th class="text-right">Precio</tg>
+        <th>Cantidad</th>
+        <th class="text-center">Total</th>
+        <th class="text-right">Precio</th>
     </tr>
     {% for orden in libro.ordenesVenta|slice(0, 8) %}
     <tr>
