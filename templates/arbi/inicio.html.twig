@@ -9,6 +9,7 @@
         <th>Fecha y hora</th>
         <th>Par</th>
         <th>Inicio</th>
+        <th>Piernas</th>
         <th class="text-right">Volumen</th>
         <th class="text-right">Ganancia</th>
         <th></th>
@@ -17,8 +18,9 @@
     <tr>
         <td>{{ opor.id }}</td>
         <td>{{ opor.Fecha|date('d/m/Y h:i:s') }}</td>
-        <td>{{ opor.piernas[0].par }}</td>
-        <td>{{ opor.piernas[0].exchange }}</td>
+        <td>{{ opor.PiernaInicial.par }}</td>
+        <td>{{ opor.PiernaInicial.exchange }}</td>
+        <td>{{ opor.piernas|length }}</td>
         <td class="text-right">{{ opor.DivisaBase|divisa_simbolo }} {{ opor.CantidadArbitrable|number_format(6) }}</td>
         <td class="text-right">{{ opor.DivisaPrecio|divisa_simbolo }} {{ opor.GananciaBruta|number_format(2) }} ({{ opor.GananciaBrutaPct|number_format(1) }}%)</td>
         <td>

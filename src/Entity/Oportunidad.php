@@ -125,12 +125,12 @@ class Oportunidad
 
     public function getDivisaBase() : string
     {
-        return $this->piernas[0]->getDivisaBase();
+        return $this->getPiernaInicial()->getDivisaBase();
     }
 
     public function getDivisaPrecio() : string
     {
-        return $this->piernas[0]->getDivisaPrecio();
+        return $this->getPiernaInicial()->getDivisaPrecio();
     }
 
     /**
@@ -146,7 +146,12 @@ class Oportunidad
      */
     public function getGananciaBrutaPct() : float
     {
-        return $this->getGananciaBruta() / $this->getPrecioInicial() * 100;
+        if ($this->getPrecioInicial() > 0) {
+            // Evitar división por cero
+            return $this->getGananciaBruta() / $this->getPrecioInicial() * 100;
+        } else {
+            return 0;
+        }
     }
 
     /**
@@ -167,12 +172,34 @@ class Oportunidad
     }
 
     /**
+     * Devuelve la primera pierna de la oportunidad.
+     */
+    public function getPiernaInicial() : Orden
+    {
+        $arr = $this->getPiernasArray();
+        return $arr[0];
+    }
+
+    /**
+     * Devuelve un array con las piernas.
+     */
+    public function getPiernasArray() : ?array
+    {
+        if (is_array($this->piernas)) {
+            return $this->piernas;
+        } else {
+            return $this->piernas->toArray();
+        }
+        
+    }
+
+    /**
      * Devuelve la cantidad de la órden que inicia el arbitraje.
      */
     public function getCantidadInicial() : float
     {
         if ($this->piernas && count($this->piernas) > 0) {
-            return $this->piernas[0]->getCantidad();
+            return $this->getPiernaInicial()->getCantidad();
         } else {
             return 0;
         }
@@ -184,7 +211,7 @@ class Oportunidad
     public function getPrecioInicial() : float
     {
         if ($this->piernas && count($this->piernas) > 0) {
-            return $this->piernas[0]->getPrecio();
+            return $this->getPiernaInicial()->getPrecio();
         } else {
             return 0;
         }
@@ -211,15 +238,19 @@ class Oportunidad
      */
     public function getPrecioArbitrablePromedio() : float
     {
-        $i = 0;
-        $res = 0;
-        foreach($this->piernas as $pierna) {
-            if ($i > 0) {
-                $res += $pierna->getPrecio();
+        if (count($this->piernas) > 1) {
+            $i = 0;
+            $res = 0;
+            foreach($this->piernas as $pierna) {
+                if ($i > 0) {
+                    $res += $pierna->getPrecio();
+                }
+                $i++;
             }
-            $i++;
+            return $res / (count($this->piernas) - 1);
+        } else {
+            return 0;
         }
-        return $res / (count($this->piernas) - 1);
     }
 
     /**
