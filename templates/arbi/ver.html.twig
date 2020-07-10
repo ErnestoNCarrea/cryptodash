@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container"><div class="row">
+
+<h3>Oportunidad #{{ opor.id }}</h3>
+
+<table class="table">
+    <tr>
+        <td>Fecha</td>
+        <td>{{ opor.fecha|date('d/m/Y h:i:s') }} </td>
+    </tr>
+    <tr>
+        <td>Vigente</td>
+        <td>{% if opor.Activa %}
+            <i class="fa fa-check text-success"></i> Sí
+        {% else %}
+            <i class="fa fa-times text-muted"></i> No
+        {% endif %}</td>
+    </tr>
+    <tr>
+        <td>Ganancia</td>
+        <td>{{ opor.DivisaPrecio|divisa_simbolo }} {{ opor.GananciaBruta }} ({{ opor.GananciaBrutaPct|number_format(2) }}%)</td>
+    </tr>
+    <tr>
+        <td>Volumen</td>
+        <td>{{ opor.DivisaBase|divisa_simbolo }} {{ opor.CantidadArbitrable }}</td>
+    </tr>
+    <tr>
+        <td>Divisa base</td>
+        <td>{{ opor.DivisaBase }} <span class="text-muted small">(Las cantidades o volúmenes se expresan en esta divisa)</span></td>
+    </tr>
+    <tr>
+        <td>Divisa precio</td>
+        <td>{{ opor.DivisaPrecio }} <span class="text-muted small">(Los precios de compra y venta se expresan en esta divisa)</span></td>
+    </tr>
+    <tr>
+        <td>Operaciones</td>
+        <td>{{ opor.piernas|length }} <span class="text-muted small">(La cantidad de operaciones que hay que ejecutar para aprovechar esta oportunidad)</span></td>
+    </tr>
+
+</table>
+
+
+<h4>Órdenes</h4>
+<table class="table">
+    <tr>
+        <th>#</th>
+        <th>Operación</th>
+        <th class="text-right">Volumen</th>
+        <th>Exchange</th>
+        <th class="text-right">Precio</th>
+        <th></th>
+    </tr>
+{% for orden in opor.piernas %}
+    <tr>
+        <td>{{ orden.id }}</td>
+        <td>
+            {% if orden.Lado == 1 %}
+                <span class="text-danger">Vender</span>
+            {% else %}
+                <span class="text-success">Comprar</span>
+            {% endif %}
+        </td>
+        <td class="text-right">{{ orden.DivisaBase|divisa_simbolo }} {{ orden.Cantidad }}</td>
+        <td>{{ orden.exchange }}</td>
+        <td class="text-right">{{ orden.DivisaPrecio|divisa_simbolo }} {{ orden.Precio }}</td>
+    </tr>
+{% endfor %}
+</table>
+
+</div></div>
+{% endblock body %}

@@ -1,10 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container-fluid"><div class="row">
-<h2>Oportuindades</h2>
+<div class="container"><div class="row">
+<h2>Oportunidades recientes</h2>
 <table class="table">
     <tr>
+        <th>#</th>
         <th>Fecha y hora</th>
         <th>Par</th>
         <th>Inicio</th>
@@ -14,12 +15,21 @@
     </tr>
 {% for opor in oportunidades %}
     <tr>
-        <td>{{ opor.Fecha|date('m/d/Y h:i:s') }}</td>
+        <td>{{ opor.id }}</td>
+        <td>{{ opor.Fecha|date('d/m/Y h:i:s') }}</td>
         <td>{{ opor.piernas[0].par }}</td>
         <td>{{ opor.piernas[0].exchange }}</td>
         <td class="text-right">{{ opor.DivisaBase|divisa_simbolo }} {{ opor.CantidadArbitrable|number_format(6) }}</td>
         <td class="text-right">{{ opor.DivisaPrecio|divisa_simbolo }} {{ opor.GananciaBruta|number_format(2) }} ({{ opor.GananciaBrutaPct|number_format(1) }}%)</td>
-        <td><a class="btn btn-link" href="#">Ver</a></td>
+        <td>
+            {% if opor.Activa %}
+                <i class="fa fa-check text-success"></i>
+            {% else %}
+                <i class="fa fa-times text-muted"></i>
+            {% endif %}
+            <a class="btn btn-link" href="{{ path('arbi_ver', { 'id': opor.id }) }}">Ver</a>
+            <a class="btn btn-link" href="#">Ejecutar</a>
+        </td>
     </tr>
 {% endfor %}
 </table>
