@@ -21,12 +21,17 @@ class Oportunidad
     private int $id;
 
     /**
+     * La cantidad o volumen disponible para arbitrar, expresado en DivisaBase.
+     * 
      * @ORM\Column(type="decimal", precision=16, scale=8)
      */
     private float $cantidad = 0;
 
     /**
+     * La lista de órdenes que componen esta oportunidad.
+     * 
      * @ORM\ManyToMany(targetEntity=Orden::class)
+     * @ORM\OrderBy({"id" = "ASC"})
      */
     private $piernas;
 
@@ -37,10 +42,60 @@ class Oportunidad
      */
     private \DateTimeInterface $fecha;
 
+    /**
+     * Indica si esta oportunidad todavía está vigente.
+     * 
+     * @ORM\Column(type="boolean")
+     */
+    private bool $activa = true;
+
     public function __construct()
     {
         $this->piernas = new ArrayCollection();
         $this->fecha = new \DateTime();
+    }
+
+    public static function areEqual(Oportunidad $op1, Oportunidad $op2) : bool
+    {
+        if ($op1->piernas === null || $op2->piernas === null) {
+            if ($op1->piernas === null && $op2->piernas === null) {
+                // Ambas están vacías. Son iguales.
+                return true;
+            } else {
+                // Una está vacía y la otra no. No son iguales.
+                return false;
+            }
+        }
+
+        if (count($op1->getPiernas()) === 0 && count($op1->getPiernas()) === count($op2->getPiernas())) {
+            return true;
+        }
+
+        if(count($op1->getPiernas()) == count($op2->getPiernas())) {
+            // Tienen igual cantidad de piernas. Buscar diferencias.
+            foreach($op1->getPiernas() as $pi1) {
+                $encontre = false;
+                foreach($op2->getPiernas() as $pi2) {
+                    if ($pi1->getId() == $pi2->getId()) {
+                        $encontre = true;
+                        break;
+                    }
+                }
+
+                if ($encontre === false) {
+                    return false;
+                }
+            }
+
+            // Si no se encuentran diferencias
+            return true;
+        } else {
+            // Tienen diferente cantidad de piernas. No son iuales.
+            return false;
+        }
+
+        // Si se comparó todo y no se encontró diferencias, son iguales.
+        return true;
     }
 
     public function __toString() : string
@@ -49,6 +104,7 @@ class Oportunidad
         $res .= "  Volumen inical       : " . $this->getCantidadInicial() . ' ' . $this->getDivisaBase() . ",\n";
         $res .= "  Volumen arbitrable   : " . $this->getCantidadArbitrable() . ' ' . $this->getDivisaBase() . ",\n";
         $res .= "  Volumen máximo       : " . $this->cantidad . ' ' . $this->getDivisaBase() . ",\n";
+        $res .= "  Piernas              : " . count($this->piernas) . ",\n";
         $res .= "  Precio inical        : " . $this->getPrecioInicial() . ' ' . $this->getDivisaBase() . ",\n";
         $res .= "  Precio arb. promedio : " . $this->getPrecioArbitrablePromedio() . ' ' . $this->getDivisaBase() . ",\n";
         foreach($this->piernas as $pierna) {
@@ -279,6 +335,24 @@ class Oportunidad
     public function setFecha(\DateTimeInterface $fecha) : self
     {
         $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * @ignore
+     */
+    public function getActiva() : bool
+    {
+        return $this->activa;
+    }
+
+    /**
+     * @ignore
+     */
+    public function setActiva(bool $activa) : self
+    {
+        $this->activa = $activa;
 
         return $this;
     }

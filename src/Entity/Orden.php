@@ -92,6 +92,19 @@ class Orden
      */
     private \DateTimeInterface $fecha;
 
+    public static function areEqual(Orden $or1, Orden $or2) : bool
+    {
+        return $or1->getPar() == $or2->getPar() &&
+            $or1->getCantidad() == $or2->getCantidad() &&
+            $or1->getPrecio() == $or2->getPrecio() &&
+            $or1->getLado() == $or2->getLado() &&
+            (
+                ($or1->getExchange() === null && $or1->getExchange() === $or2->getExchange())
+                ||
+                ($or2->getExchange() !== null && $or1->getExchange()->getId() === $or2->getExchange()->getId())
+            );
+    }
+
     public function __toString() : string
     {
         return 'Orden de ' . $this->getLadoNombre() . ' ' . number_format($this->getCantidad(), 4) . ' ' . $this->getDivisaBase() . ' a ' . $this->getDivisaPrecio() . ' ' . number_format($this->getPrecio(), 4);

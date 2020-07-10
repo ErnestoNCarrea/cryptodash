@@ -45,7 +45,7 @@ class Arbitrar extends Command
 
         $output->writeln('Buscando oportunidades de arbitraje');
 
-        $ordenes = $this->em->getRepository('App\Entity\Orden')->findAll(); //By(['activo' => 1]);
+        $ordenes = $this->em->getRepository('App\Entity\Orden')->findAll([], [ 'id' => 'ASC']);
         $this->detector->setLibro(new Libro($ordenes));
 
         if ($par) {
@@ -62,13 +62,9 @@ class Arbitrar extends Command
 
         
         if ($oportunidades) {
-            # Persistir oportunidades detectadas
-            /* foreach ($oportunidades as $oportunidad) {
-                $this->em->persist($oportunidad);
-            }
-            $this->em->flush(); */
+            $this->arbitrador->persistirOportunidades($oportunidades);
 
-            # Ejecutar arbitrajes
+            // Ejecutar arbitrajes
             $this->arbitrador->arbitrarOprtunidades($oportunidades);
 
             foreach($oportunidades as $opor) {
