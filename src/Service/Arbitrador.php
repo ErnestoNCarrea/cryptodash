@@ -53,9 +53,7 @@ class Arbitrador
 
         // Persistir todas las oportunidades
         foreach($oportunidadesExistentes as $opor) {
-            if (count($opor->getPiernas()) > 1) {
-                $this->em->persist($opor);
-            }
+            $this->em->persist($opor);
         }
 
         $this->em->flush();

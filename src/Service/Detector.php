@@ -97,7 +97,9 @@ class Detector
                     $this->restablecerVolumenDelLibro();
 
                     // Agregar esta oportunidad al resultado
-                    $oportunidades[] = $opor;
+                    if (count($opor->getPiernas()) > 1 && $opor->getGananciaBrutaPct() > 0.5) {
+                        $oportunidades[] = $opor;
+                    }
 
                     $this->logger->info('Oportunidad: {opor}', ['opor' => $opor]);
                 }
