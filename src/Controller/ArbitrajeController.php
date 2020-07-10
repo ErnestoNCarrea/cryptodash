@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Exchange;
+use App\Model\Libro;
 use App\Service\Detector;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,19 +26,16 @@ class ArbitrajeController extends AbstractController
     }
 
     /**
-     * @Route("/ver", name="arbi_ver")
+     * @Route("/inicio", name="arbi_inicio")
      */
-    public function ver()
+    public function inicio()
     {
-        $ordenes = $this->em->getRepository('App\Entity\Orden')->findBy(
-            ['activo' => 1]
-        );
+        $ordenes = $this->em->getRepository('App\Entity\Orden')->findAll();
 
-        $libro = new OrderCollection($ordenes);
+        $libro = new Libro($ordenes);
         $this->detector->setLibro($libro);
-        
         $oportunidades = $this->detector->detectarOportunidades();
 
-        //return $this->render('arbi/ver.html.twig', ['analizador' => $analizador]);
+        return $this->render('arbi/inicio.html.twig', ['oportunidades' => $oportunidades]);
     }
 }

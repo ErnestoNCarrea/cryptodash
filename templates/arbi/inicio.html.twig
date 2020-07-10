@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container-fluid"><div class="row">
+<h2>Oportuindades</h2>
+<table class="table">
+    <tr>
+        <th>Fecha y hora</th>
+        <th>Par</th>
+        <th>Inicio</th>
+        <th class="text-right">Volumen</th>
+        <th class="text-right">Ganancia</th>
+        <th></th>
+    </tr>
+{% for opor in oportunidades %}
+    <tr>
+        <td>{{ opor.Fecha|date('m/d/Y h:i:s') }}</td>
+        <td>{{ opor.piernas[0].par }}</td>
+        <td>{{ opor.piernas[0].exchange }}</td>
+        <td class="text-right">{{ opor.DivisaBase|divisa_simbolo }} {{ opor.CantidadArbitrable|number_format(6) }}</td>
+        <td class="text-right">{{ opor.DivisaPrecio|divisa_simbolo }} {{ opor.GananciaBruta|number_format(2) }} ({{ opor.GananciaBrutaPct|number_format(1) }}%)</td>
+        <td><a class="btn btn-link" href="#">Ver</a></td>
+    </tr>
+{% endfor %}
+</table>
+</div></div>
+{% endblock body %}
