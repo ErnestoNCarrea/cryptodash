@@ -45,6 +45,7 @@ class Arbitrador
             } else {
                 // Ya existe una oportunidad igual. Reactivar.
                 $oporExistente->setActiva(true);
+                $oporExistente->setContador($oporExistente->getContador() + 1);
                 $oporExistente->setFecha(new \Datetime());
             }
         }

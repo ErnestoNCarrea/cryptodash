@@ -50,6 +50,13 @@ class Oportunidad
      */
     private bool $activa = true;
 
+    /**
+     * Indica la cantidad de veces que se vio esta oportunidad
+     * 
+     * @ORM\Column(type="integer")
+     */
+    private int $contador = 0;
+
     public function __construct()
     {
         $this->piernas = new ArrayCollection();
@@ -389,6 +396,24 @@ class Oportunidad
     public function setActiva(bool $activa) : self
     {
         $this->activa = $activa;
+
+        return $this;
+    }
+
+    /**
+     * @ignore
+     */
+    public function getContador() : int
+    {
+        return $this->contador;
+    }
+
+    /**
+     * @ignore
+     */
+    public function setContador(int $contador) : self
+    {
+        $this->contador = $contador;
 
         return $this;
     }
