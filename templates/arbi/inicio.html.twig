@@ -11,6 +11,7 @@
         <th>Inicio</th>
         <th>Piernas</th>
         <th class="text-right">Volumen</th>
+        <th class="text-right">Precio<br />inicial</th>
         <th class="text-right">Ganancia</th>
         <th class="text-right">Cnt.</th>
         <th></th>
@@ -22,6 +23,7 @@
         <td>{{ opor.PiernaInicial.par }}</td>
         <td>{{ opor.PiernaInicial.exchange }}</td>
         <td>{{ opor.piernas|length }}</td>
+        <td class="text-right">{{ precio(opor.PrecioInicial, opor.DivisaPrecio) }}</td>
         <td class="text-right">{{ precio(opor.CantidadArbitrable, opor.DivisaBase) }}</td>
         <td class="text-right">{{ precio(opor.GananciaBruta, opor.DivisaPrecio) }} ({{ opor.GananciaBrutaPct|number_format(1) }}%)</td>
         <td class="text-right">{{ opor.Contador }}</td>
