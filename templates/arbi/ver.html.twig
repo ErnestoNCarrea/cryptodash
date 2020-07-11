@@ -19,11 +19,11 @@
     </tr>
     <tr>
         <td>Ganancia</td>
-        <td>{{ opor.DivisaPrecio|divisa_simbolo }} {{ opor.GananciaBruta }} ({{ opor.GananciaBrutaPct|number_format(2) }}%)</td>
+        <td>{{ precio(opor.GananciaBruta, opor.DivisaPrecio) }} ({{ opor.GananciaBrutaPct|number_format(2) }}%)</td>
     </tr>
     <tr>
         <td>Volumen</td>
-        <td>{{ opor.DivisaBase|divisa_simbolo }} {{ opor.CantidadArbitrable }}</td>
+        <td>{{ precio(opor.CantidadArbitrable, opor.DivisaBase) }}</td>
     </tr>
     <tr>
         <td>Divisa base</td>
@@ -44,16 +44,19 @@
 <h4>Órdenes</h4>
 <table class="table">
     <tr>
-        <th>#</th>
+        <th>Pos.</th>
         <th>Operación</th>
         <th class="text-right">Volumen</th>
         <th>Exchange</th>
         <th class="text-right">Precio</th>
-        <th></th>
+        <th class="text-right">Valor</th>
+        <th class="text-right">Acumulado</th>
+        <th class="text-right">Dif.</th>
     </tr>
+    {% set valorAcumulado = -1 %}
 {% for orden in opor.piernas %}
     <tr>
-        <td>{{ orden.id }}</td>
+        <td>{{ orden.posicion }}</td>
         <td>
             {% if orden.Lado == 1 %}
                 <span class="text-danger">Vender</span>
@@ -61,9 +64,20 @@
                 <span class="text-success">Comprar</span>
             {% endif %}
         </td>
-        <td class="text-right">{{ orden.DivisaBase|divisa_simbolo }} {{ orden.Cantidad }}</td>
+        <td class="text-right">{{ precio(orden.Cantidad, orden.DivisaBase) }}</td>
         <td>{{ orden.exchange }}</td>
-        <td class="text-right">{{ orden.DivisaPrecio|divisa_simbolo }} {{ orden.Precio }}</td>
+        <td class="text-right">{{ precio(orden.Precio, orden.DivisaPrecio) }}</td>
+        {% set valorPierna = orden.Precio * orden.Cantidad %}
+        <td class="text-right">{{ precio(valorPierna, orden.DivisaPrecio) }}</td>
+
+        {% if valorAcumulado == -1 %}
+            {% set valorAcumulado = 0 %}
+            <td class="text-right"> </td>
+        {% else %}
+            {% set valorAcumulado = valorAcumulado + valorPierna %}
+            <td class="text-right">{{ precio(valorAcumulado, orden.DivisaPrecio) }}</td>
+        {% endif %}
+        <td class="text-right">{{ (orden.Precio / opor.PrecioInicial * 100 - 100)|number_format(2) }}%</td>
     </tr>
 {% endfor %}
 </table>
