@@ -39,3 +39,26 @@
 </table>
 </div>
 {% endblock body %}
+
+
+{% block javascripts %}
+<script>
+    function cotiRecargar() {
+        url = '{{ path('arbi_inicio') }}';
+        destino = '#page-wrapper';
+        $.get(url, function (data, status, xhr) {
+            try {
+                $(destino).html(data);
+            } catch (err) {
+                $(destinoFinal).append('<div class="alert alert-dismissable alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert">×</button>Error al cargar fragmento AJAX: ' + err + '</div>');
+            }
+        }).fail(function (jqXHR) {
+            // Muestro un error
+            $(destino).html(jqXHR.responseText);
+        });
+        setTimeout(cotiRecargar, 60000);
+    }
+
+    setTimeout(cotiRecargar, 60000);
+</script>
+{% endblock javascripts %}
