@@ -79,11 +79,11 @@ class Detector
                 if ($otraPierna) {
                     // Crear una oportunidad
                     $opor = new Oportunidad();
-                    $opor->addPierna($mejorOferta);
+                    $opor->addPierna(Pierna::fromOrden($mejorOferta));
                     do {
                         // Existe una diferencia arbitrable bruta.
                         $this->logger->info('Otra pierna: {orden}', ['orden' => $otraPierna]);
-                        $opor->addPierna($otraPierna);
+                        $opor->addPierna(Pierna::fromOrden($otraPierna));
 
                         // Eliminar el volumen de los libros, para seguir buscando
                         // oportunidades y no volver a encontrar la misma
@@ -97,7 +97,7 @@ class Detector
                     $this->restablecerVolumenDelLibro();
 
                     // Agregar esta oportunidad al resultado
-                    if (count($opor->getPiernas()) > 1 && $opor->getGananciaBrutaPct() > 0.5) {
+                    if (count($opor->getPiernas()) > 1 && $opor->getGananciaBrutaPct() > 0.1) {
                         $oportunidades[] = $opor;
                     }
 
@@ -130,21 +130,21 @@ class Detector
 
         // Eliminar
         foreach($opor->getPiernas() as $pierna) {
-            if ($pierna->getCantidadRemanente() >= $cantidad) {
+            if ($pierna->getOrden()->getCantidadRemanente() >= $cantidad) {
                 // Consumir la orden totalmente (eliminarla del libro)
-                $this->libro->elminarOrdenPorId($pierna->getId());
-                $pierna->setCantidadRemanente(0);
+                $this->libro->elminarOrdenPorId($pierna->getOrden()->getId());
+                $pierna->getOrden()->setCantidadRemanente(0);
             } else {
                 // Consumir la orden parcialmente. Queda en el libro, pero
                 // se resta la cantidad que fue considerada en este arbitraje
                 // para que no se tome en cuenta en nuevas búsquedas.
 
                 // Calcular la cantidad remanente
-                $cantidadActual = $pierna->getCantidadRemanente();
+                $cantidadActual = $pierna->getOrden()->getCantidadRemanente();
                 $cantidadNueva = $cantidadActual - $cantidad;
 
                 //$orden = $this->libro->obtenerOrdenPorId($pierna->getId());
-                $pierna->setCantidadRemanente($cantidadNueva);
+                $pierna->getOrden()->setCantidadRemanente($cantidadNueva);
             }
         }
     }

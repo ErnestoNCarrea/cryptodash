@@ -4,38 +4,15 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Exchange;
-use App\Entity\Usuario;
+use App\Entity\Orden;
 
 /**
- * Representa una orden de mercado.
+ * Representa una pierna en una oportunidad de arbitraje.
  * 
- * @ORM\Entity(repositoryClass="App\Repository\OrdenRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\PiernaRepository")
  */
-class Orden
+class Pierna
 {
-    public const LADO_NINGUNO = 0;
-    public const LADO_COMPRA = 1;
-    public const LADO_VENTA = 2;
-    public const LADOS_NOMBRES = [
-        self::LADO_NINGUNO => 'Ninguno',
-        self::LADO_COMPRA => 'Compra',
-        self::LADO_VENTA => 'Venta',
-    ];
-
-    /**
-     * Indica si esta orden todavía existe, durante una actualización.
-     * 
-     * No se persiste.
-     */
-    private bool $activa = false;
-
-    /**
-     * Indica la cantidad remanente, durante un arbitraje.
-     * 
-     * No se persiste.
-     */
-    private ?float $cantidadRemanente = null;
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -79,54 +56,68 @@ class Orden
     private int $lado = 0;
 
     /**
-     * La fecha en la cual se registró la orden.
+     * El orden de esta pierna en la oportunidad.
      * 
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="integer")
      */
-    private \DateTimeInterface $fecha;
+    private int $posicion = 1;
 
-    public static function areEqual(Orden $or1, Orden $or2) : bool
+    /**
+     * La orden a la cual está relacionada esta pierna.
+     * 
+     * @ORM\ManyToOne(targetEntity=Orden::class)
+     * @ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
+     */
+    private $orden;
+
+    /**
+     * Crea una pierna a partir de una orden.
+     */
+    public static function fromOrden(Orden $orden) : Pierna
     {
-        return $or1->getPar() == $or2->getPar() &&
-            $or1->getCantidad() == $or2->getCantidad() &&
-            $or1->getPrecio() == $or2->getPrecio() &&
-            $or1->getLado() == $or2->getLado() &&
+        $res = new Pierna();
+
+        $res->setPar($orden->getPar());
+        $res->setCantidad($orden->getCantidad());
+        $res->setPrecio($orden->getPrecio());
+        $res->setLado($orden->getLado());
+        $res->setExchange($orden->getExchange());
+        $res->setOrden($orden);
+
+        return $res;
+    }
+
+
+    /**
+     * Compara dos piernas para saber si son iguales.
+     */
+    public static function areEqual(Pierna $pi1, Pierna $pi2) : bool
+    {
+        return $pi1->getPar() == $pi2->getPar() &&
+            $pi1->getCantidad() == $pi2->getCantidad() &&
+            $pi1->getPrecio() == $pi2->getPrecio() &&
+            $pi1->getLado() == $pi2->getLado() &&
+            $pi1->getPosicion() == $pi2->getPosicion() &&
             (
-                ($or1->getExchange() === null && $or1->getExchange() === $or2->getExchange())
+                ($pi1->getExchange() === null && $pi1->getExchange() === $pi2->getExchange())
                 ||
-                ($or2->getExchange() !== null && $or1->getExchange()->getId() === $or2->getExchange()->getId())
+                ($pi2->getExchange() !== null && $pi1->getExchange()->getId() === $pi2->getExchange()->getId())
+            ) && 
+            (
+                ($pi1->getOrden() === null && $pi1->getOrden() === $pi2->getOrden())
+                ||
+                ($pi2->getOrden() !== null && $pi1->getOrden()->getId() === $pi2->getOrden()->getId())
             );
     }
 
-    /**
-     * Devuelve el importe total de la orden (precio x cantidad).
-     */
-    public function getTotal() : float
-    {
-        return $this->cantidad * $this->precio;
-    }
-
-    /**
-     * Devuelve la cantidad remanente (o la cantidad total, si no se asignó ninguna cantidad remanente).
-     */
-    public function getCantidadRemanente() : float
-    {
-        if ($this->cantidadRemanente === null) {
-            return $this->cantidad;
-        } else {
-            return $this->cantidadRemanente;
-        }
-    }
-
-
     public function __toString() : string
     {
-        return 'Orden de ' . $this->getLadoNombre() . ' ' . number_format($this->getCantidad(), 4) . ' ' . $this->getDivisaBase() . ' a ' . $this->getDivisaPrecio() . ' ' . number_format($this->getPrecio(), 4);
+        return 'Pierna de ' . $this->getLadoNombre() . ' ' . number_format($this->getCantidad(), 4) . ' ' . $this->getDivisaBase() . ' a ' . $this->getDivisaPrecio() . ' ' . number_format($this->getPrecio(), 4);
     }
 
     public function getLadoNombre() : string
     {
-        return self::LADOS_NOMBRES[$this->lado];
+        return Orden::LADOS_NOMBRES[$this->lado];
     }
 
     public function getDivisaBase() : string
@@ -140,6 +131,15 @@ class Orden
         [ $divisaBase, $divisaPrecio ] = explode('/', $this->getPar());
         return $divisaPrecio;
     }
+
+    /**
+     * Devuelve el importe total de la pierna (precio x cantidad).
+     */
+    public function getTotal() : float
+    {
+        return $this->cantidad * $this->precio;
+    }
+
 
     public function __construct(?float $cantidad = 0 , ?float $precio = 0, ?string $par = null)
     {
@@ -287,9 +287,35 @@ class Orden
     /**
      * @ignore
      */
-    public function setCantidadRemanente(?float $cantidadRemanente) : self
+    public function getOrden(): ?Orden
     {
-        $this->cantidadRemanente = $cantidadRemanente;
+        return $this->orden;
+    }
+
+    /**
+     * @ignore
+     */
+    public function setOrden(?Orden $orden): self
+    {
+        $this->orden = $orden;
+
+        return $this;
+    }
+
+    /**
+     * @ignore
+     */
+    public function getPosicion() : int
+    {
+        return $this->posicion;
+    }
+
+    /**
+     * @ignore
+     */
+    public function setPosicion(int $posicion) : self
+    {
+        $this->posicion = $posicion;
 
         return $this;
     }

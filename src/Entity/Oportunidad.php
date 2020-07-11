@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Orden;
+use App\Entity\Pierna;
 use App\Repository\OportunidadRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -30,8 +31,8 @@ class Oportunidad
     /**
      * La lista de órdenes que componen esta oportunidad.
      * 
-     * @ORM\ManyToMany(targetEntity=Orden::class)
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\ManyToMany(targetEntity=Pierna::class, cascade={"persist", "remove"})
+     * @ORM\OrderBy({"posicion" = "ASC"})
      */
     private $piernas;
 
@@ -55,6 +56,9 @@ class Oportunidad
         $this->fecha = new \DateTime();
     }
 
+    /**
+     * Compara dos oportunidades para saber si son iguales.
+     */
     public static function areEqual(Oportunidad $op1, Oportunidad $op2) : bool
     {
         if ($op1->piernas === null || $op2->piernas === null) {
@@ -76,7 +80,7 @@ class Oportunidad
             foreach($op1->getPiernas() as $pi1) {
                 $encontre = false;
                 foreach($op2->getPiernas() as $pi2) {
-                    if ($pi1->getId() == $pi2->getId()) {
+                    if (Pierna::areEqual($pi1, $pi2)) {
                         $encontre = true;
                         break;
                     }
@@ -174,7 +178,7 @@ class Oportunidad
     /**
      * Devuelve la primera pierna de la oportunidad.
      */
-    public function getPiernaInicial() : Orden
+    public function getPiernaInicial() : Pierna
     {
         $arr = $this->getPiernasArray();
         return $arr[0];
@@ -262,7 +266,7 @@ class Oportunidad
         $res = 0;
 
         foreach($this->piernas as $pierna) {
-            $res += $pierna->getCantidadRemanente();
+            $res += $pierna->getOrden()->getCantidadRemanente();
         }
 
         return $res;
@@ -318,7 +322,7 @@ class Oportunidad
 
     /**
      * @ignore
-     * @return Collection|Orden[]
+     * @return Collection|Pierna[]
      */
     public function getPiernas(): Collection
     {
@@ -328,9 +332,10 @@ class Oportunidad
     /**
      * @ignore
      */
-    public function addPierna(Orden $pierna): self
+    public function addPierna(Pierna $pierna): self
     {
         if (!$this->piernas->contains($pierna)) {
+            $pierna->setPosicion(count($this->piernas) + 1);
             $this->piernas[] = $pierna;
         }
 
@@ -341,7 +346,7 @@ class Oportunidad
     /**
      * @ignore
      */
-    public function removePierna(Orden $pierna): self
+    public function removePierna(Pierna $pierna): self
     {
         if ($this->piernas->contains($pierna)) {
             $this->piernas->removeElement($pierna);
