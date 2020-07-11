@@ -2,6 +2,7 @@
 
 {% block body %}
 <div class="container">
+<a class="float-right" onclick="alert('La aplicación está funcionando en modo de demostración.');" href="javascript:void(0);"><i class="fa fa-play text-success"></i> Ejecutar</a>
 <h3>Oportunidad #{{ opor.id }}</h3>
 
 <table class="table">
@@ -73,11 +74,12 @@
         {% if valorAcumulado == -1 %}
             {% set valorAcumulado = 0 %}
             <td class="text-right"> </td>
+            <td class="text-right"> </td>
         {% else %}
             {% set valorAcumulado = valorAcumulado + valorPierna %}
             <td class="text-right">{{ precio(valorAcumulado, orden.DivisaPrecio) }}</td>
+            <td class="text-right">{{ (orden.Precio / opor.PrecioInicial * 100 - 100)|number_format(2) }}%</td>
         {% endif %}
-        <td class="text-right">{{ (orden.Precio / opor.PrecioInicial * 100 - 100)|number_format(2) }}%</td>
     </tr>
 {% endfor %}
 </table>
