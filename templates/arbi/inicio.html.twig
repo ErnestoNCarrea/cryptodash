@@ -12,6 +12,7 @@
         <th>Piernas</th>
         <th class="text-right">Volumen</th>
         <th class="text-right">Ganancia</th>
+        <th class="text-right">Cnt.</th>
         <th></th>
     </tr>
 {% for opor in oportunidades %}
@@ -23,6 +24,7 @@
         <td>{{ opor.piernas|length }}</td>
         <td class="text-right">{{ opor.DivisaBase|divisa_simbolo }} {{ opor.CantidadArbitrable|number_format(6) }}</td>
         <td class="text-right">{{ opor.DivisaPrecio|divisa_simbolo }} {{ opor.GananciaBruta|number_format(2) }} ({{ opor.GananciaBrutaPct|number_format(1) }}%)</td>
+        <td class="text-right">{{ opor.Contador }}</td>
         <td>
             {% if opor.Activa %}
                 <i class="fa fa-check text-success"></i>
