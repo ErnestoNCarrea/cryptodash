@@ -22,8 +22,8 @@
         <td>{{ opor.PiernaInicial.par }}</td>
         <td>{{ opor.PiernaInicial.exchange }}</td>
         <td>{{ opor.piernas|length }}</td>
-        <td class="text-right">{{ opor.DivisaBase|divisa_simbolo }} {{ opor.CantidadArbitrable|number_format(6) }}</td>
-        <td class="text-right">{{ opor.DivisaPrecio|divisa_simbolo }} {{ opor.GananciaBruta|number_format(2) }} ({{ opor.GananciaBrutaPct|number_format(1) }}%)</td>
+        <td class="text-right">{{ precio(opor.CantidadArbitrable, opor.DivisaBase) }}</td>
+        <td class="text-right">{{ precio(opor.GananciaBruta, opor.DivisaPrecio) }} ({{ opor.GananciaBrutaPct|number_format(1) }}%)</td>
         <td class="text-right">{{ opor.Contador }}</td>
         <td>
             {% if opor.Activa %}
