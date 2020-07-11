@@ -73,12 +73,17 @@ class Pierna
     /**
      * Crea una pierna a partir de una orden.
      */
-    public static function fromOrden(Orden $orden) : Pierna
+    public static function fromOrden(Orden $orden, ?float $cantidadMaxima = 0) : Pierna
     {
         $res = new Pierna();
 
         $res->setPar($orden->getPar());
-        $res->setCantidad($orden->getCantidad());
+
+        if ($cantidadMaxima > 0 && $orden->getCantidad() > $cantidadMaxima) {
+            $res->setCantidad($cantidadMaxima);
+        } else {
+            $res->setCantidad($orden->getCantidad());
+        }
         $res->setPrecio($orden->getPrecio());
         $res->setLado($orden->getLado());
         $res->setExchange($orden->getExchange());

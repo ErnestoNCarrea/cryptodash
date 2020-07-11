@@ -75,6 +75,7 @@ class Detector
             $mejorOferta = $this->libro->obtenerMejorOferta($lado, $par);
             $this->logger->info('Mejor oferta: {orden}', ['orden' => $mejorOferta]);
             if ($mejorOferta) {
+                $cantidad = $mejorOferta->getCantidad();
                 $otraPierna = $this->buscarOtraPierna($par, $mejorOferta);
                 if ($otraPierna) {
                     // Crear una oportunidad
@@ -83,7 +84,8 @@ class Detector
                     do {
                         // Existe una diferencia arbitrable bruta.
                         $this->logger->info('Otra pierna: {orden}', ['orden' => $otraPierna]);
-                        $opor->addPierna(Pierna::fromOrden($otraPierna));
+                        $opor->addPierna(Pierna::fromOrden($otraPierna, $cantidad));
+                        $cantidad = $cantidad - $otraPierna->getCantidad();
 
                         // Eliminar el volumen de los libros, para seguir buscando
                         // oportunidades y no volver a encontrar la misma
@@ -92,7 +94,7 @@ class Detector
                         // Seguir buscando más piernas
                     } while (
                             null !== ($otraPierna = $this->buscarOtraPierna($par, $mejorOferta))    // hasta que no queden oportunidades
-                            && $opor->getCantidadArbitrable() < $opor->getCantidadInicial()        // Ose agote el volumen arbitrable
+                            && $cantidad > 0                                                        // O se agote el volumen arbitrable
                         );
                     $this->restablecerVolumenDelLibro();
 
