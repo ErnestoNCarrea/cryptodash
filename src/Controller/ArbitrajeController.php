@@ -29,7 +29,7 @@ class ArbitrajeController extends AbstractController
      */
     public function inicio()
     {
-        $oportunidades = $this->em->getRepository(Oportunidad::class)->findAll([], [ 'activa' => 'DESC', 'fecha' => 'DESC'], 100);
+        $oportunidades = $this->em->getRepository(Oportunidad::class)->findBy([], [ 'activa' => 'DESC', 'fecha' => 'DESC'], 100);
         return $this->render('arbi/inicio.html.twig', ['oportunidades' => $oportunidades]);
     }
 
