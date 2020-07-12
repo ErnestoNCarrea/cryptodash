@@ -288,17 +288,6 @@ class Oportunidad
             $this->getCantidadInicial(),
             $this->getCantidadArbitrable()
         );
-
-        /** @var float */
-        $res = 0;
-
-        foreach($this->piernas as $pierna) {
-            if ($res == 0 || $pierna->getCantidad() < $res) {
-                $res = $pierna->getCantidad();
-            }
-        }
-
-        return $res;
     }
 
     /**
