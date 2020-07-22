@@ -1,12 +1,8 @@
 #!/bin/sh
 # Esto se debe ejecutar en un cron cada 1 minuto
-while :
-do
-    bin/console pull:ripio
-    bin/console pull:binance
-    bin/console pull:cryptomkt
-    bin/console pull:buenbit
-    bin/console pull:bitso
-    echo Esperando...
-    sleep 20
-done
+bin/console pull:ripio > /dev/null 2>&1
+bin/console pull:binance > /dev/null 2>&1
+bin/console pull:cryptomkt > /dev/null 2>&1
+bin/console pull:buenbit > /dev/null 2>&1
+bin/console pull:bitso > /dev/null 2>&1
+bin/console arbitrar
