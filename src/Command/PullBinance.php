@@ -33,9 +33,9 @@ class PullBinance extends PullCommandAbstract
 
         $exchange = $this->em->getRepository('App\Entity\Exchange')->find(1000);
         $cliente = new BinanceClient();
-        $pares = ['BTC/USD', 'ETH/USD', 'ETH/BTC', 'XLM/USD', 'EOS/USD'];
+        $pares = ['BTC/USDC', 'ETH/USDC', 'ETH/BTC', 'XLM/USDC', 'EOS/USDC'];
 
-        //$this->actualizarExchangePares($exchange, $cliente, $pares);
+        $this->actualizarExchangePares($exchange, $cliente, $pares);
 
         foreach ($pares as $par) {
             $cotizacion = $this->actualizarCotizacion($exchange, $par, $cliente->getPrecioActual($par));

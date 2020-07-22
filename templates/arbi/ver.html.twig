@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container">
+<h3>Oportunidad #{{ opor.id }}</h3>
+
+<table class="table">
+    <tr>
+        <td>Fecha</td>
+        <td>{{ opor.fecha|date('d/m/Y H:i:s') }} </td>
+    </tr>
+    <tr>
+        <td>Vigente</td>
+        <td>{% if opor.Activa %}
+            <i class="fa fa-check text-success"></i> Sí
+        {% else %}
+            <i class="fa fa-times text-muted"></i> No
+        {% endif %}</td>
+    </tr>
+    <tr>
+        <td>Ganancia</td>
+        <td>{{ precio(opor.GananciaBruta, opor.DivisaPrecio) }} ({{ opor.GananciaBrutaPct|number_format(2) }}%)</td>
+    </tr>
+    <tr>
+        <td>Volumen</td>
+        <td>{{ precio(opor.CantidadArbitrable, opor.DivisaBase) }}</td>
+    </tr>
+    <tr>
+        <td>Divisa base</td>
+        <td>{{ opor.DivisaBase }} <span class="text-muted small">(Las cantidades o volúmenes se expresan en esta divisa)</span></td>
+    </tr>
+    <tr>
+        <td>Divisa precio</td>
+        <td>{{ opor.DivisaPrecio }} <span class="text-muted small">(Los precios de compra y venta se expresan en esta divisa)</span></td>
+    </tr>
+    <tr>
+        <td>Operaciones</td>
+        <td>{{ opor.piernas|length }} <span class="text-muted small">(La cantidad de operaciones que hay que ejecutar para aprovechar esta oportunidad)</span></td>
+    </tr>
+
+</table>
+
+
+<a class="float-right" onclick="alert('La aplicación está funcionando en modo de demostración.');" href="javascript:void(0);"><i class="fa fa-play text-success"></i> Ejecutar</a>
+<h4>Órdenes</h4>
+<table class="table">
+    <tr>
+        <th>Pos.</th>
+        <th>Operación</th>
+        <th class="text-right">Volumen</th>
+        <th>Exchange</th>
+        <th class="text-right">Precio</th>
+        <th class="text-right">Valor</th>
+        <th class="text-right">Acumulado</th>
+        <th class="text-right">Dif.</th>
+    </tr>
+    {% set valorAcumulado = -1 %}
+{% for orden in opor.piernas %}
+    <tr>
+        <td>{{ orden.posicion }}</td>
+        <td>
+            {% if orden.Lado == 1 %}
+                <span class="text-danger">Vender</span>
+            {% else %}
+                <span class="text-success">Comprar</span>
+            {% endif %}
+        </td>
+        <td class="text-right">{{ precio(orden.Cantidad, orden.DivisaBase) }}</td>
+        <td>{{ orden.exchange }}</td>
+        <td class="text-right">{{ precio(orden.Precio, orden.DivisaPrecio) }}</td>
+        {% set valorPierna = orden.Precio * orden.Cantidad %}
+        <td class="text-right">{{ precio(valorPierna, orden.DivisaPrecio) }}</td>
+
+        {% if valorAcumulado == -1 %}
+            {% set valorAcumulado = 0 %}
+            <td class="text-right"> </td>
+            <td class="text-right"> </td>
+        {% else %}
+            {% set valorAcumulado = valorAcumulado + valorPierna %}
+            <td class="text-right">{{ precio(valorAcumulado, orden.DivisaPrecio) }}</td>
+            <td class="text-right">{{ (orden.Precio / opor.PrecioInicial * 100 - 100)|number_format(2) }}%</td>
+        {% endif %}
+    </tr>
+{% endfor %}
+</table>
+
+</div>
+{% endblock body %}

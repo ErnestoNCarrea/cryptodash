@@ -12,10 +12,10 @@ use GuzzleHttp\Client;
 class BinanceClient extends AbstractClient
 {
     /** @var array */
-    private $simbolosAdmitidos = ['USD', 'BTC', 'ETH', 'XRP', 'XLM', 'EOS'];
+    private $simbolosAdmitidos = ['USDC', 'BTC', 'ETH', 'XRP', 'XLM', 'EOS'];
 
     /** @var array */
-    private $paresAdmitidos = ['BTC/USD', 'ETH/USD', 'BTC/ETH', 'XRP/USD', 'XLM/USD', 'EOS/USD'];
+    private $paresAdmitidos = ['BTC/USDC', 'ETH/USDC', 'BTC/ETH', 'XRP/USDC', 'XLM/USDC', 'EOS/USDC'];
 
     /** @var Client */
     private $client;
@@ -43,28 +43,46 @@ class BinanceClient extends AbstractClient
 
     public function getLibro(string $par): ?Libro
     {
-        $res = $this->client->request('GET', 'api/v3/avgPrice', [
+        $res = $this->client->request('GET', 'api/v3/depth', [
             'query' => [
-                'symbol' => $this->formatearPar($this->convertirUsdAUsdt($par)),
+                'symbol' => $this->formatearPar($par),
+                'limit' => 50,
             ],
         ]);
 
-        $ordenc = new Orden(0, $precio, $par);
-        $ordenc->setLado(Orden::LADO_COMPRA);
-        $ordenesCompra = [ $ordenc ];
+        if ($res->getStatusCode() === 200) {
+            return $this->deserializarLibro($par, json_decode((string) $res->getBody()));
+        } else {
+            return null;
+        }
+    }
 
-        $ordenv = new Orden(0, $precio, $par);
-        $ordenv->setLado(Orden::LADO_VENTA);
-        $ordenesVenta = [ $ordenv ];
+    private function deserializarLibro(string $par, object $json): Libro
+    {
+        $ordenesCompra = $this->deserializarOrdenCollection($json->bids, $par, Orden::LADO_COMPRA);
+        $ordenesVenta = $this->deserializarOrdenCollection($json->asks, $par, Orden::LADO_VENTA);
 
         return new Libro(array_merge($ordenesCompra, $ordenesVenta), $par);
+    }
+
+    private function deserializarOrdenCollection(array $json_orders, string $par, int $lado): array
+    {
+        $res = [];
+
+        foreach ($json_orders as $json_order) {
+            $order = new Orden((float) $json_order[1], (float) $json_order[0], $par);
+            $order->setLado($lado);
+            $res[] = $order;
+        }
+
+        return $res;
     }
 
     public function getPrecioActual(string $par): Cotizacion
     {
         $res = $this->client->request('GET', 'api/v3/avgPrice', [
             'query' => [
-                'symbol' => $this->formatearPar($this->convertirUsdAUsdt($par)),
+                'symbol' => $this->formatearPar($par),
             ],
         ]);
 

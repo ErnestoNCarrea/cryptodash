@@ -1,5 +1,26 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<p>Bienvenido</p>
+<div class="container">
+
+<h3>Bienvenido</h3>
+
+<p>Esta aplicación se encuentra funcionando en modo de demostración.</p>
+<p>
+    Puede navegar los libros de órdenes de los criptoactivos cuyos precios se están siendo monitoreando en la sección de 
+    <a href="{{ path('dash_coti') }}">cotizaciones</a>.
+    Las oportuindades de arbitraje detectadas (vigentes o históricas) se pueden ver en la sección de
+    <a href="{{ path('arbi_inicio') }}">arbitraje</a>.
+</p>
+
+<hr>
+
+<h4>Universidad Siglo 21</h4>
+<h5>Licenciatura en Informática</h5>
+
+<p><strong>Arbitraje de Criptomonedas</strong>. Alumno: Ernesto Nicolás Carrea. Legajo VINF6439. Año 2020</p>
+<p>Puede consultar el código fuente de la aplicación en
+    <a href="https://gitlab.com/ErnestoNicolasCarrea/cryptodash" target="_blank">https://gitlab.com/ErnestoNicolasCarrea/cryptodash</a>.</p>
+
+</div>
 {% endblock %}

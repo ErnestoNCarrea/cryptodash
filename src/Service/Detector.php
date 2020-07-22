@@ -75,15 +75,17 @@ class Detector
             $mejorOferta = $this->libro->obtenerMejorOferta($lado, $par);
             $this->logger->info('Mejor oferta: {orden}', ['orden' => $mejorOferta]);
             if ($mejorOferta) {
+                $cantidad = $mejorOferta->getCantidad();
                 $otraPierna = $this->buscarOtraPierna($par, $mejorOferta);
                 if ($otraPierna) {
                     // Crear una oportunidad
                     $opor = new Oportunidad();
-                    $opor->addPierna($mejorOferta);
+                    $opor->addPierna(Pierna::fromOrden($mejorOferta));
                     do {
                         // Existe una diferencia arbitrable bruta.
                         $this->logger->info('Otra pierna: {orden}', ['orden' => $otraPierna]);
-                        $opor->addPierna($otraPierna);
+                        $opor->addPierna(Pierna::fromOrden($otraPierna, $cantidad));
+                        $cantidad = $cantidad - $otraPierna->getCantidad();
 
                         // Eliminar el volumen de los libros, para seguir buscando
                         // oportunidades y no volver a encontrar la misma
@@ -92,12 +94,14 @@ class Detector
                         // Seguir buscando más piernas
                     } while (
                             null !== ($otraPierna = $this->buscarOtraPierna($par, $mejorOferta))    // hasta que no queden oportunidades
-                            && $opor->getCantidadArbitrable() < $opor->getCantidadInicial()        // Ose agote el volumen arbitrable
+                            && $cantidad > 0                                                        // O se agote el volumen arbitrable
                         );
                     $this->restablecerVolumenDelLibro();
 
                     // Agregar esta oportunidad al resultado
-                    $oportunidades[] = $opor;
+                    if ($opor->getGananciaBrutaPct() > 0.5) {
+                        $oportunidades[] = $opor;
+                    }
 
                     $this->logger->info('Oportunidad: {opor}', ['opor' => $opor]);
                 }
@@ -128,21 +132,21 @@ class Detector
 
         // Eliminar
         foreach($opor->getPiernas() as $pierna) {
-            if ($pierna->getCantidadRemanente() >= $cantidad) {
+            if ($pierna->getOrden()->getCantidadRemanente() >= $cantidad) {
                 // Consumir la orden totalmente (eliminarla del libro)
-                $this->libro->elminarOrdenPorId($pierna->getId());
-                $pierna->setCantidadRemanente(0);
+                $this->libro->elminarOrdenPorId($pierna->getOrden()->getId());
+                $pierna->getOrden()->setCantidadRemanente(0);
             } else {
                 // Consumir la orden parcialmente. Queda en el libro, pero
                 // se resta la cantidad que fue considerada en este arbitraje
                 // para que no se tome en cuenta en nuevas búsquedas.
 
                 // Calcular la cantidad remanente
-                $cantidadActual = $pierna->getCantidadRemanente();
+                $cantidadActual = $pierna->getOrden()->getCantidadRemanente();
                 $cantidadNueva = $cantidadActual - $cantidad;
 
                 //$orden = $this->libro->obtenerOrdenPorId($pierna->getId());
-                $pierna->setCantidadRemanente($cantidadNueva);
+                $pierna->getOrden()->setCantidadRemanente($cantidadNueva);
             }
         }
     }

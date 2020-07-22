@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container-fluid">
+<h2>Oportunidades recientes</h2>
+<table class="table">
+    <tr>
+        <th>#</th>
+        <th>Fecha y hora</th>
+        <th>Par</th>
+        <th>Inicio</th>
+        <th>Piernas</th>
+        <th class="text-right">Volumen</th>
+        <th class="text-right">Precio<br />inicial</th>
+        <th class="text-right">Ganancia</th>
+        <th class="text-right">Cnt.</th>
+        <th></th>
+    </tr>
+{% for opor in oportunidades %}
+    <tr>
+        <td>{{ opor.id }} {% if opor.Activa %}
+                <i class="fa fa-check text-success"></i>
+            {% else %}
+                <i class="fa fa-times text-muted"></i>
+            {% endif %}</td>
+        <td>{{ opor.Fecha|date('d/m/Y H:i:s') }}</td>
+        <td>{{ opor.PiernaInicial.par }}</td>
+        <td>{{ opor.PiernaInicial.exchange }}</td>
+        <td>{{ opor.piernas|length }}</td>
+        <td class="text-right">{{ precio(opor.PrecioInicial, opor.DivisaPrecio) }}</td>
+        <td class="text-right">{{ precio(opor.CantidadArbitrable, opor.DivisaBase) }}</td>
+        <td class="text-right">{{ precio(opor.GananciaBruta, opor.DivisaPrecio) }} ({{ opor.GananciaBrutaPct|number_format(1) }}%)</td>
+        <td class="text-right">{{ opor.Contador }}</td>
+        <td>
+            <a href="{{ path('arbi_ver', { 'id': opor.id }) }}"><i class="fa fa-search-dollar text-info"></i> Detalles</a>
+        </td>
+    </tr>
+{% endfor %}
+</table>
+</div>
+{% endblock body %}
+
+
+{% block javascripts %}
+<script>
+    function cotiRecargar() {
+        url = '{{ path('arbi_inicio') }}';
+        destino = '#page-wrapper';
+        $.get(url, function (data, status, xhr) {
+            try {
+                $(destino).html(data);
+            } catch (err) {
+                $(destinoFinal).append('<div class="alert alert-dismissable alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert">×</button>Error al cargar fragmento AJAX: ' + err + '</div>');
+            }
+        }).fail(function (jqXHR) {
+            // Muestro un error
+            $(destino).html(jqXHR.responseText);
+        });
+        setTimeout(cotiRecargar, 60000);
+    }
+
+    setTimeout(cotiRecargar, 60000);
+</script>
+{% endblock javascripts %}

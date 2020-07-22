@@ -7,6 +7,8 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * Repositorio para la clase Pierna.
+ * 
  * @method Pierna|null find($id, $lockMode = null, $lockVersion = null)
  * @method Pierna|null findOneBy(array $criteria, array $orderBy = null)
  * @method Pierna[]    findAll()
@@ -18,33 +20,4 @@ class PiernaRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Pierna::class);
     }
-
-    // /**
-    //  * @return Pierna[] Returns an array of Pierna objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Pierna
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
