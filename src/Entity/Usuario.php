@@ -63,9 +63,21 @@ class Usuario implements UserInterface
      */
     private $ordenLibros;
 
+    /**
+     * @ORM\OneToMany(targetEntity=UsuarioExchange::class, mappedBy="usuario", orphanRemoval=true)
+     */
+    private $usuarioExchanges;
+
+    /**
+     * @ORM\OneToMany(targetEntity=UsuarioPar::class, mappedBy="usuario", orphanRemoval=true)
+     */
+    private $usuarioPares;
+
     public function __construct()
     {
         $this->ordenLibros = new ArrayCollection();
+        $this->usuarioExchanges = new ArrayCollection();
+        $this->usuarioPares = new ArrayCollection();
     }
 
     public function hasRole(string $role): bool
@@ -252,6 +264,68 @@ class Usuario implements UserInterface
     public function setPasswordRequestToken(?string $passwordRequestToken) : self
     {
         $this->passwordRequestToken = $passwordRequestToken;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UsuarioExchange[]
+     */
+    public function getUsuarioExchanges(): Collection
+    {
+        return $this->usuarioExchanges;
+    }
+
+    public function addUsuarioExchange(UsuarioExchange $usuarioExchange): self
+    {
+        if (!$this->usuarioExchanges->contains($usuarioExchange)) {
+            $this->usuarioExchanges[] = $usuarioExchange;
+            $usuarioExchange->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsuarioExchange(UsuarioExchange $usuarioExchange): self
+    {
+        if ($this->usuarioExchanges->contains($usuarioExchange)) {
+            $this->usuarioExchanges->removeElement($usuarioExchange);
+            // set the owning side to null (unless already changed)
+            if ($usuarioExchange->getUsuario() === $this) {
+                $usuarioExchange->setUsuario(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UsuarioPar[]
+     */
+    public function getUsuarioPares(): Collection
+    {
+        return $this->usuarioPares;
+    }
+
+    public function addUsuarioPare(UsuarioPar $usuarioPare): self
+    {
+        if (!$this->usuarioPares->contains($usuarioPare)) {
+            $this->usuarioPares[] = $usuarioPare;
+            $usuarioPare->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsuarioPare(UsuarioPar $usuarioPare): self
+    {
+        if ($this->usuarioPares->contains($usuarioPare)) {
+            $this->usuarioPares->removeElement($usuarioPare);
+            // set the owning side to null (unless already changed)
+            if ($usuarioPare->getUsuario() === $this) {
+                $usuarioPare->setUsuario(null);
+            }
+        }
 
         return $this;
     }

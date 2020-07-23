@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Asociar Par{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Asociar Par</h1>
+
+    {{ include('usuario_par/_form.html.twig') }}
+
+    <a class="btn btn-secondary" href="{{ path('usuario_par_index') }}">Volver</a>
+</div>
+{% endblock %}

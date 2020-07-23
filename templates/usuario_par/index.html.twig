@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pares{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Pares</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Divisa 1</th>
+                <th>Divisa 2</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for usuario_par in usuario_pars %}
+            <tr>
+                <td>{{ usuario_par.par }}</td>
+                <td>{{ usuario_par.divisa1 }}</td>
+                <td>{{ usuario_par.divisa2 }}</td>
+                <td>
+                    <a href="{{ path('usuario_par_edit', {'id': usuario_par.id}) }}">Editar</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">
+                    No hay pares asociados. Utilice el botón azul para asociar uno ahora.
+                    <p class="text-warning">
+                        Nota: la aplicación está funcionando en modo de demostración. No es necesario asociar un par.
+                    </p>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('usuario_par_new') }}">Asociar par</a>
+</div>
+{% endblock %}

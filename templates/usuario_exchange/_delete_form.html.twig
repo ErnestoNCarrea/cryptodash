@@ -1,0 +1,5 @@
+<form method="post" action="{{ path('usuario_exchange_delete', {'id': usuario_exchange.id}) }}" onsubmit="return confirm('̣¿Está seguro de que desea desasociar este Exchange?');">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ usuario_exchange.id) }}">
+    <button class="btn btn-danger">Desasociar</button>
+</form>

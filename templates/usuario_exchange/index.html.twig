@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Exchanges{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Cuentas en exchanges</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Exchange</th>
+                <th>Cuenta</th>
+                <th>Clave</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for usuario_exchange in usuario_exchanges %}
+            <tr>
+                <td>{{ usuario_exchange.exchange }}</td>
+                <td>{{ usuario_exchange.cuenta }}</td>
+                <td>{{ usuario_exchange.clave }}</td>
+                <td>
+                    <a href="{{ path('usuario_exchange_edit', {'id': usuario_exchange.id}) }}">Editar</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">
+                    No hay exchanges asociados. Utilice el botón azul para asociar uno ahora.
+                    <p class="text-warning">
+                        Nota: la aplicación está funcionando en modo de demostración. No es necesario asociar un exchange.
+                    </p>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('usuario_exchange_new') }}">Asociar exchange</a>
+</div>
+{% endblock %}

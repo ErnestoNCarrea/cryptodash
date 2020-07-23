@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editar asociación con Par{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Editar asociación con Par</h1>
+
+    {{ include('usuario_par/_form.html.twig', {'button_label': 'Guardar'}) }}
+
+    <a class="btn btn-secondary" href="{{ path('usuario_par_index') }}">Volver</a>
+
+    {{ include('usuario_par/_delete_form.html.twig') }}
+</div>
+{% endblock %}

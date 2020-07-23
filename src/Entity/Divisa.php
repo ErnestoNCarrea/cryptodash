@@ -26,6 +26,11 @@ class Divisa
      */
     private $nombre;
 
+    public function __toString() : string
+    {
+        return $this->nombre;
+    }
+
     /**
      * @ignore
      */

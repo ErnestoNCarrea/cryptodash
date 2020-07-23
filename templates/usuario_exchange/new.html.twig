@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Asociar Exchange{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Asociar Exchange</h1>
+
+    {{ include('usuario_exchange/_form.html.twig') }}
+
+    <a class="btn btn-default" href="{{ path('usuario_exchange_index') }}">Volver</a>
+</div>
+{% endblock %}

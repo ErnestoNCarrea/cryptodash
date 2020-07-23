@@ -1,0 +1,5 @@
+<form method="post" action="{{ path('usuario_par_delete', {'id': usuario_par.id}) }}" onsubmit="return confirm('¿Está seguro de que desea desasociar este par?');">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ usuario_par.id) }}">
+    <button class="btn btn-danger">Desasociar</button>
+</form>
