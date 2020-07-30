@@ -3,7 +3,6 @@
 {% block body %}
 <div class="container-fluid"><div class="row">
 {% for exchange in exchanges %}
-    {% set precioDolar = dolar.getPrecioActual %}
     {% set cotizaciones = exchange.obtenerMejorPrecioParaTodasDivisas %}
     {% if cotizaciones %}
         <div class="col">
@@ -21,16 +20,13 @@
                     {% endif %}
 
                     {% if 'ARS' in cotizacion.par %}
-                        {% set inversePar = cotizacion.par|replace({'ARS': 'USD'}) %}
+                        {% set inversePar = cotizacion.par|replace({'ARS': 'USDC'}) %}
                         {% set referenceCotizacion = reference.getCotizacionPar(inversePar) %}
                         {% if referenceCotizacion %}
                             {% set precioVenta = referenceCotizacion.getPrecioVenta %}
                             <br />
                             <span class="small text-muted">DI {{ (cotizacion.precioVenta / precioVenta)|number_format(2) }}</span>
                         {% endif %}
-
-                    {% elseif 'USD' in cotizacion.par %}
-                        
                     {% endif %}
                 </td>
                 <td class="text-right">
@@ -41,18 +37,14 @@
                     {% endif %}
 
                     {% if 'ARS' in cotizacion.par %}
-                        {% set inversePar = cotizacion.par|replace({'ARS': 'USD'}) %}
+                        {% set inversePar = cotizacion.par|replace({'ARS': 'USDC'}) %}
                         {% set referenceCotizacion = reference.getCotizacionPar(inversePar) %}
                         {% if referenceCotizacion %}
                             {% set precioCompra = referenceCotizacion.getPrecioCompra %}
                             <br />
                             <span class="small text-muted">DI {{ (cotizacion.precioCompra / precioCompra)|number_format(2) }}</span>
                         {% endif %}
-
-                    {% elseif 'USD' in cotizacion.par %}
-                        
                     {% endif %}
-                    
                 </td>
             </tr>
         {% endfor %}
