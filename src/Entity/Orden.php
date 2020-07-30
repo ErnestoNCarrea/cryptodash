@@ -9,7 +9,7 @@ use App\Entity\Usuario;
 /**
  * Representa una orden de mercado.
  * 
- * @ORM\Entity(repositoryClass="App\Repository\OrdenRepository")
+ * @ORM\Entity()
  */
 class Orden
 {

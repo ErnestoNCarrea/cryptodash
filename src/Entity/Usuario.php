@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use App\Entity\Orden;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\UsuarioRepository")
+ * @ORM\Entity()
  */
 class Usuario implements UserInterface
 {

@@ -9,7 +9,7 @@ use App\Entity\Orden;
 /**
  * Representa una pierna en una oportunidad de arbitraje.
  * 
- * @ORM\Entity(repositoryClass="App\Repository\PiernaRepository")
+ * @ORM\Entity()
  */
 class Pierna
 {

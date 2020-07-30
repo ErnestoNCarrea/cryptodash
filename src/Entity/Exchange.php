@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ExchangeRepository")
+ * @ORM\Entity()
  */
 class Exchange
 {
