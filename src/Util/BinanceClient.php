@@ -15,7 +15,7 @@ class BinanceClient extends AbstractClient
     private $simbolosAdmitidos = ['USDC', 'BTC', 'ETH', 'XRP', 'XLM', 'EOS'];
 
     /** @var array */
-    private $paresAdmitidos = ['BTC/USDC', 'ETH/USDC', 'BTC/ETH', 'XRP/USDC', 'XLM/USDC', 'EOS/USDC'];
+    private $paresAdmitidos = ['BTC/USDC', 'ETH/USDC', 'ETH/BTC', 'XRP/USDC', 'XLM/USDC', 'EOS/USDC'];
 
     /** @var Client */
     private $client;
