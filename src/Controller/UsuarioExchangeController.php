@@ -4,21 +4,24 @@ namespace App\Controller;
 
 use App\Entity\UsuarioExchange;
 use App\Form\UsuarioExchangeType;
-use App\Repository\UsuarioExchangeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @Route("/usuario/exchange")
  */
 class UsuarioExchangeController extends AbstractController
 {
+    private EntityManagerInterface $em;
+
     private TokenStorageInterface $tokenStorage;
 
-    public function __construct(TokenStorageInterface $tokenStorage) {
+    public function __construct(EntityManagerInterface $em, TokenStorageInterface $tokenStorage) {
+        $this->em = $em;
         $this->tokenStorage = $tokenStorage;
     }
 
@@ -28,7 +31,7 @@ class UsuarioExchangeController extends AbstractController
     public function index(UsuarioExchangeRepository $usuarioExchangeRepository): Response
     {
         return $this->render('usuario_exchange/index.html.twig', [
-            'usuario_exchanges' => $usuarioExchangeRepository->findAll(),
+            'usuario_exchanges' => $this->em->getRepository(UsuarioExchange::class)->findAll(),
         ]);
     }
 

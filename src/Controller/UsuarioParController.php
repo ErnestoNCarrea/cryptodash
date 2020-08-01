@@ -4,29 +4,34 @@ namespace App\Controller;
 
 use App\Entity\UsuarioPar;
 use App\Form\UsuarioParType;
-use App\Repository\UsuarioParRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @Route("/usuario/par")
  */
 class UsuarioParController extends AbstractController
 {
-    public function __construct(TokenStorageInterface $tokenStorage) {
+    private EntityManagerInterface $em;
+
+    private TokenStorageInterface $tokenStorage;
+
+    public function __construct(EntityManagerInterface $em, TokenStorageInterface $tokenStorage) {
+        $this->em = $em;
         $this->tokenStorage = $tokenStorage;
     }
 
     /**
      * @Route("/", name="usuario_par_index", methods={"GET"})
      */
-    public function index(UsuarioParRepository $usuarioParRepository): Response
+    public function index(): Response
     {
         return $this->render('usuario_par/index.html.twig', [
-            'usuario_pars' => $usuarioParRepository->findAll(),
+            'usuario_pars' => $this->em->getRepository(UsuarioPar::class)->findAll(),
         ]);
     }
 
