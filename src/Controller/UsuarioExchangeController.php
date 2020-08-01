@@ -28,7 +28,7 @@ class UsuarioExchangeController extends AbstractController
     /**
      * @Route("/", name="usuario_exchange_index", methods={"GET"})
      */
-    public function index(UsuarioExchangeRepository $usuarioExchangeRepository): Response
+    public function index(): Response
     {
         return $this->render('usuario_exchange/index.html.twig', [
             'usuario_exchanges' => $this->em->getRepository(UsuarioExchange::class)->findAll(),
