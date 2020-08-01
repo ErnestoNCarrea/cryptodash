@@ -20,7 +20,7 @@
                     {% endif %}
 
                     {% if 'ARS' in cotizacion.par %}
-                        {% if 'XML' in cotizacion.par %}
+                        {% if 'XLM' in cotizacion.par %}
                             {% set inversePar = cotizacion.par|replace({'ARS': 'USDT'}) %}
                         {% else %}
                             {% set inversePar = cotizacion.par|replace({'ARS': 'USDC'}) %}
@@ -41,7 +41,7 @@
                     {% endif %}
 
                     {% if 'ARS' in cotizacion.par %}
-                        {% if 'XML' in cotizacion.par %}
+                        {% if 'XLM' in cotizacion.par %}
                             {% set inversePar = cotizacion.par|replace({'ARS': 'USDT'}) %}
                         {% else %}
                             {% set inversePar = cotizacion.par|replace({'ARS': 'USDC'}) %}
