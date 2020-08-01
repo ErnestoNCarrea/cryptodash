@@ -33,7 +33,7 @@ class PullBinance extends PullCommandAbstract
 
         $exchange = $this->em->getRepository('App\Entity\Exchange')->find(1000);
         $cliente = new BinanceClient();
-        $pares = ['BTC/USDC', 'ETH/USDC', 'ETH/BTC', 'XLM/USDT', 'EOS/USDC', 'USDC/USDT'];
+        $pares = ['BTC/USDC', 'ETH/USDC', 'ETH/BTC', 'XLM/USDT', 'EOS/USDC', 'USDC/USDT', 'XLM/BTC', 'EOS/BTC'];
 
         $this->actualizarExchangePares($exchange, $cliente, $pares);
 
