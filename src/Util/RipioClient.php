@@ -15,7 +15,7 @@ class RipioClient extends AbstractClient
     private $simbolosAdmitidos = ['ARS', 'BTC', 'ETH', 'USDC'];
 
     /** @var array */
-    private $paresAdmitidos = ['BTC/ARS', 'ETH/ARS', 'USDC/ARS', 'BTC/USDC', 'ETH/USDC', 'ETH/BTC'];
+    private $paresAdmitidos = ['BTC/ARS', 'ETH/ARS', 'USDC/ARS', 'BTC/USDC', 'ETH/USDC', 'ETH/BTC', 'DAI/ARS'];
 
     /** @var Client */
     private $client;
