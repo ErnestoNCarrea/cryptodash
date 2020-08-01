@@ -20,7 +20,11 @@
                     {% endif %}
 
                     {% if 'ARS' in cotizacion.par %}
-                        {% set inversePar = cotizacion.par|replace({'ARS': 'USDC'}) %}
+                        {% if 'XML' in cotizacion.par %}
+                            {% set inversePar = cotizacion.par|replace({'ARS': 'USDT'}) %}
+                        {% else %}
+                            {% set inversePar = cotizacion.par|replace({'ARS': 'USDC'}) %}
+                        {% endif %}
                         {% set referenceCotizacion = reference.getCotizacionPar(inversePar) %}
                         {% if referenceCotizacion %}
                             {% set precioVenta = referenceCotizacion.getPrecioVenta %}
@@ -37,7 +41,11 @@
                     {% endif %}
 
                     {% if 'ARS' in cotizacion.par %}
-                        {% set inversePar = cotizacion.par|replace({'ARS': 'USDC'}) %}
+                        {% if 'XML' in cotizacion.par %}
+                            {% set inversePar = cotizacion.par|replace({'ARS': 'USDT'}) %}
+                        {% else %}
+                            {% set inversePar = cotizacion.par|replace({'ARS': 'USDC'}) %}
+                        {% endif %}
                         {% set referenceCotizacion = reference.getCotizacionPar(inversePar) %}
                         {% if referenceCotizacion %}
                             {% set precioCompra = referenceCotizacion.getPrecioCompra %}
