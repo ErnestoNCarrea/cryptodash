@@ -52,7 +52,7 @@
         <th class="text-right">Precio</th>
         <th class="text-right">Valor</th>
         <th class="text-right">Acumulado</th>
-        <th class="text-right">Dif.</th>
+        <th class="text-right">Diferencia</th>
     </tr>
     {% set valorAcumulado = -1 %}
 {% for orden in opor.piernas %}
@@ -78,7 +78,10 @@
         {% else %}
             {% set valorAcumulado = valorAcumulado + valorPierna %}
             <td class="text-right">{{ precio(valorAcumulado, orden.DivisaPrecio) }}</td>
-            <td class="text-right">{{ (orden.Precio / opor.PrecioInicial * 100 - 100)|number_format(2) }}%</td>
+            <td class="text-right">
+                {{ orden.DivisaPrecio }} {{ ((orden.Precio - opor.PrecioInicial) * orden.Cantidad)|number_format(2) }}
+                ({{ (orden.Precio / opor.PrecioInicial * 100 - 100)|number_format(2) }}%)
+                </td>
         {% endif %}
     </tr>
 {% endfor %}

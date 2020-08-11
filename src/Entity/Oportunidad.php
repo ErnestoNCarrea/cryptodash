@@ -149,7 +149,20 @@ class Oportunidad
      */
     public function getGananciaBruta() : float
     {
-        return abs($this->getPrecioInicial() - $this->getPrecioArbitrablePromedio()) * $this->cantidad;
+        $dinero = 0;
+        foreach($this->piernas as $pierna) {
+            $cant = $pierna->getCantidad();
+            if ($cant > $this->getCantidadArbitrable()) {
+                $cant = $this->getCantidadArbitrable();
+            }
+            if($pierna->getLado() == Orden::LADO_COMPRA) {
+                $dinero -= $pierna->getPrecio() * $cant;
+            } elseif($pierna->getLado() == Orden::LADO_VENTA) {
+                $dinero += $pierna->getPrecio() * $cant;
+            }
+        }
+
+        return abs($dinero);
     }
 
     /**
