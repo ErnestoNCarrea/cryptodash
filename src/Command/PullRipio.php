@@ -33,7 +33,7 @@ class PullRipio extends PullCommandAbstract
 
         $exchange = $this->em->getRepository('App\Entity\Exchange')->find(9000);
         $cliente = new RipioClient(getenv('API_KEY_BITSO'));
-        $pares = ['BTC/ARS', 'ETH/ARS', 'USDC/ARS', 'BTC/USDC', 'ETH/USDC', 'DAI/ARS'];
+        $pares = ['BTC/ARS', 'ETH/ARS', 'USDC/ARS', 'BTC/USDC', 'ETH/USDC', 'DAI/ARS', 'ETH/BTC'];
 
         $this->actualizarExchangePares($exchange, $cliente, $pares);
 
