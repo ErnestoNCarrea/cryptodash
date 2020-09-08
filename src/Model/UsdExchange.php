@@ -4,13 +4,13 @@ namespace App\Model;
 
 use App\Model\ExchangeInterface;
 
-class DolarIolExchange extends AbstractExchange
+class UsdExchange extends AbstractExchange
 {
     public function __construct()
     {
-        $this->nombre = 'Dólar IOL';
-        $this->makerFee = 0;
-        $this->takerFee = 0;
+        $this->nombre = 'Exchange virtual USD';
+        $this->makerFee = 0.01;
+        $this->takerFee = 0.01;
 
         $this->depositFees = null;
         $this->withdrawalFees = null;

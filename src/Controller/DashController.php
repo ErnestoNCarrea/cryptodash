@@ -6,7 +6,7 @@ use App\Entity\Exchange;
 use App\Util\AnalizadorRipio;
 use App\Util\AnalizadorArbitrajes;
 use App\Util\AnalizadorCotizaciones;
-use App\Util\DolarIolClient;
+use App\Util\UsdClient;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,7 +32,7 @@ class DashController extends AbstractController
     {
         $exchanges = $this->em->getRepository('App\Entity\Exchange')->findAll();
 
-        $clientDolar = new DolarIolClient();
+        $clientDolar = new UsdClient();
 
         $analizador = new AnalizadorCotizaciones($exchanges);
         $reference = $exchanges[0];
