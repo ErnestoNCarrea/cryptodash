@@ -34,10 +34,10 @@ abstract class PullCommandAbstract extends Command
             $this->output->writeln('  Ordenes total: ' . $libroActualizado->count());
             $this->output->writeln('  Ordenes eliminadas: ' . count($ordenesEliminadas));
 
-            $cotizacion = $this->actualizarCotizacion($exchange, $par, $cliente->getPrecioActual($par));
+            /* $cotizacion = $this->actualizarCotizacion($exchange, $par, $cliente->getPrecioActual($par));
             if ($cotizacion) {
                 $this->em->persist($cotizacion);
-            }
+            } */
         }
 
         $this->em->persist($exchange);
