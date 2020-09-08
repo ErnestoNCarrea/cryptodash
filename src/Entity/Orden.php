@@ -67,7 +67,7 @@ class Orden
     /**
      * La cantidad, expresada en divisa_base.
      * 
-     * @ORM\Column(type="decimal", precision=16, scale=8)
+     * @ORM\Column(type="decimal", precision=20, scale=8)
      */
     private float $cantidad = 0;
 
@@ -76,7 +76,7 @@ class Orden
      * 
      * @ORM\Column(type="smallint")
      */
-    private int $lado = 0;
+    private int $lado = self::LADO_NINGUNO;
 
     /**
      * La fecha en la cual se registró la orden.
@@ -118,6 +118,15 @@ class Orden
         }
     }
 
+    public function __construct(?float $cantidad = 0 , ?float $precio = 0, ?string $par = null, ?int $lado = self::LADO_NINGUNO)
+    {
+        $this->cantidad = $cantidad;
+        $this->precio = $precio;
+        if ($par != null) {
+            $this->par = $par;
+        }
+        $this->lado = $lado;
+    }
 
     public function __toString() : string
     {
@@ -139,15 +148,6 @@ class Orden
     {
         [ $divisaBase, $divisaPrecio ] = explode('/', $this->getPar());
         return $divisaPrecio;
-    }
-
-    public function __construct(?float $cantidad = 0 , ?float $precio = 0, ?string $par = null)
-    {
-        $this->cantidad = $cantidad;
-        $this->precio = $precio;
-        if ($par != null) {
-            $this->par = $par;
-        }
     }
 
     /**
