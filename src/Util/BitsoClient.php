@@ -12,10 +12,10 @@ use GuzzleHttp\Client;
 class BitsoClient extends AbstractClient
 {
     /** @var array */
-    private $simbolosAdmitidos = ['ARS', 'BTC', 'ETH', 'XRP'];
+    private $simbolosAdmitidos = ['ARS', 'BTC', 'ETH', 'XRP', 'USD', 'DAI'];
 
     /** @var array */
-    private $paresAdmitidos = ['BTC/ARS', 'ETH/BTC', 'XRP/BTC'];
+    private $paresAdmitidos = ['BTC/ARS', 'ETH/BTC', 'XRP/BTC', 'BTC/USD', 'ETH/USD', 'XRP/USD', 'BTC/DAI'];
 
     /** @var Client */
     private $client;
