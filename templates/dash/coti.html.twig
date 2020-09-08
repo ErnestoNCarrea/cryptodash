@@ -5,7 +5,7 @@
 {% for exchange in exchanges %}
     {% set cotizaciones = exchange.obtenerMejorPrecioParaTodasDivisas %}
     {% if cotizaciones %}
-        <div class="col">
+        <div class="col col-md-3 col-xs-12">
         <h2>{{ exchange }}</h2>
 
         <table class="table">
