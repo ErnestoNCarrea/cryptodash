@@ -36,6 +36,34 @@ class AnalizadorCotizaciones
         return $cotizaciones;
     }
 
+    /**
+     * Devuelve la diferencia de precio con Binance para un par /USD.
+     */
+    public function obtenerDiferenciaConReferencia(Cotizacion $coti, int $lado) : float
+    {
+        $exchRef = $this->obtenerExchangeReferenciaUsd();
+        $cotisRef = $exchRef->obtenerCotizacionesParaSimbolo($coti->getDivisaBase());
+        foreach($cotisRef as $cotiRef) {
+            if ($cotiRef->getDivisaPrecio() == 'USD' 
+                || $cotiRef->getDivisaPrecio() == 'USDC'
+                || $cotiRef->getDivisaPrecio() == 'USDT'
+                || $cotiRef->getDivisaPrecio() == 'TUSD')
+            {
+                if ($lado == 1) {
+                    $di = 1 - $coti->getPrecioCompra() / $cotiRef->getPrecioCompra();
+                } else {
+                    $di = 1 - $coti->getPrecioVenta() / $cotiRef->getPrecioVenta();
+                }
+                return $di;
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * Devuelve el dólar implícito para un par /ARS, con base en la cotización de Binance.
+     */
     public function obtenerDolarImplicito(Cotizacion $coti, int $lado) : float
     {
         $parInverso = $this->intercambiarArsUsd($coti->getPar());
@@ -47,8 +75,6 @@ class AnalizadorCotizaciones
                 || $cotiRef->getDivisaPrecio() == 'USDT'
                 || $cotiRef->getDivisaPrecio() == 'TUSD')
             {
-                dump($coti);
-                dump($cotiRef);
                 if ($lado == 1) {
                     $di = $coti->getPrecioCompra() / $cotiRef->getPrecioCompra();
                 } else {

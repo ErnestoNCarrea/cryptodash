@@ -25,6 +25,12 @@
                             <br />
                             <span class="small text-muted">DI {{ (di)|number_format(2) }}</span>
                         {% endif %}
+                    {% elseif analizador.parEsEnUsd(cotizacion.par) %}
+                        {% set dif = analizador.obtenerDiferenciaConReferencia(cotizacion, 2) %}
+                        {% if dif > 0 %}
+                            <br />
+                            <span class="small text-muted">Dif {{ (dif * 100)|number_format(2) }}%</span>
+                        {% endif %}
                     {% endif %}
                 </td>
                 <td class="text-right">
@@ -39,6 +45,12 @@
                         {% if di > 0 %}
                             <br />
                             <span class="small text-muted">DI {{ (di)|number_format(2) }}</span>
+                        {% endif %}
+                    {% elseif analizador.parEsEnUsd(cotizacion.par) %}
+                        {% set dif = analizador.obtenerDiferenciaConReferencia(cotizacion, 1) %}
+                        {% if dif > 0 %}
+                            <br />
+                            <span class="small text-muted">Dif {{ (dif * 100)|number_format(2) }}%</span>
                         {% endif %}
                     {% endif %}
                 </td>
