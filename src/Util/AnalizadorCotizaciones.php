@@ -46,11 +46,11 @@ class AnalizadorCotizaciones
         foreach($cotisRef as $cotiRef) {
             if ($cotiRef->getDivisaPrecio() == $coti->getDivisaPrecio()) {
                 if ($lado == 1) {
-                    $di = 1 - $coti->getPrecioCompra() / $cotiRef->getPrecioCompra();
+                    $di = $coti->getPrecioCompra() / $cotiRef->getPrecioCompra() - 1;
                 } else {
-                    $di = 1 - $coti->getPrecioVenta() / $cotiRef->getPrecioVenta();
+                    $di = $coti->getPrecioVenta() / $cotiRef->getPrecioVenta() - 1;
                 }
-                return $di;
+                return abs($di) > 0.001 ? $di : 0;
             }
         }
 
@@ -62,11 +62,11 @@ class AnalizadorCotizaciones
                 || $cotiRef->getDivisaPrecio() == 'TUSD')
             {
                 if ($lado == 1) {
-                    $di = 1 - $coti->getPrecioCompra() / $cotiRef->getPrecioCompra();
+                    $di = $coti->getPrecioCompra() / $cotiRef->getPrecioCompra() - 1;
                 } else {
-                    $di = 1 - $coti->getPrecioVenta() / $cotiRef->getPrecioVenta();
+                    $di = $coti->getPrecioVenta() / $cotiRef->getPrecioVenta() - 1;
                 }
-                return $di;
+                return abs($di) > 0.001 ? $di : 0;
             }
         }
 
@@ -92,7 +92,7 @@ class AnalizadorCotizaciones
                 } else {
                     $di = $coti->getPrecioVenta() / $cotiRef->getPrecioVenta();
                 }
-                return $di;
+                return $di > 1 ? $di : 0;
             }
         }
 
