@@ -76,6 +76,38 @@ class Exchange
     }
 
     /**
+     * Devuelve una cotización según mejores ordenes de compra y venta.
+     */
+    public function obtenerCotizacionDesdeLibro(string $par): Cotizacion
+    {
+        $libro = $this->obtenerLibroPorPar($par);
+        $coti = new Cotizacion();
+        $coti->setExchange($this);
+        $coti->setPar($par);
+        $coti->setPrecioVenta($libro->getMejorPrecioVenta() ?: 0);
+        $coti->setPrecioCompra($libro->getMejorPrecioCompra() ?: 0);
+
+        return $coti;
+    }
+
+    /**
+     * Devuelve la cotización de un par.
+     */
+    public function obtenerCotizacionPar(string $par) : ?Cotizacion
+    {
+        foreach ($this->getCotizaciones() as $coti) {
+            echo $par . ' ?= ' . $coti->getPar();
+            if ($par == $coti->getPar()) {
+                echo " si\n";
+                return $coti;
+            }
+            echo " no\n";
+        }
+
+        return null;
+    }
+
+    /**
      * Obtener cotizaciones de un símbolo contra el resto de los símbolos.
      */
     public function obtenerCotizacionesParaSimbolo(string $simbolo): array

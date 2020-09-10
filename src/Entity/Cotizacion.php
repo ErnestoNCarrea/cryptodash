@@ -43,12 +43,25 @@ class Cotizacion
     /**
      * @ORM\Column(type="datetime")
      */
-    private $fecha;
+    private \DateTimeInterface $fecha;
 
     public function __construct(?float $precioCompra = 0, ?float $precioVenta = 0)
     {
+        $this->fecha = new \DateTime();
         $this->precioCompra = $precioCompra;
         $this->precioVenta = $precioVenta;
+    }
+
+    public function getDivisaBase() : string
+    {
+        [ $divisaBase, $divisaPrecio ] = explode('/', $this->getPar());
+        return $divisaBase;
+    }
+
+    public function getDivisaPrecio() : string
+    {
+        [ $divisaBase, $divisaPrecio ] = explode('/', $this->getPar());
+        return $divisaPrecio;
     }
 
     public function spread() : float
@@ -83,6 +96,11 @@ class Cotizacion
         $this->par = $par;
 
         return $this;
+    }
+
+    public function getPrecioPromedio() : float
+    {
+        return ($this->precioCompra + $this->precioVenta) / 2;
     }
 
     public function getPrecioCompra() : float
