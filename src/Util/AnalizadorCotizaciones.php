@@ -44,6 +44,18 @@ class AnalizadorCotizaciones
         $exchRef = $this->obtenerExchangeReferenciaUsd();
         $cotisRef = $exchRef->obtenerCotizacionesParaSimbolo($coti->getDivisaBase());
         foreach($cotisRef as $cotiRef) {
+            if ($cotiRef->getDivisaPrecio() == $coti->getDivisaPrecio()) {
+                if ($lado == 1) {
+                    $di = 1 - $coti->getPrecioCompra() / $cotiRef->getPrecioCompra();
+                } else {
+                    $di = 1 - $coti->getPrecioVenta() / $cotiRef->getPrecioVenta();
+                }
+                return $di;
+            }
+        }
+
+        // Si no se encuentra la misma divisa, buscar USD alternativos
+        foreach($cotisRef as $cotiRef) {
             if ($cotiRef->getDivisaPrecio() == 'USD' 
                 || $cotiRef->getDivisaPrecio() == 'USDC'
                 || $cotiRef->getDivisaPrecio() == 'USDT'
