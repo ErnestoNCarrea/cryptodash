@@ -68,7 +68,7 @@
     function cotiRecargar() {
         url = '{{ path('dash_coti') }}';
         destino = '#page-wrapper';
-        $.get(url, function (data, status, xhr) {
+        jQuery.get(url, function (data, status, xhr) {
             try {
                 $(destino).html(data);
             } catch (err) {
