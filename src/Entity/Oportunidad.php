@@ -172,10 +172,20 @@ class Oportunidad
     {
         if ($this->getPrecioInicial() > 0) {
             // Evitar división por cero
-            return $this->getGananciaBruta() / $this->getPrecioInicial() * 100;
+            return $this->getGananciaBruta() / $this->getCantidadArbitrableEnDivisaPrecio() * 100;
         } else {
             return 0;
         }
+    }
+
+    /**
+     * Obtiene el volumen operable expresado en divisa precio
+     * (normalmente está expresado en divisa base).
+     * Usa precio inicial como base del cálculo.
+     */
+    public function getCantidadArbitrableEnDivisaPrecio() : float
+    {
+        return $this->getCantidadArbitrable() * $this->getPrecioInicial();
     }
 
     /**
