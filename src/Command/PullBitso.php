@@ -33,7 +33,7 @@ class PullBitso extends PullCommandAbstract
 
         $exchange = $this->em->getRepository('App\Entity\Exchange')->find(9004);
         $cliente = new BitsoClient();
-        $pares = ['BTC/ARS', 'ETH/BTC', 'XRP/BTC', 'BTC/USD', 'ETH/USD', 'XRP/USD', 'BTC/DAI'];
+        $pares = ['BTC/ARS', 'ETH/BTC', 'XRP/BTC', 'BTC/USD', 'ETH/USD', 'XRP/USD', 'BTC/DAI', 'DAI/ARS'];
 
         $this->actualizarExchangePares($exchange, $cliente, $pares);
 
