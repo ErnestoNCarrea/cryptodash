@@ -96,12 +96,12 @@ class Exchange
     public function obtenerCotizacionPar(string $par) : ?Cotizacion
     {
         foreach ($this->getCotizaciones() as $coti) {
-            echo $par . ' ?= ' . $coti->getPar();
+            //echo $par . ' ?= ' . $coti->getPar();
             if ($par == $coti->getPar()) {
-                echo " si\n";
+                //echo " si\n";
                 return $coti;
             }
-            echo " no\n";
+            //echo " no\n";
         }
 
         return null;
