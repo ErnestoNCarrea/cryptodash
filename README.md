@@ -1,10 +1,4 @@
-# Universidad Siglo 21
-## Licenciatura en Informática
 ## Arbitraje de Criptomonedas
-
-* Alumno: Ernesto Nicolás Carrea
-* Legajo VINF6439
-* Año 2020
 
 # Instalación en entorno de desarrollo
 
