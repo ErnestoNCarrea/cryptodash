@@ -87,6 +87,9 @@
     "evenement/evenement": {
         "version": "v3.0.1"
     },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.0"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.3.3"
     },
