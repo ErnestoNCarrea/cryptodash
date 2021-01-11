@@ -55,18 +55,18 @@ class AnalizadorCotizaciones
         }
 
         // Si no se encuentra la misma divisa, buscar USD alternativos
-        $DivisasRef = [ 'USD', 'USDT', 'USDC', 'TUSD', 'DAI'];
-        foreach($DivisasRef as $DivisaRef) {
-            foreach($cotisRef as $cotiRef) {
-                if ($cotiRef->getDivisaPrecio() == $DivisaRef)
-                {
-                    if ($lado == 1) {
-                        $di = $coti->getPrecioCompra() / $cotiRef->getPrecioCompra() - 1;
-                    } else {
-                        $di = $coti->getPrecioVenta() / $cotiRef->getPrecioVenta() - 1;
-                    }
-                    return abs($di) > 0.001 ? $di : 0;
+        foreach($cotisRef as $cotiRef) {
+            if ($cotiRef->getDivisaPrecio() == 'USD' 
+                || $cotiRef->getDivisaPrecio() == 'USDC'
+                || $cotiRef->getDivisaPrecio() == 'USDT'
+                || $cotiRef->getDivisaPrecio() == 'TUSD')
+            {
+                if ($lado == 1) {
+                    $di = $coti->getPrecioCompra() / $cotiRef->getPrecioCompra() - 1;
+                } else {
+                    $di = $coti->getPrecioVenta() / $cotiRef->getPrecioVenta() - 1;
                 }
+                return abs($di) > 0.001 ? $di : 0;
             }
         }
 
