@@ -3,7 +3,7 @@
     "license": "proprietary",
     "description": "Arbitraje de criptomonedas",
     "require": {
-        "php": "^7.4",
+        "php": ">=7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "apimatic/unirest-php": "^2",
@@ -13,7 +13,7 @@
         "doctrine/doctrine-migrations-bundle": "^3",
         "doctrine/orm": "^2",
         "guzzlehttp/guzzle": "^7",
-        "sensio/framework-extra-bundle": "^5",
+        "sensio/framework-extra-bundle": "^6",
         "symfony/apache-pack": "^1",
         "symfony/asset": "^5",
         "symfony/console": "^5",
