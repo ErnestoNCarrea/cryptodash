@@ -15,7 +15,7 @@ class BitsoClient extends AbstractClient
     private $simbolosAdmitidos = ['ARS', 'BTC', 'ETH', 'XRP', 'USD', 'DAI'];
 
     /** @var array */
-    private $paresAdmitidos = ['BTC/ARS', 'ETH/BTC', 'XRP/BTC', 'BTC/USD', 'ETH/USD', 'XRP/USD', 'BTC/DAI', 'DAI/ARS'];
+    private $paresAdmitidos = ['BTC/ARS', 'ETH/ARS', 'DAI/ARS', 'ETH/BTC', 'XRP/BTC', 'BTC/USD', 'ETH/USD', 'XRP/USD', 'BTC/DAI'];
 
     /** @var Client */
     private $client;
